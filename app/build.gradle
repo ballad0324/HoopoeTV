@@ -11,10 +11,10 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId 'com.github.tvbox.osc.tk'
+        applicationId 'com.hoopoetv.tvbox'
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0.".concat(buildTime())
+        versionName "v0.0.1"
         multiDexEnabled true
         //设置room的Schema的位置
         javaCompileOptions {
@@ -57,7 +57,7 @@ android {
 
         hisense {
             //海信的
-            applicationId 'com.github.hisense.osc.tk'
+            applicationId 'com.hoopoetv.tvbox.hisense'
             dimension = "brand"
         }
         normal {

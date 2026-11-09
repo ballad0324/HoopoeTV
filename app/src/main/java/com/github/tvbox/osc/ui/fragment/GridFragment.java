@@ -56,6 +56,7 @@ import java.util.Stack;
 public class GridFragment extends BaseLazyFragment {
     private MovieSort.SortData sortData = null;
     private TvRecyclerView mGridView;
+    private LinearLayout llFilterBar;
     private SourceViewModel sourceViewModel;
     private GridFilterDialog gridFilterDialog;
     private GridAdapter gridAdapter;
@@ -197,11 +198,14 @@ public class GridFragment extends BaseLazyFragment {
 
     private void initView() {
         this.createView();
+        if (llFilterBar == null) {
+            llFilterBar = findViewById(R.id.llFilterBar);
+        }
         mGridView.setAdapter(gridAdapter);
         if (isFolederMode()) {
             mGridView.setLayoutManager(new V7LinearLayoutManager(this.mContext, 1, false));
         } else {
-            int spanCount = isBaseOnWidth() ? 5 : 6;
+            int spanCount = isBaseOnWidth() ? 4 : 5;
             if (style != null) {
                 spanCount = ImgUtil.spanCountByStyle(style, spanCount);
             }
@@ -350,7 +354,159 @@ public class GridFragment extends BaseLazyFragment {
         isLoad = false;
         scrollTop();
         toggleFilterStatus();
+        buildFilterBar();
         sourceViewModel.getList(sortData, page);
+    }
+
+    /**
+     * 分类页底部常驻筛选条：类型 / 地区 / 排序 / 年代，切换分类自动加载。
+     */
+    private void buildFilterBar() {
+        if (llFilterBar == null) {
+            llFilterBar = findViewById(R.id.llFilterBar);
+        }
+        if (llFilterBar == null) {
+            return;
+        }
+        llFilterBar.removeAllViews();
+        if (sortData == null || sortData.filters == null || sortData.filters.isEmpty()) {
+            llFilterBar.setVisibility(View.GONE);
+            return;
+        }
+        Context context = getContext();
+        if (context == null) {
+            return;
+        }
+        LayoutInflater inflater = LayoutInflater.from(context);
+        TypedArray a = context.obtainStyledAttributes(R.styleable.themeColor);
+        int selectedColor = a.getColor(R.styleable.themeColor_color_theme, 0);
+        int defaultColor = ContextCompat.getColor(context, R.color.color_FFFFFF);
+        a.recycle();
+        for (MovieSort.SortFilter filter : sortData.filters) {
+            View line = inflater.inflate(R.layout.item_grid_filter, llFilterBar, false);
+            TextView filterNameTv = line.findViewById(R.id.filterName);
+            filterNameTv.setText(filter.name);
+            TvRecyclerView gridView = line.findViewById(R.id.mFilterKv);
+            gridView.setHasFixedSize(true);
+            gridView.setLayoutManager(new V7LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            GridFilterKVAdapter adapter = new GridFilterKVAdapter();
+            gridView.setAdapter(adapter);
+            final String key = filter.key;
+            final ArrayList<String> values = new ArrayList<>(filter.values.keySet());
+            final ArrayList<String> keys = new ArrayList<>(filter.values.values());
+            adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                View previousSelectedView = null;
+
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    String currentSelection = sortData.filterSelect.get(key);
+                    String newSelection = keys.get(position);
+                    if (currentSelection == null || !currentSelection.equals(newSelection)) {
+                        sortData.filterSelect.put(key, newSelection);
+                        updateViewStyle(view, selectedColor, true);
+                        if (previousSelectedView != null) {
+                            updateViewStyle(previousSelectedView, defaultColor, false);
+                        }
+                        previousSelectedView = view;
+                    } else {
+                        sortData.filterSelect.remove(key);
+                        if (previousSelectedView != null) {
+                            updateViewStyle(previousSelectedView, defaultColor, false);
+                        }
+                        previousSelectedView = null;
+                    }
+                    forceRefresh();
+                }
+
+                private void updateViewStyle(View view, int color, boolean isBold) {
+                    TextView valueTv = view.findViewById(R.id.filterValue);
+                    if (valueTv == null) {
+                        return;
+                    }
+                    valueTv.getPaint().setFakeBoldText(isBold);
+                    valueTv.setTextColor(color);
+                }
+            });
+            adapter.setNewData(values);
+            llFilterBar.addView(line);
+        }
+        // 底部筛选条默认收起，点当前分类标签时才展开
+        llFilterBar.setVisibility(View.GONE);
+    }
+
+    /**
+     * 点当前分类标签：展开 / 收起底部筛选条（类型/地区/排序/年代）。
+     */
+    public void toggleFilterBar() {
+        if (llFilterBar == null) {
+            buildFilterBar();
+        }
+        if (llFilterBar == null) {
+            return;
+        }
+        if (llFilterBar.getChildCount() == 0) {
+            return;
+        }
+        if (llFilterBar.getVisibility() == View.VISIBLE) {
+            llFilterBar.setVisibility(View.GONE);
+            if (mGridView != null) {
+                mGridView.requestFocus();
+            }
+        } else {
+            llFilterBar.setVisibility(View.VISIBLE);
+            focusFirstFilter();
+        }
+    }
+
+    public boolean isFilterBarVisible() {
+        return llFilterBar != null && llFilterBar.getVisibility() == View.VISIBLE;
+    }
+
+    /**
+     * 返回键：先关掉底部分类条，再退其它层级。
+     */
+    public boolean closeFilterBarIfVisible() {
+        if (!isFilterBarVisible()) {
+            return false;
+        }
+        llFilterBar.setVisibility(View.GONE);
+        if (mGridView != null) {
+            mGridView.requestFocus();
+        }
+        return true;
+    }
+
+    private void focusFirstFilter() {
+        if (llFilterBar == null) {
+            return;
+        }
+        for (int i = 0; i < llFilterBar.getChildCount(); i++) {
+            View child = llFilterBar.getChildAt(i);
+            TvRecyclerView kv = child.findViewById(R.id.mFilterKv);
+            if (kv != null && kv.getChildCount() > 0) {
+                kv.getChildAt(0).requestFocus();
+                return;
+            }
+        }
+    }
+
+    /**
+     * 让焦点进入底部筛选条（原来的弹窗式“分类检索”已取消）。
+     */
+    public void focusFilterBar() {
+        if (llFilterBar == null || llFilterBar.getVisibility() != View.VISIBLE) {
+            buildFilterBar();
+        }
+        if (llFilterBar != null) {
+            for (int i = 0; i < llFilterBar.getChildCount(); i++) {
+                View child = llFilterBar.getChildAt(i);
+                TvRecyclerView kv = child.findViewById(R.id.mFilterKv);
+                if (kv != null && kv.getChildCount() > 0) {
+                    kv.getChildAt(0).requestFocus();
+                    return;
+                }
+            }
+        }
     }
 
     private void toggleFilterStatus() {
@@ -370,20 +526,8 @@ public class GridFragment extends BaseLazyFragment {
     }
 
     public void showFilter() {
-    	if (sortData!=null && !sortData.filters.isEmpty() && gridFilterDialog == null) {
-            gridFilterDialog = new GridFilterDialog(mContext);
-//            gridFilterDialog.setData(sortData);
-//            gridFilterDialog.setOnDismiss(new GridFilterDialog.Callback() {
-//                @Override
-//                public void change() {
-//                    page = 1;
-//                    initData();
-//                }
-//            });
-            setFilterDialogData();
-        }
-        if (gridFilterDialog != null)
-            gridFilterDialog.show();
+        // 点当前分类标签：展开/收起底部筛选条
+        toggleFilterBar();
     }
 
     public void setFilterDialogData() {

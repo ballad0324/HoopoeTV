@@ -12,6 +12,8 @@
         <shape>
             <corners android:radius="20mm"/>
             <solid android:color="@android:color/transparent"/>
+            <!--未选中也带一圈主题色边框-->
+            <stroke android:width="1mm" android:color="?attr/color_theme_50" />
         </shape>
     </item>
 </selector>

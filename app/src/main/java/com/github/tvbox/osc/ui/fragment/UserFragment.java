@@ -47,9 +47,8 @@ import java.util.List;
  */
 public class UserFragment extends BaseLazyFragment implements View.OnClickListener {
     private LinearLayout tvDrive;
+    private LinearLayout tvApps;
     private LinearLayout tvLive;
-    private LinearLayout tvSearch;
-    private LinearLayout tvSetting;
     private LinearLayout tvHistory;
     private LinearLayout tvCollect;
     private LinearLayout tvPush;
@@ -74,18 +73,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
     @Override
     public void onFragmentResume() {
 
-        // takagen99: Initialize Icon Placement
-        if (!Hawk.get(HawkConfig.HOME_SEARCH_POSITION, true)) {
-            tvSearch.setVisibility(View.VISIBLE);
-        } else {
-            tvSearch.setVisibility(View.GONE);
-        }
-        if (!Hawk.get(HawkConfig.HOME_MENU_POSITION, true)) {
-            tvSetting.setVisibility(View.VISIBLE);
-        } else {
-            tvSetting.setVisibility(View.GONE);
-        }
-
+        // 搜索、设置改为左侧栏/顶栏固定入口，不再按设置项隐藏
         super.onFragmentResume();
         if (Hawk.get(HawkConfig.HOME_REC, 0) == 2) {
             List<VodInfo> allVodRecord = RoomDataManger.getAllVodRecord(20);
@@ -112,31 +100,12 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
     @Override
     protected void init() {
         EventBus.getDefault().register(this);
-        tvDrive = findViewById(R.id.tvDrive);
-        tvLive = findViewById(R.id.tvLive);
-        tvSearch = findViewById(R.id.tvSearch);
-        tvSetting = findViewById(R.id.tvSetting);
-        tvCollect = findViewById(R.id.tvFavorite);
-        tvHistory = findViewById(R.id.tvHistory);
-        tvPush = findViewById(R.id.tvPush);
-        tvDrive.setOnClickListener(this);
-        tvLive.setOnClickListener(this);
-        tvSearch.setOnClickListener(this);
-        tvSetting.setOnClickListener(this);
-        tvHistory.setOnClickListener(this);
-        tvPush.setOnClickListener(this);
-        tvCollect.setOnClickListener(this);
-        tvDrive.setOnFocusChangeListener(focusChangeListener);
-        tvLive.setOnFocusChangeListener(focusChangeListener);
-        tvSearch.setOnFocusChangeListener(focusChangeListener);
-        tvSetting.setOnFocusChangeListener(focusChangeListener);
-        tvHistory.setOnFocusChangeListener(focusChangeListener);
-        tvPush.setOnFocusChangeListener(focusChangeListener);
-        tvCollect.setOnFocusChangeListener(focusChangeListener);
+        // 应用/直播/收藏/文件/历史/推送 入口已移到 HomeActivity 顶部应用栏，这里不再绑定
         tvHotListForLine = findViewById(R.id.tvHotListForLine);
         tvHotListForGrid = findViewById(R.id.tvHotListForGrid);
         tvHotListForGrid.setHasFixedSize(true);
-        int spanCount = 5;
+        // 右侧内容区比全屏窄（左侧预留了导航栏），列数由 5 降为 4 以免卡片被挤压
+        int spanCount = 4;
         if (Hawk.get(HawkConfig.HOME_REC, 0) == 1 && homeSourceRec!=null) {
             style=ImgUtil.initStyle();
         }
@@ -208,13 +177,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
             }
         });
         
-        tvHistory.setOnLongClickListener(new View.OnLongClickListener() {
-        	@Override
-            public boolean onLongClick(View v) {
-                HomeActivity.homeRecf();
-                return HomeActivity.reHome(mContext);
-            }
-        });
+        // 长按「历史」重载首页的行为已随入口一起移到 HomeActivity 顶部应用栏
         
         // Grid View
         tvHotListForGrid.setOnItemListener(new TvRecyclerView.OnItemListener() {
@@ -255,14 +218,9 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
 
         initHomeHotVod(homeHotVodAdapter);
 
-        // Swifly: Home Style
-        if (Hawk.get(HawkConfig.HOME_REC_STYLE, false)) {
-            tvHotListForGrid.setVisibility(View.VISIBLE);
-            tvHotListForLine.setVisibility(View.GONE);
-        } else {
-            tvHotListForGrid.setVisibility(View.GONE);
-            tvHotListForLine.setVisibility(View.VISIBLE);
-        }
+        // 首页资源列表固定用网格（一排 4 个），不再跟随 HOME_REC_STYLE 的“单行横排”样式
+        tvHotListForGrid.setVisibility(View.VISIBLE);
+        tvHotListForLine.setVisibility(View.GONE);
     }
 
     private void initHomeHotVod(HomeHotVodAdapter adapter) {
@@ -345,26 +303,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-
-        // takagen99: Remove Delete Mode
-        HawkConfig.hotVodDelete = false;
-
-        FastClickCheckUtil.check(v);
-        if (v.getId() == R.id.tvLive) {
-            jumpActivity(LivePlayActivity.class);
-        } else if (v.getId() == R.id.tvSearch) {
-            jumpActivity(SearchActivity.class);
-        } else if (v.getId() == R.id.tvSetting) {
-            jumpActivity(SettingActivity.class);
-        } else if (v.getId() == R.id.tvHistory) {
-            jumpActivity(HistoryActivity.class);
-        } else if (v.getId() == R.id.tvPush) {
-            jumpActivity(PushActivity.class);
-        } else if (v.getId() == R.id.tvFavorite) {
-            jumpActivity(CollectActivity.class);
-        } else if (v.getId() == R.id.tvDrive) {
-            jumpActivity(DriveActivity.class);
-        }
+        // 入口已移到 HomeActivity 顶部应用栏，这里不再处理
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

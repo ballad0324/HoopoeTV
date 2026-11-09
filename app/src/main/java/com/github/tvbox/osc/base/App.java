@@ -157,10 +157,35 @@ public class App extends MultiDexApplication {
     }
 
     private void initLocale() {
-        if (Hawk.get(HawkConfig.HOME_LOCALE, 0) == 0) {
-            LocaleHelper.setLocale(App.this, "zh");
-        } else {
-            LocaleHelper.setLocale(App.this, "");
+        // 主题与语言锁定：默认主题 + 简体中文，设置项里已不再提供切换入口
+        Hawk.put(HawkConfig.HOME_LOCALE, 0);
+        Hawk.put(HawkConfig.THEME_SELECT, 0);
+        LocaleHelper.setLocale(App.this, "zh");
+        // 空壳播放器：内置源地址已清空，首次启动时把旧存储的源地址一并清掉
+        if (!Hawk.get("shell_url_reset_v1", false)) {
+            String def = "";
+            try {
+                def = getResources().getString(R.string.app_source);
+            } catch (Throwable th) {
+            }
+            if (def != null && def.trim().isEmpty()) {
+                Hawk.put(HawkConfig.API_URL, "");
+                // 直播源、节目单也一并清空，设置里对应项留空
+                String live = "";
+                String epg = "";
+                try {
+                    live = getResources().getString(R.string.app_live);
+                    epg = getResources().getString(R.string.app_epg);
+                } catch (Throwable th) {
+                }
+                if (live == null || live.trim().isEmpty()) {
+                    Hawk.put(HawkConfig.LIVE_URL, "");
+                }
+                if (epg == null || epg.trim().isEmpty()) {
+                    Hawk.put(HawkConfig.EPG_URL, "");
+                }
+            }
+            Hawk.put("shell_url_reset_v1", true);
         }
     }
 

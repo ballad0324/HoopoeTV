@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TVBox</string>
+    <string name="app_name">HoopoeTV</string>
     <string name="app_home">Home</string>
     <string name="app_source"></string>
+    <string name="app_live"></string>
+    <string name="app_epg"></string>
 
     // Home Page //
     <string name="hm_ok">Load Complete</string>
@@ -14,8 +16,10 @@
     <string name="hm_date1">dd MMM</string>
     <string name="hm_date2">EE HH:mm</string>
     <string name="hm_hist">History</string>
+<string name="hm_apps">Apps</string>
     <string name="hm_live">LiveTV</string>
     <string name="hm_search">Search</string>
+    <string name="hm_clear_cache">Clear Cache</string>
     <string name="hm_push">Push</string>
     <string name="hm_file">Drives</string>
     <string name="hm_fav">Favorite</string>

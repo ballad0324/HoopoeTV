@@ -137,9 +137,29 @@ public class ApiConfig {
         return "".getBytes();
     }
 
+    public static String getDefaultApiUrl() {
+        try {
+            return HomeActivity.getRes().getString(R.string.app_source);
+        } catch (Throwable th) {
+            return "";
+        }
+    }
+
+    public static String getApiUrl() {
+        String def = getDefaultApiUrl();
+        if (def == null) def = "";
+        String stored = Hawk.get(HawkConfig.API_URL, "");
+        if (stored == null) stored = "";
+        // 内置源已清空：默认走空壳，但允许用户在设置里手动填源
+        if (stored.trim().isEmpty()) {
+            return def.trim();
+        }
+        return stored;
+    }
+
     public void loadConfig(boolean useCache, LoadConfigCallback callback, Activity activity) {
         // Embedded Source : Update in Strings.xml if required
-        String apiUrl = Hawk.get(HawkConfig.API_URL, HomeActivity.getRes().getString(R.string.app_source));
+        String apiUrl = getApiUrl();
         if (apiUrl.isEmpty()) {
             callback.error("源地址为空");
             return;
@@ -243,10 +263,11 @@ public class ApiConfig {
             if (cache.exists() && (useCache || MD5.getFileMd5(cache).equalsIgnoreCase(md5))) {
                 if (jarLoader.load(cache.getAbsolutePath())) {
                     callback.success();
-                } else {
-                    callback.error("从缓存加载jar失败");
+                    return;
                 }
-                return;
+                // 缓存里的 jar 打不开（文件损坏或内容与当前版本不匹配），删掉后重新下载
+                LOG.e("echo---cache jar load failed, size=" + cache.length() + ", md5=" + MD5.getFileMd5(cache) + "，删除缓存重新下载");
+                cache.delete();
             }
         }else {
             if (Boolean.parseBoolean(jarCache) && cache.exists() && !FileUtils.isWeekAgo(cache)) {
@@ -548,6 +569,16 @@ public class ApiConfig {
 
         } catch (Throwable th) {
             th.printStackTrace();
+        }
+
+        // 内置兜底：接口未下发 lives/epg 时，用 strings.xml 里的默认地址补进设置
+        if (StringUtils.isBlank(Hawk.get(HawkConfig.LIVE_URL, ""))) {
+            String defLive = HomeActivity.getRes().getString(R.string.app_live);
+            if (!StringUtils.isBlank(defLive)) Hawk.put(HawkConfig.LIVE_URL, defLive);
+        }
+        if (StringUtils.isBlank(Hawk.get(HawkConfig.EPG_URL, ""))) {
+            String defEpg = HomeActivity.getRes().getString(R.string.app_epg);
+            if (!StringUtils.isBlank(defEpg)) Hawk.put(HawkConfig.EPG_URL, defEpg);
         }
 
         // Video parse rule for host

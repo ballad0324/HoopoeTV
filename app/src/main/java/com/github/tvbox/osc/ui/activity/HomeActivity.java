@@ -24,6 +24,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -102,6 +103,7 @@ public class HomeActivity extends BaseActivity {
     private ImageView tvMenu;
     private TextView tvDate;
     private TvRecyclerView mGridView;
+    private TvRecyclerView mGridViewLeft;
     private NoScrollViewPager mViewPager;
     private SourceViewModel sourceViewModel;
     private SortAdapter sortAdapter;
@@ -158,36 +160,201 @@ public class HomeActivity extends BaseActivity {
         return res;
     }
 
-    private void initView() {
-        this.topLayout = findViewById(R.id.topLayout);
-        this.tvName = findViewById(R.id.tvName);
-        this.tvWifi = findViewById(R.id.tvWifi);
-        this.tvFind = findViewById(R.id.tvFind);
-        this.tvStyle = findViewById(R.id.tvStyle);
-        this.tvDraw = findViewById(R.id.tvDrawer);
-        this.tvMenu = findViewById(R.id.tvMenu);
-        this.tvDate = findViewById(R.id.tvDate);
-        this.contentLayout = findViewById(R.id.contentLayout);
-        this.mGridView = findViewById(R.id.mGridViewCategory);
-        this.mViewPager = findViewById(R.id.mViewPager);
-        this.sortAdapter = new SortAdapter();
-        this.mGridView.setLayoutManager(new V7LinearLayoutManager(this.mContext, 0, false));
-        this.mGridView.setSpacingWithMargins(0, AutoSizeUtils.dp2px(this.mContext, 10.0f));
-        this.mGridView.setAdapter(this.sortAdapter);
-        sortAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                mGridView.post(() -> {
-                    View firstChild = Objects.requireNonNull(mGridView.getLayoutManager()).findViewByPosition(0);
-                    if (firstChild != null) {
-                        mGridView.setSelectedPosition(0);
-                        firstChild.requestFocus();
-                    }
-                });
+    /**
+     * 首页与分类内容页统一为：分类导航在左、内容在右。
+     * 首页顶部保留「应用/直播/收藏/文件/历史/推送」横排（由 UserFragment 承载）。
+     */
+    private boolean categoryLayoutApplied = false;
+    // 上一次翻页的目标页，用来决定内容向上滑还是向下滑
+    private int lastTransitionPage = 0;
+    private boolean categoryLayoutGridMode = true;
+    // 布局切换期间为 true，用于屏蔽 RecyclerView 重绑导致的伪选中回调
+    private boolean layoutSwitching = false; // build28 marker
+
+    private TvRecyclerView navView() {
+        return categoryLayoutGridMode ? this.mGridViewLeft : this.mGridView;
+    }
+
+    /**
+     * 位置换算：分类列表里不再放「首页」（首页在顶部应用栏第一格），
+     * 适配器位置 0 = 第一个分类（豆瓣热门电影），对应内容页 1；
+     * 内容页 0 永远是首页。
+     */
+    private boolean isAppRow(int adapterPos) {
+        if (this.sortAdapter == null || adapterPos < 0 || adapterPos >= this.sortAdapter.getItemCount()) {
+            return false;
+        }
+        return SortAdapter.isAppRow(this.sortAdapter.getItem(adapterPos));
+    }
+
+    private int adapterPosOfPage(int page) {
+        return page <= 0 ? 0 : page - 1;
+    }
+
+    private int pageOfAdapterPos(int adapterPos) {
+        return adapterPos < 0 ? 0 : adapterPos + 1;
+    }
+
+    private MovieSort.SortData sortDataOfPage(int page) {
+        if (this.sortAdapter == null || page <= 0) {
+            return null;
+        }
+        int adapterPos = adapterPosOfPage(page);
+        if (adapterPos >= this.sortAdapter.getItemCount()) {
+            return null;
+        }
+        return this.sortAdapter.getItem(adapterPos);
+    }
+
+    // 分类列表里去掉「首页」那一项（它已经放到顶部应用栏第一格）
+    private List<MovieSort.SortData> withoutHomeRow(List<MovieSort.SortData> src) {
+        List<MovieSort.SortData> out = new ArrayList<>();
+        if (src != null) {
+            for (MovieSort.SortData data : src) {
+                if (data == null) {
+                    continue;
+                }
+                if ("my0".equals(data.id)) {
+                    continue;
+                }
+                out.add(data);
             }
-        });
-        this.mGridView.setOnItemListener(new TvRecyclerView.OnItemListener() {
+        }
+        return out;
+    }
+
+    /**
+     * 顶部「首页」格：回到第 0 页（首页内容），左栏保持显示但不高亮任何分类。
+     */
+    private void goHomePage() {
+        try {
+            mHandler.removeCallbacks(mDataRunnable);
+            sortFocused = 0;
+            currentSelected = 0;
+            changeTop(false);
+            if (mViewPager != null && mViewPager.getAdapter() != null) {
+                mViewPager.setCurrentItem(0, false);
+            }
+            playPageTransition();
+            if (navView() != null) {
+                navView().clearFocus();
+            }
+        } catch (Throwable ignored) {
+            // 切换失败保持当前页
+        }
+    }
+
+    private void applyCategoryLayout(final boolean gridMode) {
+        if (this.mGridView == null || this.mGridViewLeft == null) {
+            return;
+        }
+        // 统一走“左栏竖排 + 右侧内容”布局：首页与分类页都不再用顶部横排导航
+        this.mGridView.post(() -> applyCategoryLayoutNow(true));
+    }
+
+    private void applyCategoryLayoutNow(boolean gridMode) {
+        if (this.mGridView == null || this.mGridViewLeft == null || this.mViewPager == null) {
+            return;
+        }
+        // 状态没变化就不重复改，避免来回抖动
+        if (categoryLayoutApplied && categoryLayoutGridMode == gridMode) {
+            return;
+        }
+        try {
+            layoutSwitching = true;
+            final TvRecyclerView target = gridMode ? this.mGridViewLeft : this.mGridView;
+            // 只切显隐：首页顶部横排导航在分类页整体隐藏，左栏竖排导航在分类页显示
+            this.mGridView.setVisibility(gridMode ? View.GONE : View.VISIBLE);
+            this.mGridViewLeft.setVisibility(gridMode ? View.VISIBLE : View.GONE);
+            categoryLayoutGridMode = gridMode;
+            SortAdapter.verticalMode = gridMode;
+            if (this.sortAdapter != null) {
+                this.mGridView.setAdapter(target == this.mGridView ? this.sortAdapter : null);
+                this.mGridViewLeft.setAdapter(target == this.mGridViewLeft ? this.sortAdapter : null);
+            }
+            final int pageKeep = this.sortFocused >= 0 ? this.sortFocused : 0;
+            final int keep = adapterPosOfPage(pageKeep);
+            target.setSelection(keep);
+            target.setSelectedPosition(keep);
+            // 顶部导航隐藏/左栏显示会改变 ViewPager 可用宽度，必须让它重新测量；
+            // 否则页面子视图仍按旧宽度绘制，溢出到左侧导航下面（表现为左栏与卡片互相叠压）
+            this.mViewPager.requestLayout();
+            this.mViewPager.post(() -> {
+                try {
+                    HomeActivity.this.mViewPager.requestLayout();
+                    if (HomeActivity.this.mViewPager.getAdapter() != null) {
+                        HomeActivity.this.mViewPager.setCurrentItem(pageKeep, false);
+                    }
+                } catch (Throwable ignored) {
+                    // 重新测量失败不影响后续操作
+                }
+            });
+            target.post(() -> {
+                try {
+                    if (pageKeep <= 0) {
+                        // 在首页时焦点交给顶部「首页」格，避免左栏抢焦点直接把页面切到第一个分类
+                        View home = findViewById(R.id.tvHome);
+                        if (home != null) {
+                            home.requestFocus();
+                        }
+                        return;
+                    }
+                    View keepView = target.getLayoutManager() == null ? null
+                            : target.getLayoutManager().findViewByPosition(keep);
+                    if (keepView != null) {
+                        HomeActivity.this.sortFocusView = keepView;
+                        keepView.requestFocus();
+                    }
+                } catch (Throwable ignored) {
+                    // 焦点恢复失败不影响布局
+                }
+                target.postDelayed(() -> layoutSwitching = false, 150);
+            });
+            categoryLayoutApplied = true;
+        } catch (Throwable ignored) {
+            layoutSwitching = false;
+        }
+    }
+
+    /**
+     * 页面切换过渡：右侧内容像一张纸一样平滑上下滑动 + 淡入，左栏一起淡入。
+     * 切到更靠后的分类时内容从下往上滑入，切回上面的分类时从上往下滑入。
+     */
+    private void playPageTransition() {
+        try {
+            final float offset = AutoSizeUtils.mm2px(this.mContext, 25f);
+            float dir = 1.0f;
+            if (mViewPager != null && mViewPager.getAdapter() != null) {
+                int target = currentSelected;
+                dir = target >= lastTransitionPage ? 1.0f : -1.0f;
+                lastTransitionPage = target;
+            }
+            this.mViewPager.setAlpha(0.4f);
+            this.mViewPager.setTranslationY(offset * dir);
+            this.mViewPager.animate().alpha(1.0f).translationY(0f)
+                    .setDuration(260).setInterpolator(new DecelerateInterpolator()).start();
+            if (this.mGridViewLeft != null && this.mGridViewLeft.getVisibility() == View.VISIBLE) {
+                this.mGridViewLeft.setAlpha(0.4f);
+                this.mGridViewLeft.animate().alpha(1.0f)
+                        .setDuration(220).setInterpolator(new DecelerateInterpolator()).start();
+            }
+        } catch (Throwable ignored) {
+            // 动画失败不影响切换
+        }
+    }
+
+    /**
+     * 两块导航控件共用同一套选中/点击/边界按键逻辑。
+     */
+    private void setupNavView(final TvRecyclerView nav) {
+        nav.setOnItemListener(new TvRecyclerView.OnItemListener() {
             public void onItemPreSelected(TvRecyclerView tvRecyclerView, View view, int position) {
+                if (layoutSwitching) {
+                    return;
+                }
+                if (isAppRow(position)) {
+                    return;
+                }
                 if (view != null && !HomeActivity.this.isDownOrUp) {
                     view.animate().scaleX(1.0f).scaleY(1.0f).setDuration(250).start();
                     TextView textView = view.findViewById(R.id.tvTitle);
@@ -199,6 +366,13 @@ public class HomeActivity extends BaseActivity {
             }
 
             public void onItemSelected(TvRecyclerView tvRecyclerView, View view, int position) {
+                if (layoutSwitching) {
+                    return;
+                }
+                // 「应用」是独立入口行，不参与分类选中逻辑
+                if (isAppRow(position)) {
+                    return;
+                }
                 if (view != null) {
                     HomeActivity.this.currentView = view;
                     HomeActivity.this.isDownOrUp = false;
@@ -208,15 +382,20 @@ public class HomeActivity extends BaseActivity {
                     textView.getPaint().setFakeBoldText(true);
                     textView.setTextColor(HomeActivity.this.getResources().getColor(R.color.color_FFFFFF));
                     textView.invalidate();
-//                    if (!sortAdapter.getItem(position).filters.isEmpty())
-//                        view.findViewById(R.id.tvFilter).setVisibility(View.VISIBLE);
                     if (position == -1) {
                         position = 0;
-                        HomeActivity.this.mGridView.setSelection(0);
+                        nav.setSelection(0);
                     }
-                    MovieSort.SortData sortData = sortAdapter.getItem(position);
-                    if (null != sortData && !sortData.filters.isEmpty()) {
-                        showFilterIcon(sortData.filterSelectCount());
+                    position = pageOfAdapterPos(position);
+                    if (position < 0) {
+                        return;
+                    }
+                    if (position < sortAdapter.getItemCount()) {
+                        MovieSort.SortData sortData = sortDataOfPage(position);
+                        // 分类检索图标已取消：筛选条在分类页底部常驻显示
+                        if (null != sortData && !sortData.filters.isEmpty()) {
+                            // 不再显示筛选图标，避免右侧多出内边距
+                        }
                     }
                     HomeActivity.this.sortFocusView = view;
                     HomeActivity.this.sortFocused = position;
@@ -227,18 +406,44 @@ public class HomeActivity extends BaseActivity {
 
             @Override
             public void onItemClick(TvRecyclerView parent, View itemView, int position) {
-                if (itemView != null && currentSelected == position) {
-                    BaseLazyFragment baseLazyFragment = fragments.get(currentSelected);
-                    if ((baseLazyFragment instanceof GridFragment) && !sortAdapter.getItem(position).filters.isEmpty()) {// 弹出筛选
-                        ((GridFragment) baseLazyFragment).showFilter();
-                    } else if (baseLazyFragment instanceof UserFragment) {
-                        showSiteSwitch();
+                final int page = pageOfAdapterPos(position);
+                if (page < 0 || page >= fragments.size()) {
+                    return;
+                }
+                // 点击即切换：不依赖选中态回调与 200ms 延时，避免“点前几个导航不生效”
+                if (page != currentSelected) {
+                    mHandler.removeCallbacks(mDataRunnable);
+                    sortFocused = page;
+                    currentSelected = page;
+                    try {
+                        HomeActivity.this.mViewPager.setCurrentItem(page, false);
+                        changeTop(false);
+                        applyCategoryLayout(page != 0);
+                        playPageTransition();
+                    } catch (Throwable ignored) {
+                        // 切换失败保持当前页
+                        return;
+                    }
+                    // 单击只负责选中/切页；再点一下（同一分类）才展开底部分类条
+                    return;
+                }
+                if (itemView != null && currentSelected == page && page < fragments.size()) {
+                    BaseLazyFragment baseLazyFragment = fragments.get(page);
+                    if (baseLazyFragment instanceof GridFragment) {
+                        MovieSort.SortData d = sortDataOfPage(page);
+                        if (d != null && !d.filters.isEmpty()) {
+                            // 点当前分类标签：展开/收起底部筛选条（默认收起）
+                            ((GridFragment) baseLazyFragment).showFilter();
+                        }
                     }
                 }
             }
         });
-        this.mGridView.setOnInBorderKeyEventListener(new TvRecyclerView.OnInBorderKeyEventListener() {
+        nav.setOnInBorderKeyEventListener(new TvRecyclerView.OnInBorderKeyEventListener() {
             public boolean onInBorderKeyEvent(int direction, View view) {
+                if (sortFocused < 0 || sortFocused >= fragments.size()) {
+                    return false;
+                }
                 if (direction == View.FOCUS_UP) {
                     BaseLazyFragment baseLazyFragment = fragments.get(sortFocused);
                     if ((baseLazyFragment instanceof GridFragment)) {// 弹出筛选
@@ -255,41 +460,102 @@ public class HomeActivity extends BaseActivity {
                 return !((GridFragment) baseLazyFragment).isLoad();
             }
         });
-        // Button : TVBOX >> Delete Cache / Longclick to Refresh Source --
+    }
+
+    private void initView() {
+        this.topLayout = findViewById(R.id.topLayout);
+        this.tvName = findViewById(R.id.tvName);
+        this.tvWifi = findViewById(R.id.tvWifi);
+        this.tvFind = findViewById(R.id.tvFind);
+        this.tvStyle = findViewById(R.id.tvStyle);
+        this.tvDraw = findViewById(R.id.tvDrawer);
+        this.tvMenu = findViewById(R.id.tvMenu);
+        this.tvDate = findViewById(R.id.tvDate);
+        this.contentLayout = findViewById(R.id.contentLayout);
+        this.mGridView = findViewById(R.id.mGridViewCategory);
+        this.mGridViewLeft = findViewById(R.id.mGridViewCategoryLeft);
+        this.mViewPager = findViewById(R.id.mViewPager);
+        this.sortAdapter = new SortAdapter();
+        this.mGridView.setLayoutManager(new V7LinearLayoutManager(this.mContext, 0, false));
+        this.mGridView.setSpacingWithMargins(0, AutoSizeUtils.dp2px(this.mContext, 10.0f));
+        this.mGridViewLeft.setLayoutManager(new V7LinearLayoutManager(this.mContext, 1, false));
+        this.mGridViewLeft.setSpacingWithMargins(0, AutoSizeUtils.dp2px(this.mContext, 0.0f));
+        this.mGridView.setAdapter(this.sortAdapter);
+        setupNavView(this.mGridView);
+        setupNavView(this.mGridViewLeft);
+        sortAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                if (layoutSwitching) {
+                    return;
+                }
+                final TvRecyclerView nav = navView();
+                nav.post(() -> {
+                    if (layoutSwitching || nav.getLayoutManager() == null) {
+                        return;
+                    }
+                    View firstChild = nav.getLayoutManager().findViewByPosition(0);
+                    if (firstChild != null) {
+                        nav.setSelectedPosition(0);
+                        firstChild.requestFocus();
+                    }
+                });
+            }
+        });
+        // 左上角源名称：点击弹出可选视频源列表，选完自动关闭并重新加载
         tvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FastClickCheckUtil.check(v);
-                File dir = getCacheDir();
-                FileUtils.recursiveDelete(dir);
-                dir = getExternalCacheDir();
-                FileUtils.recursiveDelete(dir);
-                Toast.makeText(HomeActivity.this, getString(R.string.hm_cache_del), Toast.LENGTH_SHORT).show();
-                if(dataInitOk && jarInitOk){
-                    String cspCachePath = FileUtils.getFilePath()+"/csp/";
-                    String jar=ApiConfig.get().getHomeSourceBean().getJar();
-                    String jarUrl=!jar.isEmpty()?jar:ApiConfig.get().getSpider();
-                    File cspCacheDir = new File(cspCachePath + MD5.string2MD5(jarUrl)+".jar");
-                    if (!cspCacheDir.exists()){
-                        reloadHome();
-                        return;
-                    }
-                    new Thread(() -> {
-                        try {
-                            FileUtils.deleteFile(cspCacheDir);
-                            ApiConfig.get().clearJarLoader();
-                            reloadHome();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }).start();
+                List<SourceBean> sites = new ArrayList<>();
+                for (SourceBean sb : ApiConfig.get().getSourceBeanList()) {
+                    if (sb.getHide() == 0) sites.add(sb);
                 }
+                if (sites.isEmpty()) {
+                    Toast.makeText(mContext, "当前没有可选视频源", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                SelectDialog<SourceBean> dialog = new SelectDialog<>(HomeActivity.this);
+                int spanCount = (int) Math.floor(sites.size() / 10);
+                if (spanCount <= 1) spanCount = 1;
+                if (spanCount >= 3) spanCount = 3;
+                TvRecyclerView tvRecyclerView = dialog.findViewById(R.id.list);
+                tvRecyclerView.setLayoutManager(new V7GridLayoutManager(dialog.getContext(), spanCount));
+                ConstraintLayout cl_root = dialog.findViewById(R.id.cl_root);
+                ViewGroup.LayoutParams clp = cl_root.getLayoutParams();
+                if (spanCount != 1) {
+                    clp.width = AutoSizeUtils.mm2px(dialog.getContext(), 400 + 260 * (spanCount - 1));
+                }
+                dialog.setTip(getString(R.string.dia_source));
+                dialog.setAdapter(tvRecyclerView, new SelectDialogAdapter.SelectDialogInterface<SourceBean>() {
+                    @Override
+                    public void click(SourceBean value, int pos) {
+                        ApiConfig.get().setSourceBean(value);
+                        dialog.dismiss();
+                        reloadHome();
+                    }
+
+                    @Override
+                    public String getDisplay(SourceBean val) {
+                        return val.getName();
+                    }
+                }, new DiffUtil.ItemCallback<SourceBean>() {
+                    @Override
+                    public boolean areItemsTheSame(@NonNull @NotNull SourceBean oldItem, @NonNull @NotNull SourceBean newItem) {
+                        return oldItem == newItem;
+                    }
+
+                    @Override
+                    public boolean areContentsTheSame(@NonNull @NotNull SourceBean oldItem, @NonNull @NotNull SourceBean newItem) {
+                        return oldItem.getKey().equals(newItem.getKey());
+                    }
+                }, sites, Math.max(sites.indexOf(ApiConfig.get().getHomeSourceBean()), 0));
+                dialog.show();
             }
         });
         tvName.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                reloadHome();
                 return true;
             }
         });
@@ -311,26 +577,111 @@ public class HomeActivity extends BaseActivity {
             }
         });
         // Button : Style --------------------------------------------
+        // 样式切换按钮已下线：首页资源列表固定为网格（多行）显示
+        try {
+            tvStyle.setVisibility(View.GONE);
+            Hawk.put(HawkConfig.HOME_REC_STYLE, true);
+        } catch (Throwable ignored) {
+            // 忽略
+        }
         tvStyle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    Hawk.put(HawkConfig.HOME_REC_STYLE, !Hawk.get(HawkConfig.HOME_REC_STYLE, false));
-                    if (Hawk.get(HawkConfig.HOME_REC_STYLE, false)) {
-                        UserFragment.tvHotListForGrid.setVisibility(View.VISIBLE);
-                        UserFragment.tvHotListForLine.setVisibility(View.GONE);
-                        Toast.makeText(HomeActivity.this, getString(R.string.hm_style_grid), Toast.LENGTH_SHORT).show();
-                        tvStyle.setImageResource(R.drawable.hm_up_down);
-                    } else {
-                        UserFragment.tvHotListForGrid.setVisibility(View.GONE);
-                        UserFragment.tvHotListForLine.setVisibility(View.VISIBLE);
-                        Toast.makeText(HomeActivity.this, getString(R.string.hm_style_line), Toast.LENGTH_SHORT).show();
-                        tvStyle.setImageResource(R.drawable.hm_left_right);
-                    }
+                    Hawk.put(HawkConfig.HOME_REC_STYLE, true);
+                    UserFragment.tvHotListForGrid.setVisibility(View.VISIBLE);
+                    UserFragment.tvHotListForLine.setVisibility(View.GONE);
                 } catch (Exception ex) {
                 }
             }
         });
+        // Button : 顶部应用栏（直播/收藏/文件/历史/推送）+ 左侧「应用」
+        View.OnClickListener appBarClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id = v.getId();
+                if (id == R.id.tvLive) {
+                    jumpActivity(LivePlayActivity.class);
+                } else if (id == R.id.tvFavorite) {
+                    jumpActivity(CollectActivity.class);
+                } else if (id == R.id.tvDrive) {
+                    jumpActivity(DriveActivity.class);
+                } else if (id == R.id.tvHistory) {
+                    jumpActivity(HistoryActivity.class);
+                } else if (id == R.id.tvPush) {
+                    jumpActivity(PushActivity.class);
+                }
+            }
+        };
+        int[] appBarIds = new int[]{R.id.tvLive, R.id.tvFavorite, R.id.tvDrive,
+                R.id.tvHistory, R.id.tvPush};
+        for (int appBarId : appBarIds) {
+            View appBarItem = findViewById(appBarId);
+            if (appBarItem != null) {
+                appBarItem.setOnClickListener(appBarClick);
+            }
+        }
+        // 顶部「首页」格 + 左侧「应用」块
+        View tvHome = findViewById(R.id.tvHome);
+        if (tvHome != null) {
+            tvHome.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goHomePage();
+                }
+            });
+        }
+        View tvApps = findViewById(R.id.tvApps);
+        if (tvApps != null) {
+            tvApps.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    jumpActivity(AppsActivity.class);
+                }
+            });
+        }
+        // 左侧分类行右侧的小按钮：点一下展开底部分类条，再点关闭
+        SortAdapter.filterClick = new SortAdapter.OnFilterClick() {
+            @Override
+            public void onFilterClick(MovieSort.SortData item) {
+                if (sortAdapter == null || item == null) {
+                    return;
+                }
+                int pos = sortAdapter.getData().indexOf(item);
+                if (pos < 0) {
+                    return;
+                }
+                final int page = pageOfAdapterPos(pos);
+                if (page < 0 || page >= fragments.size()) {
+                    return;
+                }
+                if (page != currentSelected) {
+                    mHandler.removeCallbacks(mDataRunnable);
+                    sortFocused = page;
+                    currentSelected = page;
+                    try {
+                        mViewPager.setCurrentItem(page, false);
+                        changeTop(false);
+                        applyCategoryLayout(page != 0);
+                        playPageTransition();
+                    } catch (Throwable ignored) {
+                        return;
+                    }
+                }
+                mViewPager.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (page >= fragments.size()) {
+                            return;
+                        }
+                        BaseLazyFragment f = fragments.get(page);
+                        if (f instanceof GridFragment) {
+                            ((GridFragment) f).toggleFilterBar();
+                        }
+                    }
+                }, 220);
+            }
+        };
         // Button : Drawer >> To go into App Drawer -------------------
         tvDraw.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -394,9 +745,9 @@ public class HomeActivity extends BaseActivity {
                 }
                 showSuccess();
                 if (absXml != null && absXml.classes != null && absXml.classes.sortList != null) {
-                    sortAdapter.setNewData(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), absXml.classes.sortList, true));
+                    sortAdapter.setNewData(withoutHomeRow(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), absXml.classes.sortList, true)));
                 } else {
-                    sortAdapter.setNewData(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), new ArrayList<>(), true));
+                    sortAdapter.setNewData(withoutHomeRow(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), new ArrayList<>(), true)));
                 }
                 initViewPager(absXml);
                 // takagen99 : Switch to show / hide source title
@@ -437,13 +788,13 @@ public class HomeActivity extends BaseActivity {
         }
 
         // takagen99: Set Style either Grid or Line
-        if (Hawk.get(HawkConfig.HOME_REC_STYLE, false)) {
+        if (Hawk.get(HawkConfig.HOME_REC_STYLE, true)) {
             tvStyle.setImageResource(R.drawable.hm_up_down);
         } else {
             tvStyle.setImageResource(R.drawable.hm_left_right);
         }
 
-        mGridView.requestFocus();
+        navView().requestFocus();
 
         if (dataInitOk && jarInitOk) {
             sourceViewModel.getSort(ApiConfig.get().getHomeSourceBean().getKey());
@@ -592,16 +943,17 @@ public class HomeActivity extends BaseActivity {
 
     private void initViewPager(AbsSortXml absXml) {
         if (sortAdapter.getData().size() > 0) {
+            // 首页固定为第 0 页（分类列表里已去掉「首页」项）
+            if (Hawk.get(HawkConfig.HOME_REC, 0) == 1 && absXml != null && absXml.videoList != null && absXml.videoList.size() > 0) {
+                fragments.add(UserFragment.newInstance(absXml.videoList));
+            } else {
+                fragments.add(UserFragment.newInstance(null));
+            }
             for (MovieSort.SortData data : sortAdapter.getData()) {
-                if (data.id.equals("my0")) {
-                    if (Hawk.get(HawkConfig.HOME_REC, 0) == 1 && absXml != null && absXml.videoList != null && absXml.videoList.size() > 0) {
-                        fragments.add(UserFragment.newInstance(absXml.videoList));
-                    } else {
-                        fragments.add(UserFragment.newInstance(null));
-                    }
-                } else {
-                    fragments.add(GridFragment.newInstance(data));
+                if (SortAdapter.isAppRow(data)) {
+                    continue;
                 }
+                fragments.add(GridFragment.newInstance(data));
             }
             pageAdapter = new HomePageAdapter(getSupportFragmentManager(), fragments);
             try {
@@ -615,6 +967,7 @@ public class HomeActivity extends BaseActivity {
             mViewPager.setPageTransformer(true, new DefaultTransformer());
             mViewPager.setAdapter(pageAdapter);
             mViewPager.setCurrentItem(currentSelected, false);
+            applyCategoryLayout(currentSelected != 0);
         }
     }
 
@@ -640,28 +993,13 @@ public class HomeActivity extends BaseActivity {
 
         BaseLazyFragment baseLazyFragment = this.fragments.get(this.sortFocused);
         if (baseLazyFragment instanceof GridFragment) {
-            GridFragment grid = (GridFragment) baseLazyFragment;
-            // 如果当前 Fragment 能恢复之前保存的 UI 状态，则直接返回
-            if (grid.restoreView()) {
+            // 底部分类条展开时，返回键先关条
+            if (((GridFragment) baseLazyFragment).closeFilterBarIfVisible()) {
                 return;
             }
-            // 如果 sortFocusView 存在且没有获取焦点，则请求焦点
-            if (this.sortFocusView != null && !this.sortFocusView.isFocused()) {
-                this.sortFocusView.requestFocus();
-            }
-            // 如果当前不是第一个界面，则将列表设置到第一项
-            else if (this.sortFocused != 0) {
-                this.mGridView.setSelection(0);
-            } else {
-                doExit();
-            }
-        } else if (baseLazyFragment instanceof UserFragment && UserFragment.tvHotListForGrid.canScrollVertically(-1)) {
-            // 如果 UserFragment 列表可以向上滚动，则滚动到顶部
-            UserFragment.tvHotListForGrid.scrollToPosition(0);
-            this.mGridView.setSelection(0);
-        } else {
-            doExit();
         }
+        // 任意页面：连按两次返回键退出 APP
+        doExit();
     }
 
     private void doExit() {
@@ -695,17 +1033,9 @@ public class HomeActivity extends BaseActivity {
             tvName.setText(R.string.app_name);
         }
 
-        // takagen99: Icon Placement
-        if (Hawk.get(HawkConfig.HOME_SEARCH_POSITION, true)) {
-            tvFind.setVisibility(View.VISIBLE);
-        } else {
-            tvFind.setVisibility(View.GONE);
-        }
-        if (Hawk.get(HawkConfig.HOME_MENU_POSITION, true)) {
-            tvMenu.setVisibility(View.VISIBLE);
-        } else {
-            tvMenu.setVisibility(View.GONE);
-        }
+        // 搜索与设置图标固定显示在 wifi 之后的同一栏，不再受按钮位置开关控制
+        tvFind.setVisibility(View.VISIBLE);
+        tvMenu.setVisibility(View.VISIBLE);
         mHandler.post(mRunnable);
     }
 
@@ -747,7 +1077,22 @@ public class HomeActivity extends BaseActivity {
                 if (sortFocused != currentSelected) {
                     currentSelected = sortFocused;
                     mViewPager.setCurrentItem(sortFocused, false);
-                    changeTop(sortFocused != 0);
+                    // 顶栏保持显示，避免进入分类页时整页向上跳动
+                    changeTop(false);
+                    applyCategoryLayout(sortFocused != 0);
+                    playPageTransition();
+                    // 布局刚切换过宽度会变，等一帧再确认当前页，防止切换动作被重测量吞掉（点前几个导航不生效）
+                    final int target = sortFocused;
+                    mViewPager.post(() -> {
+                        try {
+                            if (currentSelected == target && mViewPager.getAdapter() != null
+                                    && mViewPager.getCurrentItem() != target) {
+                                mViewPager.setCurrentItem(target, false);
+                            }
+                        } catch (Throwable ignored) {
+                            // 保持当前页
+                        }
+                    });
                 }
             }
         }
@@ -811,8 +1156,7 @@ public class HomeActivity extends BaseActivity {
             animatorSet.start();
             tvName.setFocusable(false);
             tvWifi.setFocusable(false);
-            tvFind.setFocusable(false);
-            tvStyle.setFocusable(false);
+            tvFind.setFocusable(false);            tvStyle.setFocusable(false);
             tvDraw.setFocusable(false);
             tvMenu.setFocusable(false);
             return;
@@ -919,7 +1263,7 @@ public class HomeActivity extends BaseActivity {
     private void refreshEmpty() {
         skipNextUpdate=true;
         showSuccess();
-        sortAdapter.setNewData(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), new ArrayList<>(), true));
+        sortAdapter.setNewData(withoutHomeRow(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), new ArrayList<>(), true)));
         initViewPager(null);
         tvName.clearAnimation();
     }

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TVBox</string>
+    <string name="app_name">HoopoeTV</string>
     <string name="app_home">首页</string>
     <string name="app_source"></string>
+    <string name="app_live"></string>
+    <string name="app_epg"></string>
 
     // Home Page //
     <string name="hm_ok">加载成功</string>
@@ -14,8 +16,10 @@
     <string name="hm_date1">MM月dd日</string>
     <string name="hm_date2">EE HH:mm</string>
     <string name="hm_hist">历史</string>
+<string name="hm_apps">应用</string>
     <string name="hm_live">直播</string>
     <string name="hm_search">搜索</string>
+    <string name="hm_clear_cache">清理缓存</string>
     <string name="hm_push">推送</string>
     <string name="hm_file">文件</string>
     <string name="hm_fav">收藏</string>

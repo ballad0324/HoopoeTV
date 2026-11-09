@@ -61,7 +61,14 @@ public class JarLoader {
             int count = 0;
             do {
                 try {
-                    final Class<?> classInit = classLoader.loadClass("com.github.catvod.spider.Init");
+                    Class<?> classInit = null;
+                    try {
+                        classInit = classLoader.loadClass("com.github.catvod.spider.Init");
+                    } catch (Throwable th) {
+                        // 部分服务端(如 DecoTV)分发的 spider.jar 不含 Init 类，
+                        // 不能因为缺少它就把整个 jar 判定为加载失败
+                        Log.i("JarLoader", "jar 内无 Init 类，跳过 init(): " + th);
+                    }
                     if (classInit != null) {
                         final Method initMethod = classInit.getMethod("init", Context.class);
                         // 在子线程中调用 init 方法，避免网络请求在主线程中执行
@@ -77,19 +84,19 @@ public class JarLoader {
                         });
                         initThread.start();
                         initThread.join();
-                        Log.i("JarLoader", "echo-自定义爬虫代码加载成功!");
-                        success = true;
-                        try {
-                            Class<?> proxy = classLoader.loadClass("com.github.catvod.spider.Proxy");
-                            Method proxyMethod = proxy.getMethod("proxy", Map.class);
-                            proxyMethods.put(key, proxyMethod);
-                        } catch (Throwable th) {
-                            // 可以记录错误日志
-                            th.printStackTrace();
-                        }
-                        break;
                     }
-                    Thread.sleep(200);
+                    // 走到这里说明 DexClassLoader 已成功打开 jar，视为加载成功
+                    Log.i("JarLoader", "echo-自定义爬虫代码加载成功!");
+                    success = true;
+                    try {
+                        Class<?> proxy = classLoader.loadClass("com.github.catvod.spider.Proxy");
+                        Method proxyMethod = proxy.getMethod("proxy", Map.class);
+                        proxyMethods.put(key, proxyMethod);
+                    } catch (Throwable th) {
+                        // 可以记录错误日志
+                        th.printStackTrace();
+                    }
+                    break;
                 } catch (Throwable th) {
                     th.printStackTrace();
                 }

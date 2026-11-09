@@ -2,6 +2,8 @@ package com.github.tvbox.osc.ui.fragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +51,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +72,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
     private TextView tvHomeDefaultShow;
     private TextView tvHomeShow;
     private TextView tvHomeIcon;
+    private TextView tvClearCache;
     private TextView tvHomeRec;
     private TextView tvHomeNum;
 
@@ -86,6 +90,56 @@ public class ModelSettingFragment extends BaseLazyFragment {
     private TextView tvSearchView;
     private TextView tvDns;
     private TextView tvFastSearchText;
+
+    // ---- 缓存清理：只动 App 的 cache 目录（图片/播放器临时缓存），不动 jar 缓存与数据 ----
+    private File[] cacheDirs() {
+        ArrayList<File> list = new ArrayList<>();
+        try {
+            if (mActivity.getCacheDir() != null) list.add(mActivity.getCacheDir());
+        } catch (Exception ignored) {
+        }
+        try {
+            if (mActivity.getExternalCacheDir() != null) list.add(mActivity.getExternalCacheDir());
+        } catch (Exception ignored) {
+        }
+        return list.toArray(new File[0]);
+    }
+
+    private long dirSize(File f) {
+        if (f == null || !f.exists()) return 0;
+        if (f.isDirectory()) {
+            File[] kids = f.listFiles();
+            long s = 0;
+            if (kids != null) for (File k : kids) s += dirSize(k);
+            return s;
+        }
+        return f.length();
+    }
+
+    private long cacheSize() {
+        long total = 0;
+        for (File dir : cacheDirs()) total += dirSize(dir);
+        return total;
+    }
+
+    private long clearDir(File f) {
+        if (f == null || !f.exists()) return 0;
+        if (f.isDirectory()) {
+            File[] kids = f.listFiles();
+            long s = 0;
+            if (kids != null) for (File k : kids) s += clearDir(k);
+            return s;
+        }
+        long len = f.length();
+        return f.delete() ? len : 0;
+    }
+
+    private String formatSize(long bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return String.format("%.1f KB", bytes / 1024.0);
+        if (bytes < 1024L * 1024 * 1024) return String.format("%.1f MB", bytes / (1024.0 * 1024.0));
+        return String.format("%.2f GB", bytes / (1024.0 * 1024.0 * 1024.0));
+    }
 
     public static ModelSettingFragment newInstance() {
         return new ModelSettingFragment().setArguments();
@@ -107,12 +161,14 @@ public class ModelSettingFragment extends BaseLazyFragment {
         tvDebugOpen = findViewById(R.id.tvDebugOpen);
         tvDebugOpen.setText(Hawk.get(HawkConfig.DEBUG_OPEN, false) ? "开启" : "关闭");
         tvApi = findViewById(R.id.tvApi);
-        tvApi.setText(Hawk.get(HawkConfig.API_URL, ""));
+        tvApi.setText(ApiConfig.getApiUrl());
         // Home Section
         tvHomeApi = findViewById(R.id.tvHomeApi);
         tvHomeApi.setText(ApiConfig.get().getHomeSourceBean().getName());
         tvHomeShow = findViewById(R.id.tvHomeShow);
         tvHomeShow.setText(Hawk.get(HawkConfig.HOME_SHOW_SOURCE, false) ? "开启" : "关闭");
+        tvHomeIcon = findViewById(R.id.tvHomeIcon);
+        tvHomeIcon.setText(formatSize(cacheSize()));
         tvHomeRec = findViewById(R.id.tvHomeRec);
         tvHomeRec.setText(getHomeRecName(Hawk.get(HawkConfig.HOME_REC, 0)));
         tvHomeNum = findViewById(R.id.tvHomeNum);
@@ -127,6 +183,8 @@ public class ModelSettingFragment extends BaseLazyFragment {
         tvVideoPurifyText = findViewById(R.id.tvVideoPurifyText);
         tvVideoPurifyText.setText(Hawk.get(HawkConfig.VIDEO_PURIFY, true) ? "开启" : "关闭");
         // System Section
+        tvClearCache = findViewById(R.id.tvClearCache);
+        tvClearCache.setText(formatSize(cacheSize()));
         tvLocale = findViewById(R.id.tvLocale);
         tvLocale.setText(getLocaleView(Hawk.get(HawkConfig.HOME_LOCALE, 0)));
         tvTheme = findViewById(R.id.tvTheme);
@@ -267,12 +325,40 @@ public class ModelSettingFragment extends BaseLazyFragment {
                 tvHomeShow.setText(Hawk.get(HawkConfig.HOME_SHOW_SOURCE, true) ? "开启" : "关闭");
             }
         });
-        findViewById(R.id.llHomeIcon).setOnClickListener(new View.OnClickListener() {
+        // 清理缓存项已下线（整块隐藏）
+        try {
+            findViewById(R.id.llHomeIcon).setVisibility(View.GONE);
+        } catch (Throwable ignored) {
+        }
+        // 系统区块下的「清理缓存」（显示占用大小，点一下即清理）
+        findViewById(R.id.llClearCache).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FastClickCheckUtil.check(v);
-                HomeIconDialog dialog = new HomeIconDialog(mActivity);
-                dialog.show();
+                if (tvClearCache != null) tvClearCache.setText("清理中...");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        long freed = 0;
+                        for (File dir : cacheDirs()) freed += clearDir(dir);
+                        final long freedSize = freed;
+                        if (mActivity == null) return;
+                        mActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (tvClearCache != null) tvClearCache.setText(formatSize(cacheSize()));
+                                Toast.makeText(mActivity, "已清理 " + formatSize(freedSize) + " 缓存", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }).start();
+            }
+        });
+        // 清理缓存（旧入口已下线，保留空实现避免误触）------------------
+        findViewById(R.id.llHomeIcon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 已下线
             }
         });
         // Select Home Display Type : Douban / Recommended / History -----
@@ -620,24 +706,44 @@ public class ModelSettingFragment extends BaseLazyFragment {
             @Override
             public void onClick(View v) {
                 FastClickCheckUtil.check(v);
-                if (!ApiConfig.get().wallpaper.isEmpty())
-                    Toast.makeText(mContext, getString(R.string.mn_wall_load), Toast.LENGTH_SHORT).show();
-                OkGo.<File>get(ApiConfig.get().wallpaper).execute(new FileCallback(requireActivity().getFilesDir().getAbsolutePath(), "wp") {
-                    @Override
-                    public void onSuccess(Response<File> response) {
-                        ((BaseActivity) requireActivity()).changeWallpaper(true);
-                    }
+                Toast.makeText(mContext, getString(R.string.mn_wall_load), Toast.LENGTH_SHORT).show();
+                // 接口下发了壁纸地址就用接口的
+                if (!ApiConfig.get().wallpaper.isEmpty()) {
+                    OkGo.<File>get(ApiConfig.get().wallpaper).execute(new FileCallback(requireActivity().getFilesDir().getAbsolutePath(), "wp") {
+                        @Override
+                        public void onSuccess(Response<File> response) {
+                            ((BaseActivity) requireActivity()).changeWallpaper(true);
+                        }
 
-                    @Override
-                    public void onError(Response<File> response) {
-                        super.onError(response);
-                    }
+                        @Override
+                        public void onError(Response<File> response) {
+                            super.onError(response);
+                        }
 
-                    @Override
-                    public void downloadProgress(Progress progress) {
-                        super.downloadProgress(progress);
-                    }
-                });
+                        @Override
+                        public void downloadProgress(Progress progress) {
+                            super.downloadProgress(progress);
+                        }
+                    });
+                    return;
+                }
+                // 接口没给壁纸时，从内置的三张壁纸里轮换
+                try {
+                    int[] wps = new int[]{R.drawable.wallpaper_1, R.drawable.wallpaper_2, R.drawable.wallpaper_3};
+                    int idx = (Hawk.get("wp_index", -1) + 1) % wps.length;
+                    Hawk.put("wp_index", idx);
+                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), wps[idx]);
+                    File wpFile = new File(requireActivity().getFilesDir().getAbsolutePath() + "/wp");
+                    FileOutputStream fos = new FileOutputStream(wpFile);
+                    bmp.compress(Bitmap.CompressFormat.JPEG, 92, fos);
+                    fos.flush();
+                    fos.close();
+                    bmp.recycle();
+                    ((BaseActivity) requireActivity()).changeWallpaper(true);
+                } catch (Throwable th) {
+                    th.printStackTrace();
+                    Toast.makeText(mContext, "换壁纸失败", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         // Restore Default Wallpaper from system -------------------------
