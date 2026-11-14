@@ -13,9 +13,11 @@ android {
     defaultConfig {
         applicationId 'com.hoopoetv.tvbox'
         targetSdkVersion 28
-        versionCode 1
-        versionName "v0.0.1"
+        versionCode 10078
+        versionName "v1.6.27"
         multiDexEnabled true
+        // UI 身份开关：false = TV 端 UI，true = 手机端 UI（由 mobile flavor 覆盖）
+        buildConfigField "boolean", "UI_MOBILE", "false"
         //设置room的Schema的位置
         javaCompileOptions {
             annotationProcessorOptions {
@@ -71,6 +73,14 @@ android {
             // Python 版本需要额外的 Proguard 规则
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'proguard-python.pro'
         }
+        // 手机端 UI 变体：与 normal/python 共用同一内核（main 源集），
+        // UI 资源与页面类由 app/src/mobile 覆盖，未覆盖的全部继承 main 的 TV 端实现
+        mobile {
+            dimension = "mode"
+            minSdkVersion 21
+            buildConfigField "boolean", "UI_MOBILE", "true"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
     applicationVariants.configureEach { variant ->
         variant.outputs.configureEach { output ->
@@ -93,6 +103,15 @@ android {
 
     buildFeatures {
         dataBinding = true
+        buildConfig = true
+    }
+
+    sourceSets {
+        // 手机端 UI 类与布局已并入 main（两套 UI 运行时共存，「界面模式」设置可在两端互切）。
+        // flavor 源集只剩 mode 维度契约类的手机版本（pyLoader 桩）。
+        mobile {
+            java.srcDirs = ['src/mobile/java']
+        }
     }
 
     lint {

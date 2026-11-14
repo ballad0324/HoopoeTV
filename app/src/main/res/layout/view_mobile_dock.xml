@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 手机端底部 dock 栏（公共件）：首页 / 直播 / 搜索 / 设置 四页共用同一份 -->
+<com.github.tvbox.osc.mobile.ui.view.MobileDockLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/navBar"
+    android:layout_width="match_parent"
+    android:layout_height="58dp"
+    android:layout_marginStart="34dp"
+    android:layout_marginTop="14dp"
+    android:layout_marginEnd="34dp"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/glass_dock_bg"
+    android:elevation="12dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/navVod"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/navVodIcon"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:contentDescription="影视"
+            android:src="@drawable/icon_home" />
+
+        <TextView
+            android:id="@+id/navVodLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/m_nav_movie"
+            android:textColor="@color/shell_text_dim"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/navLive"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/navLiveIcon"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:contentDescription="直播"
+            android:src="@drawable/hm_live" />
+
+        <TextView
+            android:id="@+id/navLiveLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/m_nav_live"
+            android:textColor="@color/shell_text_dim"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <!-- 搜索入口：位于「直播」与「发现」之间 -->
+    <LinearLayout
+        android:id="@+id/navSearch"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/navSearchIcon"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:contentDescription="搜索"
+            android:src="@drawable/hm_search" />
+
+        <TextView
+            android:id="@+id/navSearchLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/m_nav_search"
+            android:textColor="@color/shell_text_dim"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <!-- 原「设置」位已改为「发现」；设置入口移到各页右上角（明暗切换右侧） -->
+    <LinearLayout
+        android:id="@+id/navDiscover"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/navDiscoverIcon"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:contentDescription="发现"
+            android:src="@drawable/ic_nav_discover" />
+
+        <TextView
+            android:id="@+id/navDiscoverLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/m_nav_discover"
+            android:textColor="@color/shell_text_dim"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+</com.github.tvbox.osc.mobile.ui.view.MobileDockLayout>

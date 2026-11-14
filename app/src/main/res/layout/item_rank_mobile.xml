@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 搜索页排行/浏览列表行：名次 + 海报(带角标) + 标题 + 年份·地区·类型 + 两行简介 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="horizontal"
+    android:paddingStart="12dp"
+    android:paddingTop="7dp"
+    android:paddingEnd="14dp"
+    android:paddingBottom="7dp">
+
+    <TextView
+        android:id="@+id/tvRank"
+        android:layout_width="26dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:textColor="@color/shell_secondary"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        tools:text="1" />
+
+    <FrameLayout
+        android:layout_width="78dp"
+        android:layout_height="106dp"
+        android:layout_marginStart="6dp">
+
+        <ImageView
+            android:id="@+id/ivPoster"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_hist_cover"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_loading_placeholder" />
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_vod_play"
+            android:contentDescription="播放"
+            android:padding="6dp"
+            android:src="@drawable/play_play" />
+
+        <TextView
+            android:id="@+id/tvBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|top"
+            android:background="@drawable/bg_vod_badge"
+            android:maxLines="1"
+            android:paddingStart="5dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="2dp"
+            android:textColor="#FFFFFFFF"
+            android:textSize="9sp"
+            tools:text="第199集" />
+
+        <TextView
+            android:id="@+id/tvScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:paddingStart="4dp"
+            android:paddingBottom="3dp"
+            android:shadowColor="#CC000000"
+            android:shadowRadius="3"
+            android:textColor="#FFFFC53D"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            tools:text="9.0" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/shell_text"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="凡人修仙传" />
+
+        <TextView
+            android:id="@+id/tvMeta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/shell_text_dim"
+            android:textSize="11sp"
+            tools:text="2020 · 大陆 · 动漫" />
+
+        <TextView
+            android:id="@+id/tvBlurb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="2dp"
+            android:maxLines="2"
+            android:textColor="@color/shell_text_dim"
+            android:textSize="11sp"
+            tools:text="平凡少年韩立出生贫困，为了让家人过上更好的生活，自愿前去七玄门参加…" />
+
+    </LinearLayout>
+
+</LinearLayout>

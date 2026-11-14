@@ -1,0 +1,41 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+    <!-- 机身外框（老款直板机，挖空内部） -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M184,120 h144 a24,24 0 0 1 24,24 v288 a24,24 0 0 1 -24,24 h-144 a24,24 0 0 1 -24,-24 v-288 a24,24 0 0 1 24,-24 z M180,144 L332,144 L332,432 L180,432 Z" />
+    <!-- 右上外置天线 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M300,120 L342,58 L356,68 L314,126 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M349,52 a9,9 0 0 1 0,18 a9,9 0 0 1 0,-18 z" />
+    <!-- 屏幕 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M198,166 L314,166 L314,294 L198,294 Z" />
+    <!-- 按键：两排共六个 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M200,318 L226,318 L226,336 L200,336 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M242,318 L268,318 L268,336 L242,336 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M284,318 L310,318 L310,336 L284,336 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M200,354 L226,354 L226,372 L200,372 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M242,354 L268,354 L268,372 L242,372 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M284,354 L310,354 L310,372 L284,372 Z" />
+</vector>

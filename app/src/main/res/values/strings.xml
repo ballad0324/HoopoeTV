@@ -275,4 +275,46 @@
 
     <!-- 结束 视频设置 相关配置 -->
 
+
+    <!-- ===== 手机端界面文案（英文为默认 values，中文在 values-zh） ===== -->
+    <string name="m_back">‹ Back</string>
+    <string name="m_play_now">Play now</string>
+    <string name="m_desc_more">Show more</string>
+    <string name="m_desc_less">Collapse</string>
+    <string name="m_empty_series">No episodes</string>
+    <string name="m_series">Episodes</string>
+    <string name="m_scale">Aspect</string>
+    <string name="m_prev_ep">Prev</string>
+    <string name="m_next_ep">Next</string>
+    <string name="m_pause">Pause</string>
+    <string name="m_play">Play</string>
+    <string name="m_collapse">Close</string>
+    <string name="m_prev_ch">Prev</string>
+    <string name="m_next_ch">Next</string>
+    <string name="m_nav_movie">Movies</string>
+    <string name="m_nav_live">Live</string>
+    <string name="m_nav_search">Search</string>
+    <string name="m_nav_setting">Settings</string>
+    <string name="m_nav_discover">Discover</string>
+    <string name="m_live_empty">No live source yet. Add one in Settings first.</string>
+    <string name="m_search_hist">History</string>
+    <string name="m_clear">Clear</string>
+    <string name="m_hot_search">Trending</string>
+    <string name="m_ui_mode">UI mode</string>
+    <string name="m_ui_mobile">Phone</string>
+    <string name="m_ui_tv">TV</string>
+    <string name="m_downloads">Downloads</string>
+    <string name="m_refresh">Refresh</string>
+    <string name="m_no_downloads">No downloaded videos yet.\nDownload a video from the detail page, then come back here.</string>
+    <string name="m_delete_file_confirm">Delete this file?</string>
+    <string name="m_cancel">Cancel</string>
+    <string name="m_delete">Delete</string>
+    <string name="m_deleted">Deleted</string>
+    <string name="m_cast">Cast</string>
+    <string name="m_download">Download</string>
+    <string name="m_full">Fullscreen</string>
+    <string name="m_year">Year</string>
+    <string name="m_type">Genre</string>
+    <string name="m_area">Region</string>
+    <string name="m_status">Status</string>
 </resources>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llSheetRow"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="54dp"
+    android:orientation="horizontal"
+    android:paddingStart="16dp"
+    android:paddingTop="6dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="6dp">
+
+    <TextView
+        android:id="@+id/tvSheetTime"
+        android:layout_width="52dp"
+        android:layout_height="wrap_content"
+        android:text="19:32"
+        android:textColor="@color/shell_text"
+        android:textSize="13sp" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvSheetName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="节目名"
+            android:textColor="@color/shell_text"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvSheetRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="19:32 - 20:00"
+            android:textColor="@color/shell_text_dim"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvSheetAction"
+        android:layout_width="68dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="回看"
+        android:textSize="11sp" />
+
+</LinearLayout>

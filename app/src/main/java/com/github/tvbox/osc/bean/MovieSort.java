@@ -61,7 +61,12 @@ public class MovieSort implements Serializable {
         }
     }
 
-    public static class SortFilter {
+    /**
+     * SortData.filters 是 ArrayList&lt;SortFilter&gt;，而 SortData 声明了 Serializable：
+     * SortFilter 不实现 Serializable 会导致 Fragment arguments 在 Activity 保存状态时
+     * 抛「Parcelable encountered IOException writing serializable object」直接闪退。
+     */
+    public static class SortFilter implements Serializable {
         public String key;
         public String name;
         public LinkedHashMap<String, String> values;

@@ -1,0 +1,435 @@
+--------- beginning of main
+11-13 20:11:57.333 17844 20078 D NoMediaRecorder: call gallery scan
+11-13 20:11:57.333  9787  9804 D MyLog   : -->log(0): [Tid:631] onForegroundServicesChanged:pid = 19788,uid=10097,serviceTypes=0
+11-13 20:11:57.334 22101 22179 D MyLog   : -->log(0): [Tid:984] onForegroundServicesChanged:pid = 19788,uid=10097,serviceTypes=0
+11-13 20:11:57.334 16901 17687 D MyLog   : -->log(0): [Tid:2789] onForegroundServicesChanged:pid = 19788,uid=10097,serviceTypes=0
+11-13 20:11:57.335  4465 32070 D MyLog   : -->log(0): [Tid:630] onForegroundServicesChanged:pid = 19788,uid=10097,serviceTypes=0
+11-13 20:11:57.335 19902 19919 D MyLog   : -->log(0): [Tid:861] onForegroundServicesChanged:pid = 19788,uid=10097,serviceTypes=0
+11-13 20:11:57.335 17071 17089 D MyLog   : -->log(0): [Tid:2727] onForegroundServicesChanged:pid = 19788,uid=10097,serviceTypes=0
+11-13 20:11:57.337 17844 20078 D NoMediaRecorder: call gallery scan
+11-13 20:11:57.337 17844 20078 I MediaProvider: End android.intent.action.MEDIA_SCANNER_SCAN_FILE
+11-13 20:11:57.339   555   555 I hwservicemanager: getTransport: Cannot find entry vendor.qti.hardware.servicetracker@1.0::IServicetracker/default in either framework or device manifest.
+11-13 20:11:57.343  1496  2287 I MiuiNetworkPolicy: updateUidState uid = 10097, uidState = 5
+11-13 20:11:57.343  1496  2287 I MiuiNetworkPolicy: updateMLUid uid:10097,old:11,new:5
+11-13 20:11:57.343  1496  2287 I MiuiNetworkPolicy: isMLEnabled state:11,uid:10097,connect:DISCONNECTED
+11-13 20:11:57.343  1496  2287 I MiuiNetworkPolicy: isMLEnabled state:5,uid:10097,connect:DISCONNECTED
+11-13 20:11:57.420   555   555 I hwservicemanager: getTransport: Cannot find entry vendor.qti.hardware.servicetracker@1.0::IServicetracker/default in either framework or device manifest.
+11-13 20:11:57.424  1496  4052 D CompatibilityInfo: mCompatibilityFlags - 0
+11-13 20:11:57.424  1496  4052 D CompatibilityInfo: applicationDensity - 440
+11-13 20:11:57.424  1496  4052 D CompatibilityInfo: applicationScale - 1.0
+11-13 20:11:57.427   555   555 I hwservicemanager: getTransport: Cannot find entry vendor.qti.hardware.servicetracker@1.0::IServicetracker/default in either framework or device manifest.
+11-13 20:11:57.434  3125 20040 I NetworkScheduler.Stats: (REDACTED) Task %s/%s started execution. cause:%s exec_start_elapsed_seconds: %s
+11-13 20:11:57.439   555   555 I hwservicemanager: getTransport: Cannot find entry vendor.qti.hardware.servicetracker@1.0::IServicetracker/default in either framework or device manifest.
+11-13 20:11:57.442  3125 20040 I NetworkScheduler.Stats: (REDACTED) Task %s/%s finished executing. cause:%s result: %s elapsed_millis: %s uptime_millis: %s exec_start_elapsed_seconds: %s
+11-13 20:11:57.443   555   555 I hwservicemanager: getTransport: Cannot find entry vendor.qti.hardware.servicetracker@1.0::IServicetracker/default in either framework or device manifest.
+11-13 20:11:57.445   555   555 I hwservicemanager: getTransport: Cannot find entry vendor.qti.hardware.servicetracker@1.0::IServicetracker/default in either framework or device manifest.
+11-13 20:11:57.455  2502  2502 D StatusBar: onNotificationPosted key=0|com.miui.gallery|8|null|10097 isUpdate=false
+11-13 20:11:57.457  9787  9787 W PushService: [Tid:2] this sbn is not at my space
+11-13 20:11:57.458  2502  2502 D StatusBar: filter Notification key=0|com.miui.gallery|8|null|10097
+11-13 20:11:57.483   837   837 V DisplayFeatureHal: dataCallback value=< 922.0000,   0.0000,   0.0000>,time=13078034996105, sensor=5, temperature(K)=   0.0000
+11-13 20:11:57.524   555   555 I hwservicemanager: getTransport: Cannot find entry vendor.qti.hardware.servicetracker@1.0::IServicetracker/default in either framework or device manifest.
+11-13 20:11:57.527  1496  3678 D CompatibilityInfo: mCompatibilityFlags - 0
+11-13 20:11:57.527  1496  3678 D CompatibilityInfo: applicationDensity - 440
+11-13 20:11:57.527  1496  3678 D CompatibilityInfo: applicationScale - 1.0
+11-13 20:11:57.528   555   555 I hwservicemanager: getTransport: Cannot find entry vendor.qti.hardware.servicetracker@1.0::IServicetracker/default in either framework or device manifest.
+11-13 20:11:57.535  3125 20087 I NetworkScheduler.Stats: (REDACTED) Task %s/%s started execution. cause:%s exec_start_elapsed_seconds: %s
+11-13 20:11:57.545   555   555 I hwservicemanager: getTransport: Cannot find entry vendor.qti.hardware.servicetracker@1.0::IServicetracker/default in either framework or device manifest.
+11-13 20:11:57.545  3125 20040 I NetworkScheduler.Stats: (REDACTED) Task %s/%s finished executing. cause:%s result: %s elapsed_millis: %s uptime_millis: %s exec_start_elapsed_seconds: %s
+11-13 20:11:57.546   555   555 I hwservicemanager: getTransport: Cannot find entry vendor.qti.hardware.servicetracker@1.0::IServicetracker/default in either framework or device manifest.
+11-13 20:11:57.636  1496  4460 D MessageMonitor: Dump Looper message took 1ms
+11-13 20:11:57.642  1496  4460 D MessageMonitor: Dump Looper message took 1ms
+11-13 20:11:57.649   837   837 V DisplayFeatureHal: dataCallback value=< 921.0000,   0.0000,   0.0000>,time=13078201658136, sensor=5, temperature(K)=   0.0000
+11-13 20:11:57.816   837   837 V DisplayFeatureHal: dataCallback value=< 918.0000,   0.0000,   0.0000>,time=13078368327042, sensor=5, temperature(K)=   0.0000
+11-13 20:11:57.983   837   837 V DisplayFeatureHal: dataCallback value=< 917.0000,   0.0000,   0.0000>,time=13078534993240, sensor=5, temperature(K)=   0.0000
+11-13 20:11:58.149   837   837 V DisplayFeatureHal: dataCallback value=< 917.0000,   0.0000,   0.0000>,time=13078701658761, sensor=5, temperature(K)=   0.0000
+11-13 20:11:58.196   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:11:58.224  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47207 mC, weight[0] 2
+11-13 20:11:58.225  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38072 mC, weight[1] 1
+11-13 20:11:58.316   837   837 V DisplayFeatureHal: dataCallback value=< 916.0000,   0.0000,   0.0000>,time=13078868326782, sensor=5, temperature(K)=   0.0000
+11-13 20:11:58.398  1496  2287 I MiuiNetworkPolicy: updateUidState uid = 10141, uidState = 20
+11-13 20:11:58.483   837   837 V DisplayFeatureHal: dataCallback value=< 878.0000,   0.0000,   0.0000>,time=13079034991834, sensor=5, temperature(K)=   0.0000
+11-13 20:11:58.651   837   837 V DisplayFeatureHal: dataCallback value=< 838.0000,   0.0000,   0.0000>,time=13079201654594, sensor=5, temperature(K)=   0.0000
+11-13 20:11:58.782  2502  2853 D MobileSignalController: onSignalStrengthsChanged: SignalStrength:{mCdma=CellSignalStrengthCdma: cdmaDbm=2147483647 cdmaEcio=2147483647 evdoDbm=2147483647 evdoEcio=2147483647 evdoSnr=2147483647 miuiLevel=0 level=0,mGsm=CellSignalStrengthGsm: rssi=2147483647 ber=2147483647 mTa=2147483647 miuiLevel=0 mLevel=0,mWcdma=CellSignalStrengthWcdma: ss=2147483647 ber=2147483647 rscp=2147483647 ecno=2147483647 miuiLevel=0 level=0,mTdscdma=CellSignalStrengthTdscdma: rssi=2147483647 ber=2147483647 rscp=2147483647 miuiLevel=0 level=0,mLte=CellSignalStrengthLte: rssi=-51 rsrp=-80 rsrq=-13 rssnr=46 cqi=2147483647 ta=2147483647 miuiLevel=5 level=3,mNr=CellSignalStrengthNr:{ csiRsrp = 2147483647 csiRsrq = 2147483647 csiSinr = 2147483647 ssRsrp = 2147483647 ssRsrq = 2147483647 ssSinr = 2147483647 miuiLevel = 0 level = 0 },primary=CellSignalStrengthLte}
+11-13 20:11:58.782  2502  2853 D NetworkController.MobileSignalController(2): 4G level = 5
+11-13 20:11:58.816   837   837 V DisplayFeatureHal: dataCallback value=< 711.0000,   0.0000,   0.0000>,time=13079368426261, sensor=5, temperature(K)=   0.0000
+11-13 20:11:58.920 18158 18209 W com.tencent.mm: Profile data size exceeds 500000 bytes
+11-13 20:11:58.984   837   837 V DisplayFeatureHal: dataCallback value=< 691.0000,   0.0000,   0.0000>,time=13079534885376, sensor=5, temperature(K)=   0.0000
+11-13 20:11:59.149   837   837 V DisplayFeatureHal: dataCallback value=< 606.0000,   0.0000,   0.0000>,time=13079701563292, sensor=5, temperature(K)=   0.0000
+11-13 20:11:59.196   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:11:59.227  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47272 mC, weight[0] 2
+11-13 20:11:59.228  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38072 mC, weight[1] 1
+11-13 20:11:59.278  1496  2295 D WifiClientModeImpl: fetchRssiLinkSpeedAndFrequencyNative rssi=-30 TxLinkspeed=400 freq=5260 RxLinkSpeed=400
+11-13 20:11:59.278  1496  2295 V WifiConfigManager: Updating scan detail cache freq=5260 BSSID=10:da:43:bd:a9:55 RSSI=-30 for "CMCC_G"-WPA_PSK
+11-13 20:11:59.285  1496  3678 I WifiService: getCurrentNetwork uid=1000
+11-13 20:11:59.286  2630  5132 D QCNEJ/WlanStaInfoRelay: Received action: android.net.wifi.RSSI_CHANGED
+11-13 20:11:59.287  2502  2551 V WifiManager: TrafficStateCallbackProxy: onStateChanged state=3
+11-13 20:11:59.288  1496  2295 D WifiClientModeImpl:  L2ConnectedState screen=on 19 0 "CMCC_G" 10:da:43:bd:a9:55 rssi=-30 f=5260 sc=60 link=400 tx=2.7, 0.2, 0.2  rx=0.2 bcn=4812 [on:1197 tx:2 rx:4 period:3044] from screen [on:1459321 period:2413951] score=60
+11-13 20:11:59.290  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:11:59.306  2502  2502 I chatty  : uid=1000(system) com.android.systemui identical 8 lines
+11-13 20:11:59.306  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:11:59.317   837   837 V DisplayFeatureHal: dataCallback value=< 689.0000,   0.0000,   0.0000>,time=13079868322303, sensor=5, temperature(K)=   0.0000
+11-13 20:11:59.317  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47272 mC, weight[0] 2
+11-13 20:11:59.319  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38072 mC, weight[1] 1
+11-13 20:11:59.321  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:11:59.321  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:11:59.322  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47272 mC, weight[0] 2
+11-13 20:11:59.323  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38072 mC, weight[1] 1
+11-13 20:11:59.323  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:11:59.324  2502  2502 I chatty  : uid=1000(system) com.android.systemui identical 3 lines
+11-13 20:11:59.324  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:11:59.324  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47272 mC, weight[0] 2
+11-13 20:11:59.324  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:11:59.325  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38072 mC, weight[1] 1
+11-13 20:11:59.326  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:11:59.340  2502  2502 I chatty  : uid=1000(system) com.android.systemui identical 4 lines
+11-13 20:11:59.340  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:11:59.483   837   837 V DisplayFeatureHal: dataCallback value=< 714.0000,   0.0000,   0.0000>,time=13080034988032, sensor=5, temperature(K)=   0.0000
+11-13 20:11:59.649   837   837 V DisplayFeatureHal: dataCallback value=< 805.0000,   0.0000,   0.0000>,time=13080201650428, sensor=5, temperature(K)=   0.0000
+11-13 20:11:59.744  3125 12727 W Auth    : [TokenResponseCallback] TokenResponse failed with exception [CONTEXT service_id=343 ]
+11-13 20:11:59.744  3125 12727 W Auth    : djrk: Failed to process request
+11-13 20:11:59.744  3125 12727 W Auth    : 	at djrr.a(:com.google.android.gms@264231013@26.42.31 (100400-1005867181):23)
+11-13 20:11:59.744  3125 12727 W Auth    : 	at djvk.b(:com.google.android.gms@264231013@26.42.31 (100400-1005867181):17)
+11-13 20:11:59.744  3125 12727 W Auth    : 	at djvn.b(:com.google.android.gms@264231013@26.42.31 (100400-1005867181):22)
+11-13 20:11:59.744  3125 12727 W Auth    : 	at djwf.onFailed(:com.google.android.gms@264231013@26.42.31 (100400-1005867181):13)
+11-13 20:11:59.744  3125 12727 W Auth    : 	at m1.ip.onFailed(:com.google.android.gms.dynamite_cronetdynamite@264231013@26.42.31 (100400-0):3)
+11-13 20:11:59.744  3125 12727 W Auth    : 	at m1.hm.run(:com.google.android.gms.dynamite_cronetdynamite@264231013@26.42.31 (100400-0):16)
+11-13 20:11:59.744  3125 12727 W Auth    : 	at bptm.d(:com.google.android.gms@264231013@26.42.31 (100400-1005867181):50)
+11-13 20:11:59.744  3125 12727 W Auth    : 	at bptm.c(:com.google.android.gms@264231013@26.42.31 (100400-1005867181):5)
+11-13 20:11:59.744  3125 12727 W Auth    : 	at bptm.run(:com.google.android.gms@264231013@26.42.31 (100400-1005867181):81)
+11-13 20:11:59.744  3125 12727 W Auth    : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-13 20:11:59.744  3125 12727 W Auth    : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-13 20:11:59.744  3125 12727 W Auth    : 	at bpzn.run(:com.google.android.gms@264231013@26.42.31 (100400-1005867181):8)
+11-13 20:11:59.744  3125 12727 W Auth    : 	at java.lang.Thread.run(Thread.java:919)
+11-13 20:11:59.744  3125 12727 W Auth    : Caused by: m1.hz: Exception in CronetUrlRequest: net::ERR_TIMED_OUT, ErrorCode=4, InternalErrorCode=-7, Retryable=true
+11-13 20:11:59.744  3125 12727 W Auth    : 	at org.chromium.net.impl.CronetUrlRequest.onError(:com.google.android.gms.dynamite_cronetdynamite@264231013@26.42.31 (100400-0):83)
+11-13 20:11:59.816   837   837 V DisplayFeatureHal: dataCallback value=< 815.0000,   0.0000,   0.0000>,time=13080368319386, sensor=5, temperature(K)=   0.0000
+11-13 20:11:59.983   837   837 V DisplayFeatureHal: dataCallback value=< 803.0000,   0.0000,   0.0000>,time=13080534985636, sensor=5, temperature(K)=   0.0000
+11-13 20:12:00.002  2502  2502 D KeyguardUpdateMonitor: handleTimeUpdate
+11-13 20:12:00.080  1496  2287 I MiuiNetworkPolicy: updateUidState uid = 99910102, uidState = 11
+11-13 20:12:00.082  1496  2287 I MiuiNetworkPolicy: updateUidState uid = 10102, uidState = 7
+11-13 20:12:00.111  3125 12727 W Auth    : [TokenResponseCallback] TokenResponse failed with exception [CONTEXT service_id=343 ]
+11-13 20:12:00.111  3125 12727 W Auth    : djrk: Failed to process request
+11-13 20:12:00.111  3125 12727 W Auth    : 	at djrr.a(:com.google.android.gms@264231013@26.42.31 (100400-1005867181):23)
+11-13 20:12:00.111  3125 12727 W Auth    : 	at djvk.b(:com.google.android.gms@264231013@26.42.31 (100400-1005867181):17)
+11-13 20:12:00.111  3125 12727 W Auth    : 	at djvn.b(:com.google.android.gms@264231013@26.42.31 (100400-1005867181):22)
+11-13 20:12:00.111  3125 12727 W Auth    : 	at djwf.onFailed(:com.google.android.gms@264231013@26.42.31 (100400-1005867181):13)
+11-13 20:12:00.111  3125 12727 W Auth    : 	at m1.ip.onFailed(:com.google.android.gms.dynamite_cronetdynamite@264231013@26.42.31 (100400-0):3)
+11-13 20:12:00.111  3125 12727 W Auth    : 	at m1.hm.run(:com.google.android.gms.dynamite_cronetdynamite@264231013@26.42.31 (100400-0):16)
+11-13 20:12:00.111  3125 12727 W Auth    : 	at bptm.d(:com.google.android.gms@264231013@26.42.31 (100400-1005867181):50)
+11-13 20:12:00.111  3125 12727 W Auth    : 	at bptm.c(:com.google.android.gms@264231013@26.42.31 (100400-1005867181):5)
+11-13 20:12:00.111  3125 12727 W Auth    : 	at bptm.run(:com.google.android.gms@264231013@26.42.31 (100400-1005867181):81)
+11-13 20:12:00.111  3125 12727 W Auth    : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-13 20:12:00.111  3125 12727 W Auth    : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-13 20:12:00.111  3125 12727 W Auth    : 	at bpzn.run(:com.google.android.gms@264231013@26.42.31 (100400-1005867181):8)
+11-13 20:12:00.111  3125 12727 W Auth    : 	at java.lang.Thread.run(Thread.java:919)
+11-13 20:12:00.111  3125 12727 W Auth    : Caused by: m1.hz: Exception in CronetUrlRequest: net::ERR_TIMED_OUT, ErrorCode=4, InternalErrorCode=-7, Retryable=true
+11-13 20:12:00.111  3125 12727 W Auth    : 	at org.chromium.net.impl.CronetUrlRequest.onError(:com.google.android.gms.dynamite_cronetdynamite@264231013@26.42.31 (100400-0):83)
+11-13 20:12:00.149   837   837 V DisplayFeatureHal: dataCallback value=< 781.0000,   0.0000,   0.0000>,time=13080701651157, sensor=5, temperature(K)=   0.0000
+11-13 20:12:00.197   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:12:00.230  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47337 mC, weight[0] 2
+11-13 20:12:00.231  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38072 mC, weight[1] 1
+11-13 20:12:00.316   837   837 V DisplayFeatureHal: dataCallback value=< 763.0000,   0.0000,   0.0000>,time=13080868317407, sensor=5, temperature(K)=   0.0000
+11-13 20:12:00.483   837   837 V DisplayFeatureHal: dataCallback value=< 754.0000,   0.0000,   0.0000>,time=13081034984907, sensor=5, temperature(K)=   0.0000
+11-13 20:12:00.649   837   837 V DisplayFeatureHal: dataCallback value=< 753.0000,   0.0000,   0.0000>,time=13081201646678, sensor=5, temperature(K)=   0.0000
+11-13 20:12:00.745  5114  5634 D AppOpsAdapter: using permission notify! 32 , groundState 0
+11-13 20:12:00.816   837   837 V DisplayFeatureHal: dataCallback value=< 752.0000,   0.0000,   0.0000>,time=13081368314490, sensor=5, temperature(K)=   0.0000
+11-13 20:12:00.983   837   837 V DisplayFeatureHal: dataCallback value=< 784.0000,   0.0000,   0.0000>,time=13081534980584, sensor=5, temperature(K)=   0.0000
+11-13 20:12:01.149   837   837 V DisplayFeatureHal: dataCallback value=< 819.0000,   0.0000,   0.0000>,time=13081701644959, sensor=5, temperature(K)=   0.0000
+11-13 20:12:01.198   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:12:01.233  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47337 mC, weight[0] 2
+11-13 20:12:01.234  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38072 mC, weight[1] 1
+11-13 20:12:01.316   837   837 V DisplayFeatureHal: dataCallback value=< 851.0000,   0.0000,   0.0000>,time=13081868312980, sensor=5, temperature(K)=   0.0000
+11-13 20:12:01.327  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47337 mC, weight[0] 2
+11-13 20:12:01.328  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38125 mC, weight[1] 1
+11-13 20:12:01.329  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47337 mC, weight[0] 2
+11-13 20:12:01.330  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38125 mC, weight[1] 1
+11-13 20:12:01.331  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47337 mC, weight[0] 2
+11-13 20:12:01.332  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38072 mC, weight[1] 1
+11-13 20:12:01.483   837   837 V DisplayFeatureHal: dataCallback value=< 850.0000,   0.0000,   0.0000>,time=13082034980376, sensor=5, temperature(K)=   0.0000
+11-13 20:12:01.649   837   837 V DisplayFeatureHal: dataCallback value=< 849.0000,   0.0000,   0.0000>,time=13082201643344, sensor=5, temperature(K)=   0.0000
+11-13 20:12:01.816   837   837 V DisplayFeatureHal: dataCallback value=< 849.0000,   0.0000,   0.0000>,time=13082368311469, sensor=5, temperature(K)=   0.0000
+11-13 20:12:01.983   837   837 V DisplayFeatureHal: dataCallback value=< 851.0000,   0.0000,   0.0000>,time=13082534975219, sensor=5, temperature(K)=   0.0000
+11-13 20:12:02.150   837   837 V DisplayFeatureHal: dataCallback value=< 853.0000,   0.0000,   0.0000>,time=13082701582303, sensor=5, temperature(K)=   0.0000
+11-13 20:12:02.198   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:12:02.235  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47337 mC, weight[0] 2
+11-13 20:12:02.236  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38125 mC, weight[1] 1
+11-13 20:12:02.317   837   837 V DisplayFeatureHal: dataCallback value=< 854.0000,   0.0000,   0.0000>,time=13082868212824, sensor=5, temperature(K)=   0.0000
+11-13 20:12:02.318  1496  2295 D WifiClientModeImpl: fetchRssiLinkSpeedAndFrequencyNative rssi=-29 TxLinkspeed=400 freq=5260 RxLinkSpeed=400
+11-13 20:12:02.318  1496  2295 V WifiConfigManager: Updating scan detail cache freq=5260 BSSID=10:da:43:bd:a9:55 RSSI=-29 for "CMCC_G"-WPA_PSK
+11-13 20:12:02.324  1496  2295 D WifiClientModeImpl:  L2ConnectedState screen=on 19 0 "CMCC_G" 10:da:43:bd:a9:55 rssi=-29 f=5260 sc=60 link=400 tx=2.9, 0.1, 0.1  rx=0.3 bcn=4824 [on:1166 tx:3 rx:3 period:3035] from screen [on:1460487 period:2416987] score=60
+11-13 20:12:02.325  2630  5132 D QCNEJ/WlanStaInfoRelay: Received action: android.net.wifi.RSSI_CHANGED
+11-13 20:12:02.327  1496  4460 I WifiService: getCurrentNetwork uid=1000
+11-13 20:12:02.329  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:12:02.348  2502  2502 I chatty  : uid=1000(system) com.android.systemui identical 10 lines
+11-13 20:12:02.348  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:12:02.482   837   837 V DisplayFeatureHal: dataCallback value=< 854.0000,   0.0000,   0.0000>,time=13083034974646, sensor=5, temperature(K)=   0.0000
+11-13 20:12:02.649   837   837 V DisplayFeatureHal: dataCallback value=< 855.0000,   0.0000,   0.0000>,time=13083201638761, sensor=5, temperature(K)=   0.0000
+11-13 20:12:02.752  2502  2853 D MobileSignalController: onSignalStrengthsChanged: SignalStrength:{mCdma=CellSignalStrengthCdma: cdmaDbm=2147483647 cdmaEcio=2147483647 evdoDbm=2147483647 evdoEcio=2147483647 evdoSnr=2147483647 miuiLevel=0 level=0,mGsm=CellSignalStrengthGsm: rssi=2147483647 ber=2147483647 mTa=2147483647 miuiLevel=0 mLevel=0,mWcdma=CellSignalStrengthWcdma: ss=2147483647 ber=2147483647 rscp=2147483647 ecno=2147483647 miuiLevel=0 level=0,mTdscdma=CellSignalStrengthTdscdma: rssi=2147483647 ber=2147483647 rscp=2147483647 miuiLevel=0 level=0,mLte=CellSignalStrengthLte: rssi=-51 rsrp=-76 rsrq=-9 rssnr=54 cqi=2147483647 ta=2147483647 miuiLevel=5 level=3,mNr=CellSignalStrengthNr:{ csiRsrp = 2147483647 csiRsrq = 2147483647 csiSinr = 2147483647 ssRsrp = 2147483647 ssRsrq = 2147483647 ssSinr = 2147483647 miuiLevel = 0 level = 0 },primary=CellSignalStrengthLte}
+11-13 20:12:02.753  2502  2853 D NetworkController.MobileSignalController(1): 4G level = 5
+11-13 20:12:02.762  2502  2853 D MobileSignalController: updateDataType mSelectedDataTypeIcon[0]=2131232924, mSelectedDataActivityIndex=6
+11-13 20:12:02.762  2502  2853 D TelephonyIcons: getSignalStrengthIcon: slot=0, inetCondition=1, level=5, roaming=false, signalstrength=SignalStrength:{mCdma=CellSignalStrengthCdma: cdmaDbm=2147483647 cdmaEcio=2147483647 evdoDbm=2147483647 evdoEcio=2147483647 evdoSnr=2147483647 miuiLevel=0 level=0,mGsm=CellSignalStrengthGsm: rssi=2147483647 ber=2147483647 mTa=2147483647 miuiLevel=0 mLevel=0,mWcdma=CellSignalStrengthWcdma: ss=2147483647 ber=2147483647 rscp=2147483647 ecno=2147483647 miuiLevel=0 level=0,mTdscdma=CellSignalStrengthTdscdma: rssi=2147483647 ber=2147483647 rscp=2147483647 miuiLevel=0 level=0,mLte=CellSignalStrengthLte: rssi=-51 rsrp=-76 rsrq=-9 rssnr=54 cqi=2147483647 ta=2147483647 miuiLevel=5 level=3,mNr=CellSignalStrengthNr:{ csiRsrp = 2147483647 csiRsrq = 2147483647 csiSinr = 2147483647 ssRsrp = 2147483647 ssRsrq = 2147483647 ssSinr = 2147483647 miuiLevel = 0 level = 0 },primary=CellSignalStrengthLte}
+11-13 20:12:02.763  2502  2853 D TelephonyIcons: null signal icon name: drawable/stat_sys_signal_null
+11-13 20:12:02.764  2502  2853 D TelephonyIcons: getDataTypeIcon sub=0
+11-13 20:12:02.765  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:12:02.766  2502  2502 I chatty  : uid=1000(system) com.android.systemui identical 4 lines
+11-13 20:12:02.766  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:12:02.816   837   837 V DisplayFeatureHal: dataCallback value=< 854.0000,   0.0000,   0.0000>,time=13083368308969, sensor=5, temperature(K)=   0.0000
+11-13 20:12:02.961  1496  1638 D CompatibilityInfo: mCompatibilityFlags - 0
+11-13 20:12:02.961  1496  1638 D CompatibilityInfo: applicationDensity - 440
+11-13 20:12:02.961  1496  1638 D CompatibilityInfo: applicationScale - 1.0
+11-13 20:12:02.982   837   837 V DisplayFeatureHal: dataCallback value=< 855.0000,   0.0000,   0.0000>,time=13083534974230, sensor=5, temperature(K)=   0.0000
+11-13 20:12:03.129 18011 19074 I mars::stn: [longlink_connect_monitor.cc:551, OnHeartbeatAlarmSet]:longlink_progress on_heartbeat_set, time: 13083685, time interval:210000
+11-13 20:12:03.149   837   837 V DisplayFeatureHal: dataCallback value=< 854.0000,   0.0000,   0.0000>,time=13083701638969, sensor=5, temperature(K)=   0.0000
+11-13 20:12:03.198   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:12:03.238  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47337 mC, weight[0] 2
+11-13 20:12:03.239  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38125 mC, weight[1] 1
+11-13 20:12:03.264  2502  2853 D MobileSignalController: onSignalStrengthsChanged: SignalStrength:{mCdma=CellSignalStrengthCdma: cdmaDbm=2147483647 cdmaEcio=2147483647 evdoDbm=2147483647 evdoEcio=2147483647 evdoSnr=2147483647 miuiLevel=0 level=0,mGsm=CellSignalStrengthGsm: rssi=2147483647 ber=2147483647 mTa=2147483647 miuiLevel=0 mLevel=0,mWcdma=CellSignalStrengthWcdma: ss=2147483647 ber=2147483647 rscp=2147483647 ecno=2147483647 miuiLevel=0 level=0,mTdscdma=CellSignalStrengthTdscdma: rssi=2147483647 ber=2147483647 rscp=2147483647 miuiLevel=0 level=0,mLte=CellSignalStrengthLte: rssi=-55 rsrp=-81 rsrq=-13 rssnr=-8 cqi=2147483647 ta=2147483647 miuiLevel=5 level=1,mNr=CellSignalStrengthNr:{ csiRsrp = 2147483647 csiRsrq = 2147483647 csiSinr = 2147483647 ssRsrp = 2147483647 ssRsrq = 2147483647 ssSinr = 2147483647 miuiLevel = 0 level = 0 },primary=CellSignalStrengthLte}
+11-13 20:12:03.264  2502  2853 D NetworkController.MobileSignalController(2): 4G level = 5
+11-13 20:12:03.316   837   837 V DisplayFeatureHal: dataCallback value=< 855.0000,   0.0000,   0.0000>,time=13083868303292, sensor=5, temperature(K)=   0.0000
+11-13 20:12:03.334  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47337 mC, weight[0] 2
+11-13 20:12:03.335  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38125 mC, weight[1] 1
+11-13 20:12:03.336  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47337 mC, weight[0] 2
+11-13 20:12:03.337  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38125 mC, weight[1] 1
+11-13 20:12:03.338  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47337 mC, weight[0] 2
+11-13 20:12:03.339  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38125 mC, weight[1] 1
+11-13 20:12:03.446  1496  2287 I MiuiNetworkPolicy: updateUidState uid = 99901000, uidState = 11
+11-13 20:12:03.483   837   837 V DisplayFeatureHal: dataCallback value=< 854.0000,   0.0000,   0.0000>,time=13084035075011, sensor=5, temperature(K)=   0.0000
+11-13 20:12:03.649   837   837 V DisplayFeatureHal: dataCallback value=< 854.0000,   0.0000,   0.0000>,time=13084201634959, sensor=5, temperature(K)=   0.0000
+11-13 20:12:03.816   837   837 V DisplayFeatureHal: dataCallback value=< 854.0000,   0.0000,   0.0000>,time=13084368302928, sensor=5, temperature(K)=   0.0000
+11-13 20:12:03.983   837   837 V DisplayFeatureHal: dataCallback value=< 854.0000,   0.0000,   0.0000>,time=13084534968501, sensor=5, temperature(K)=   0.0000
+11-13 20:12:04.149   837   837 V DisplayFeatureHal: dataCallback value=< 853.0000,   0.0000,   0.0000>,time=13084701634438, sensor=5, temperature(K)=   0.0000
+11-13 20:12:04.198   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:12:04.241  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47402 mC, weight[0] 2
+11-13 20:12:04.242  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38125 mC, weight[1] 1
+11-13 20:12:04.316   837   837 V DisplayFeatureHal: dataCallback value=< 853.0000,   0.0000,   0.0000>,time=13084868300271, sensor=5, temperature(K)=   0.0000
+11-13 20:12:04.375   653  1333 D OemNetd : setLimit: disable, rate=0
+11-13 20:12:04.483   837   837 V DisplayFeatureHal: dataCallback value=< 854.0000,   0.0000,   0.0000>,time=13085034966105, sensor=5, temperature(K)=   0.0000
+11-13 20:12:04.649   837   837 V DisplayFeatureHal: dataCallback value=< 857.0000,   0.0000,   0.0000>,time=13085201630949, sensor=5, temperature(K)=   0.0000
+11-13 20:12:04.816   837   837 V DisplayFeatureHal: dataCallback value=< 858.0000,   0.0000,   0.0000>,time=13085368298292, sensor=5, temperature(K)=   0.0000
+11-13 20:12:04.983   837   837 V DisplayFeatureHal: dataCallback value=< 859.0000,   0.0000,   0.0000>,time=13085535069126, sensor=5, temperature(K)=   0.0000
+11-13 20:12:05.149   837   837 V DisplayFeatureHal: dataCallback value=< 858.0000,   0.0000,   0.0000>,time=13085701631417, sensor=5, temperature(K)=   0.0000
+11-13 20:12:05.199   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:12:05.244  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47402 mC, weight[0] 2
+11-13 20:12:05.245  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38125 mC, weight[1] 1
+11-13 20:12:05.316   837   837 V DisplayFeatureHal: dataCallback value=< 857.0000,   0.0000,   0.0000>,time=13085868172771, sensor=5, temperature(K)=   0.0000
+11-13 20:12:05.341  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47337 mC, weight[0] 2
+11-13 20:12:05.344  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38125 mC, weight[1] 1
+11-13 20:12:05.345  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47402 mC, weight[0] 2
+11-13 20:12:05.346  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38125 mC, weight[1] 1
+11-13 20:12:05.348  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47402 mC, weight[0] 2
+11-13 20:12:05.349  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38125 mC, weight[1] 1
+11-13 20:12:05.364  1496  2295 D WifiClientModeImpl: fetchRssiLinkSpeedAndFrequencyNative rssi=-30 TxLinkspeed=400 freq=5260 RxLinkSpeed=400
+11-13 20:12:05.364  1496  2295 V WifiConfigManager: Updating scan detail cache freq=5260 BSSID=10:da:43:bd:a9:55 RSSI=-29 for "CMCC_G"-WPA_PSK
+11-13 20:12:05.370  2630  5132 D QCNEJ/WlanStaInfoRelay: Received action: android.net.wifi.RSSI_CHANGED
+11-13 20:12:05.370  1496  2295 D WifiClientModeImpl:  L2ConnectedState screen=on 19 0 "CMCC_G" 10:da:43:bd:a9:55 rssi=-30 f=5260 sc=60 link=400 tx=2.9, 0.0, 0.0  rx=1.2 bcn=4842 [on:1703 tx:2 rx:5 period:3045] from screen [on:1462190 period:2420033] score=60
+11-13 20:12:05.371  1496  4460 I WifiService: getCurrentNetwork uid=1000
+11-13 20:12:05.374  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:12:05.401  2502  2502 I chatty  : uid=1000(system) com.android.systemui identical 10 lines
+11-13 20:12:05.401  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:12:05.483   837   837 V DisplayFeatureHal: dataCallback value=< 856.0000,   0.0000,   0.0000>,time=13086034963813, sensor=5, temperature(K)=   0.0000
+11-13 20:12:05.649   837   837 V DisplayFeatureHal: dataCallback value=< 857.0000,   0.0000,   0.0000>,time=13086201627251, sensor=5, temperature(K)=   0.0000
+11-13 20:12:05.816   837   837 V DisplayFeatureHal: dataCallback value=< 856.0000,   0.0000,   0.0000>,time=13086368294386, sensor=5, temperature(K)=   0.0000
+11-13 20:12:05.983   837   837 V DisplayFeatureHal: dataCallback value=< 858.0000,   0.0000,   0.0000>,time=13086534960636, sensor=5, temperature(K)=   0.0000
+11-13 20:12:06.149   837   837 V DisplayFeatureHal: dataCallback value=< 857.0000,   0.0000,   0.0000>,time=13086701627563, sensor=5, temperature(K)=   0.0000
+11-13 20:12:06.199   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:12:06.246  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47337 mC, weight[0] 2
+11-13 20:12:06.247  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38177 mC, weight[1] 1
+11-13 20:12:06.317   837   837 V DisplayFeatureHal: dataCallback value=< 858.0000,   0.0000,   0.0000>,time=13086868292719, sensor=5, temperature(K)=   0.0000
+11-13 20:12:06.440 18011 18029 W tencent.mm:pus: Profile data size exceeds 500000 bytes
+11-13 20:12:06.483   837   837 V DisplayFeatureHal: dataCallback value=< 856.0000,   0.0000,   0.0000>,time=13087034956730, sensor=5, temperature(K)=   0.0000
+11-13 20:12:06.649   837   837 V DisplayFeatureHal: dataCallback value=< 856.0000,   0.0000,   0.0000>,time=13087201622563, sensor=5, temperature(K)=   0.0000
+11-13 20:12:06.651  1496  2228 I InputDispatcher: Application is not responding: Window{3db56f7 u0 com.hoopoetv.tvbox/com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity}.  It has been 8004.0ms since event, 8002.2ms since wait started.  Reason: Waiting to send non-key event because the touched window has not finished processing certain input events that were delivered to it over 500.0ms ago.  Wait queue length: 1.  Wait queue head age: 42802.2ms.
+--------- beginning of system
+11-13 20:12:06.654  1496  2228 I WindowManager: Input event dispatching timed out sending to com.hoopoetv.tvbox/com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity.  Reason: Waiting to send non-key event because the touched window has not finished processing certain input events that were delivered to it over 500.0ms ago.  Wait queue length: 1.  Wait queue head age: 42802.2ms.
+11-13 20:12:06.701  1496  2228 D MessageMonitor: Dump Looper message took 0ms
+11-13 20:12:06.750  5224  5488 W PowerCheckerService: Time interval is too short since last check
+11-13 20:12:06.773  1496  1638 I android_os_HwBinder: HwBinder: Starting thread pool for getting: android.hidl.manager@1.0::IServiceManager/default
+11-13 20:12:06.789  1496  1638 I ActivityManager: dumpStackTraces pids={2459=true, 2478=true, 2502=true, 2585=true, 2630=true, 2656=true, 2689=true, 2746=true, 3125=true, 3523=true, 3559=true, 3583=true, 3647=true, 3727=true, 3758=true, 3799=true, 3819=true, 3858=true, 3892=true, 3921=true, 3961=true, 4013=true, 4043=true, 4069=true, 4119=true, 4152=true, 4249=true, 4465=true, 4500=true, 5114=true, 5224=true, 5238=true, 5722=true, 7723=true, 9787=true, 10003=true, 10833=true, 10906=true, 11247=true, 14037=true, 14095=true, 14157=true, 14265=true, 14310=true, 14730=true, 15937=true, 16331=true, 16852=true, 16901=true, 17071=true, 17349=true, 17464=true, 17844=true, 17869=true, 17905=true, 18011=true, 18158=true, 18186=true, 18477=true, 18582=true, 19291=true, 19347=true, 19440=true, 19482=true, 19514=true, 19770=true, 19788=true, 19858=true, 19902=true, 19907=true, 19989=true, 22101=true, 25693=true} nativepids=[564, 653, 655, 888, 904, 1038, 1040, 1054, 1056, 1057, 1061, 1068, 1122, 1167, 2459, 2664, 800, 1122, 773, 613, 775, 1178, 762, 763, 1068, 780]
+11-13 20:12:06.816   837   837 V DisplayFeatureHal: dataCallback value=< 856.0000,   0.0000,   0.0000>,time=13087368290011, sensor=5, temperature(K)=   0.0000
+11-13 20:12:06.983   837   837 V DisplayFeatureHal: dataCallback value=< 856.0000,   0.0000,   0.0000>,time=13087534957511, sensor=5, temperature(K)=   0.0000
+11-13 20:12:07.149   837   837 V DisplayFeatureHal: dataCallback value=< 857.0000,   0.0000,   0.0000>,time=13087701622251, sensor=5, temperature(K)=   0.0000
+11-13 20:12:07.200   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:12:07.249  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47337 mC, weight[0] 2
+11-13 20:12:07.250  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38125 mC, weight[1] 1
+11-13 20:12:07.316   837   837 V DisplayFeatureHal: dataCallback value=< 858.0000,   0.0000,   0.0000>,time=13087868288501, sensor=5, temperature(K)=   0.0000
+11-13 20:12:07.350  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47337 mC, weight[0] 2
+11-13 20:12:07.351  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38177 mC, weight[1] 1
+11-13 20:12:07.352  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47337 mC, weight[0] 2
+11-13 20:12:07.353  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38177 mC, weight[1] 1
+11-13 20:12:07.354  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47337 mC, weight[0] 2
+11-13 20:12:07.355  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38177 mC, weight[1] 1
+11-13 20:12:07.404   555   555 I hwservicemanager: getTransport: Cannot find entry vendor.qti.hardware.servicetracker@1.0::IServicetracker/default in either framework or device manifest.
+11-13 20:12:07.410  9787  9804 D MyLog   : -->log(0): [Tid:631] onForegroundServicesChanged:pid = 19788,uid=10097,serviceTypes=0
+11-13 20:12:07.411 22101 22179 D MyLog   : -->log(0): [Tid:984] onForegroundServicesChanged:pid = 19788,uid=10097,serviceTypes=0
+11-13 20:12:07.411 19902 19919 D MyLog   : -->log(0): [Tid:861] onForegroundServicesChanged:pid = 19788,uid=10097,serviceTypes=0
+11-13 20:12:07.411 16901 17687 D MyLog   : -->log(0): [Tid:2789] onForegroundServicesChanged:pid = 19788,uid=10097,serviceTypes=0
+11-13 20:12:07.412  4465 32070 D MyLog   : -->log(0): [Tid:630] onForegroundServicesChanged:pid = 19788,uid=10097,serviceTypes=0
+11-13 20:12:07.412 17071 17089 D MyLog   : -->log(0): [Tid:2727] onForegroundServicesChanged:pid = 19788,uid=10097,serviceTypes=0
+11-13 20:12:07.421  1496  1638 I ActivityManager: Skipping next CPU consuming process, not a java proc: 19381
+11-13 20:12:07.421  1496  1638 I ActivityManager: Skipping next CPU consuming process, not a java proc: 1496
+11-13 20:12:07.421  1496  1638 I ActivityManager: Skipping next CPU consuming process, not a java proc: 10
+11-13 20:12:07.421  1496  1638 I ActivityManager: Skipping next CPU consuming process, not a java proc: 787
+11-13 20:12:07.421  1496  1638 I ActivityManager: Skipping next CPU consuming process, not a java proc: 965
+11-13 20:12:07.429  1496  1638 I ActivityManager: Dumping to /data/anr/anr_2026-11-13-20-12-07-428
+11-13 20:12:07.429  1496  1638 I ActivityManager: Collecting stacks for pid 19381
+11-13 20:12:07.429  1496  1638 I system_server: libdebuggerd_client: started dumping process 19381
+11-13 20:12:07.433  1171  1171 I /system/bin/tombstoned: registered intercept for pid 19381 and type kDebuggerdJavaBacktrace
+11-13 20:12:07.433 19381 19395 I .hoopoetv.tvbo: Thread[6,tid=19395,WaitingInMainSignalCatcherLoop,Thread*=0x7c0e42c000,peer=0x13840078,"Signal Catcher"]: reacting to signal 3
+11-13 20:12:07.433 19381 19395 I .hoopoetv.tvbo: 
+11-13 20:12:07.483   837   837 V DisplayFeatureHal: dataCallback value=< 859.0000,   0.0000,   0.0000>,time=13088034954230, sensor=5, temperature(K)=   0.0000
+11-13 20:12:07.487 19381 19395 W .hoopoetv.tvbo: Suspending all threads took: 42.526ms
+11-13 20:12:07.582  1171  1171 I /system/bin/tombstoned: received crash request for pid 19381
+11-13 20:12:07.582  1171  1171 I /system/bin/tombstoned: found intercept fd 512 for pid 19381 and type kDebuggerdJavaBacktrace
+11-13 20:12:07.583 19381 19395 I .hoopoetv.tvbo: Wrote stack traces to tombstoned
+11-13 20:12:07.583  1496  1638 I system_server: libdebuggerd_client: done dumping process 19381
+11-13 20:12:07.589  1496  1638 I ActivityManager: Collecting stacks for pid 1496
+11-13 20:12:07.590  1496  1638 I system_server: libdebuggerd_client: started dumping process 1496
+11-13 20:12:07.590  1171  1171 I /system/bin/tombstoned: registered intercept for pid 1496 and type kDebuggerdJavaBacktrace
+11-13 20:12:07.590  1496  1527 I system_server: Thread[7,tid=1527,WaitingInMainSignalCatcherLoop,Thread*=0x7c039df800,peer=0x15ac0430,"Signal Catcher"]: reacting to signal 3
+11-13 20:12:07.590  1496  1527 I system_server: 
+11-13 20:12:07.649   837   837 V DisplayFeatureHal: dataCallback value=< 859.0000,   0.0000,   0.0000>,time=13088201618344, sensor=5, temperature(K)=   0.0000
+11-13 20:12:07.723 19907 19959 I Finsky:quick_launch: [2876] Stats for Executor: bgExecutor yly@3e0c96e[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1]
+11-13 20:12:07.724 19907 19959 I Finsky:quick_launch: [2876] Stats for Executor: LightweightExecutor yly@d29780f[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 5]
+11-13 20:12:07.728   555   555 I hwservicemanager: getTransport: Cannot find entry vendor.qti.hardware.servicetracker@1.0::IServicetracker/default in either framework or device manifest.
+11-13 20:12:07.735  1496  1535 D CompatibilityInfo: mCompatibilityFlags - 0
+11-13 20:12:07.735  1496  1535 D CompatibilityInfo: applicationDensity - 440
+11-13 20:12:07.735  1496  1535 D CompatibilityInfo: applicationScale - 1.0
+11-13 20:12:07.744  2502  2853 D MobileSignalController: onSignalStrengthsChanged: SignalStrength:{mCdma=CellSignalStrengthCdma: cdmaDbm=2147483647 cdmaEcio=2147483647 evdoDbm=2147483647 evdoEcio=2147483647 evdoSnr=2147483647 miuiLevel=0 level=0,mGsm=CellSignalStrengthGsm: rssi=2147483647 ber=2147483647 mTa=2147483647 miuiLevel=0 mLevel=0,mWcdma=CellSignalStrengthWcdma: ss=2147483647 ber=2147483647 rscp=2147483647 ecno=2147483647 miuiLevel=0 level=0,mTdscdma=CellSignalStrengthTdscdma: rssi=2147483647 ber=2147483647 rscp=2147483647 miuiLevel=0 level=0,mLte=CellSignalStrengthLte: rssi=-51 rsrp=-81 rsrq=-15 rssnr=-8 cqi=2147483647 ta=2147483647 miuiLevel=5 level=1,mNr=CellSignalStrengthNr:{ csiRsrp = 2147483647 csiRsrq = 2147483647 csiSinr = 2147483647 ssRsrp = 2147483647 ssRsrq = 2147483647 ssSinr = 2147483647 miuiLevel = 0 level = 0 },primary=CellSignalStrengthLte}
+11-13 20:12:07.744  2502  2853 D NetworkController.MobileSignalController(2): 4G level = 5
+11-13 20:12:07.750   555   555 I hwservicemanager: getTransport: Cannot find entry vendor.qti.hardware.servicetracker@1.0::IServicetracker/default in either framework or device manifest.
+11-13 20:12:07.816   837   837 V DisplayFeatureHal: dataCallback value=< 859.0000,   0.0000,   0.0000>,time=13088368389282, sensor=5, temperature(K)=   0.0000
+11-13 20:12:07.932  1496  2233 I HidlSensorManager: hidl_ssvc_poll: spurious wake up, back to work
+11-13 20:12:07.951  1496  1496 W Looper  : Slow delivery took 210ms main h=android.os.Handler c=android.telephony.-$$Lambda$PhoneStateListener$IPhoneStateListenerStub$0s34qsuHFsa43jUHrTkD62ni6Ds@60b6cda m=0
+11-13 20:12:07.953  1496  1618 W Looper  : Slow delivery took 220ms android.ui h=com.android.server.am.ActivityManagerService$UiHandler c=null m=53
+11-13 20:12:07.954  1496  1496 W Looper  : Drained
+11-13 20:12:07.954  1496  2287 I MiuiNetworkPolicy: updateUidState uid = 10097, uidState = 16
+11-13 20:12:07.954  1496  2287 I MiuiNetworkPolicy: updateMLUid uid:10097,old:5,new:16
+11-13 20:12:07.955  1496  2287 I MiuiNetworkPolicy: isMLEnabled state:5,uid:10097,connect:DISCONNECTED
+11-13 20:12:07.955  1496  2287 I MiuiNetworkPolicy: isMLEnabled state:16,uid:10097,connect:DISCONNECTED
+11-13 20:12:07.982   837   837 V DisplayFeatureHal: dataCallback value=< 860.0000,   0.0000,   0.0000>,time=13088534954230, sensor=5, temperature(K)=   0.0000
+11-13 20:12:08.114  2727  3036 W BpBinder: Slow Binder: BpBinder transact took 365 ms, interface=android.app.IActivityManager, code=42 oneway=false
+11-13 20:12:08.114  4465  4465 W BpBinder: Slow Binder: BpBinder transact took 362 ms, interface=android.app.IActivityManager, code=30 oneway=false
+11-13 20:12:08.116  2502  2853 W BpBinder: Slow Binder: BpBinder transact took 366 ms, interface=com.android.internal.telephony.ITelephony, code=107 oneway=false
+11-13 20:12:08.117   555   555 I hwservicemanager: getTransport: Cannot find entry vendor.qti.hardware.servicetracker@1.0::IServicetracker/default in either framework or device manifest.
+11-13 20:12:08.118   555   555 I hwservicemanager: getTransport: Cannot find entry vendor.qti.hardware.servicetracker@1.0::IServicetracker/default in either framework or device manifest.
+11-13 20:12:08.149   837   837 V DisplayFeatureHal: dataCallback value=< 860.0000,   0.0000,   0.0000>,time=13088701616782, sensor=5, temperature(K)=   0.0000
+11-13 20:12:08.181  1171  1171 I /system/bin/tombstoned: received crash request for pid 1496
+11-13 20:12:08.181  1171  1171 I /system/bin/tombstoned: found intercept fd 512 for pid 1496 and type kDebuggerdJavaBacktrace
+11-13 20:12:08.183  1496  1527 I system_server: Wrote stack traces to tombstoned
+11-13 20:12:08.183  1496  1638 I system_server: libdebuggerd_client: done dumping process 1496
+11-13 20:12:08.200   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:12:08.212  1496  1638 I ActivityManager: Collecting stacks for pid 5435
+11-13 20:12:08.212  1496  1638 I system_server: libdebuggerd_client: started dumping process 5435
+11-13 20:12:08.212  1171  1171 I /system/bin/tombstoned: registered intercept for pid 5435 and type kDebuggerdJavaBacktrace
+11-13 20:12:08.213  5435  5465 I putmethod.sogo: Thread[7,tid=5465,WaitingInMainSignalCatcherLoop,Thread*=0x7c039da400,peer=0x14680228,"Signal Catcher"]: reacting to signal 3
+11-13 20:12:08.213  5435  5465 I putmethod.sogo: 
+11-13 20:12:08.252  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47402 mC, weight[0] 2
+11-13 20:12:08.253  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38177 mC, weight[1] 1
+11-13 20:12:08.316   837   837 V DisplayFeatureHal: dataCallback value=< 860.0000,   0.0000,   0.0000>,time=13088868284699, sensor=5, temperature(K)=   0.0000
+11-13 20:12:08.325  1171  1171 I /system/bin/tombstoned: received crash request for pid 5435
+11-13 20:12:08.325  1171  1171 I /system/bin/tombstoned: found intercept fd 512 for pid 5435 and type kDebuggerdJavaBacktrace
+11-13 20:12:08.326  5435  5465 I putmethod.sogo: Wrote stack traces to tombstoned
+11-13 20:12:08.326  1496  1638 I system_server: libdebuggerd_client: done dumping process 5435
+11-13 20:12:08.331  1496  1638 I ActivityManager: Collecting stacks for pid 3699
+11-13 20:12:08.331  1496  1638 I system_server: libdebuggerd_client: started dumping process 3699
+11-13 20:12:08.332  1171  1171 I /system/bin/tombstoned: registered intercept for pid 3699 and type kDebuggerdJavaBacktrace
+11-13 20:12:08.332  3699  3713 I com.android.nf: Thread[5,tid=3713,WaitingInMainSignalCatcherLoop,Thread*=0x7c039da400,peer=0x12e40000,"Signal Catcher"]: reacting to signal 3
+11-13 20:12:08.333  3699  3713 I com.android.nf: 
+11-13 20:12:08.407  1171  1171 I /system/bin/tombstoned: received crash request for pid 3699
+11-13 20:12:08.407  1171  1171 I /system/bin/tombstoned: found intercept fd 512 for pid 3699 and type kDebuggerdJavaBacktrace
+11-13 20:12:08.409  1496  2295 D WifiClientModeImpl: fetchRssiLinkSpeedAndFrequencyNative rssi=-30 TxLinkspeed=400 freq=5260 RxLinkSpeed=400
+11-13 20:12:08.409  3699  3713 I com.android.nf: Wrote stack traces to tombstoned
+11-13 20:12:08.409  1496  2295 V WifiConfigManager: Updating scan detail cache freq=5260 BSSID=10:da:43:bd:a9:55 RSSI=-29 for "CMCC_G"-WPA_PSK
+11-13 20:12:08.410  1496  1638 I system_server: libdebuggerd_client: done dumping process 3699
+11-13 20:12:08.414  1496  1638 I ActivityManager: Collecting stacks for pid 2727
+11-13 20:12:08.414  1496  1638 I system_server: libdebuggerd_client: started dumping process 2727
+11-13 20:12:08.415  1171  1171 I /system/bin/tombstoned: registered intercept for pid 2727 and type kDebuggerdJavaBacktrace
+11-13 20:12:08.415  2727  2738 I m.android.phon: Thread[5,tid=2738,WaitingInMainSignalCatcherLoop,Thread*=0x7c0574b400,peer=0x156000c8,"Signal Catcher"]: reacting to signal 3
+11-13 20:12:08.415  2727  2738 I m.android.phon: 
+11-13 20:12:08.417  2502  3115 V WifiManager: TrafficStateCallbackProxy: onStateChanged state=2
+11-13 20:12:08.417  1496  2295 D WifiClientModeImpl:  L2ConnectedState screen=on 19 0 "CMCC_G" 10:da:43:bd:a9:55 rssi=-30 f=5260 sc=60 link=400 tx=2.3, 0.0, 0.0  rx=0.4 bcn=4850 [on:828 tx:1 rx:2 period:3046] from screen [on:1463018 period:2423080] score=60
+11-13 20:12:08.418  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:12:08.446  2502  2502 I chatty  : uid=1000(system) com.android.systemui identical 10 lines
+11-13 20:12:08.447  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:12:08.482   837   837 V DisplayFeatureHal: dataCallback value=< 859.0000,   0.0000,   0.0000>,time=13089034950271, sensor=5, temperature(K)=   0.0000
+11-13 20:12:08.582  1171  1171 I /system/bin/tombstoned: received crash request for pid 2727
+11-13 20:12:08.582  1171  1171 I /system/bin/tombstoned: found intercept fd 512 for pid 2727 and type kDebuggerdJavaBacktrace
+11-13 20:12:08.583  2727  2738 I m.android.phon: Wrote stack traces to tombstoned
+11-13 20:12:08.584  1496  1638 I system_server: libdebuggerd_client: done dumping process 2727
+11-13 20:12:08.587  1496  1638 I ActivityManager: Collecting stacks for native pid 564
+11-13 20:12:08.587  1496  1638 I system_server: libdebuggerd_client: started dumping process 564
+11-13 20:12:08.588  1171  1171 I /system/bin/tombstoned: registered intercept for pid 564 and type kDebuggerdNativeBacktrace
+11-13 20:12:08.589   564   564 I libc    : Requested dump for tid 564 (Binder:564_2)
+11-13 20:12:08.623 20101 20101 I crash_dump64: obtaining output fd from tombstoned, type: kDebuggerdNativeBacktrace
+11-13 20:12:08.626  1171  1171 I /system/bin/tombstoned: received crash request for pid 564
+11-13 20:12:08.626  1171  1171 I /system/bin/tombstoned: found intercept fd 512 for pid 564 and type kDebuggerdNativeBacktrace
+11-13 20:12:08.627 20101 20101 I crash_dump64: performing dump of process 564 (target tid = 564)
+11-13 20:12:08.649   837   837 V DisplayFeatureHal: dataCallback value=< 859.0000,   0.0000,   0.0000>,time=13089201617928, sensor=5, temperature(K)=   0.0000
+11-13 20:12:08.650  1496  1638 I system_server: libdebuggerd_client: done dumping process 564
+11-13 20:12:08.655  1496  1638 I ActivityManager: Collecting stacks for native pid 653
+11-13 20:12:08.655  1496  1638 I system_server: libdebuggerd_client: started dumping process 653
+11-13 20:12:08.656  1171  1171 I /system/bin/tombstoned: registered intercept for pid 653 and type kDebuggerdNativeBacktrace
+11-13 20:12:08.657   653   653 I libc    : Requested dump for tid 653 (Binder:653_3)
+11-13 20:12:08.693 20106 20106 I crash_dump64: obtaining output fd from tombstoned, type: kDebuggerdNativeBacktrace
+11-13 20:12:08.694  1171  1171 I /system/bin/tombstoned: received crash request for pid 653
+11-13 20:12:08.694  1171  1171 I /system/bin/tombstoned: found intercept fd 512 for pid 653 and type kDebuggerdNativeBacktrace
+11-13 20:12:08.694 20106 20106 I crash_dump64: performing dump of process 653 (target tid = 653)
+11-13 20:12:08.741  1496  1638 I system_server: libdebuggerd_client: done dumping process 653
+11-13 20:12:08.746  1496  1638 I ActivityManager: Collecting stacks for native pid 655
+11-13 20:12:08.746  1496  1638 I system_server: libdebuggerd_client: started dumping process 655
+11-13 20:12:08.746  1171  1171 I /system/bin/tombstoned: registered intercept for pid 655 and type kDebuggerdNativeBacktrace
+11-13 20:12:08.747   655   655 I libc    : Requested dump for tid 655 (main)
+11-13 20:12:08.817   837   837 V DisplayFeatureHal: dataCallback value=< 859.0000,   0.0000,   0.0000>,time=13089368369959, sensor=5, temperature(K)=   0.0000
+11-13 20:12:08.854 20111 20111 I crash_dump32: obtaining output fd from tombstoned, type: kDebuggerdNativeBacktrace
+11-13 20:12:08.855  1171  1171 I /system/bin/tombstoned: received crash request for pid 655
+11-13 20:12:08.855  1171  1171 I /system/bin/tombstoned: found intercept fd 512 for pid 655 and type kDebuggerdNativeBacktrace
+11-13 20:12:08.856 20111 20111 I crash_dump32: performing dump of process 655 (target tid = 655)
+11-13 20:12:08.863   655  6266 I Zygote  : Process 20110 exited cleanly (0)
+--------- beginning of crash
+11-13 20:12:08.865   655   655 F libc    : failed to wait for crash_dump helper: No child processes
+11-13 20:12:08.899  1496  1638 I system_server: libdebuggerd_client: done dumping process 655
+11-13 20:12:08.902  1496  1638 I ActivityManager: Collecting stacks for native pid 888
+11-13 20:12:08.902  1496  1638 I system_server: libdebuggerd_client: started dumping process 888
+11-13 20:12:08.902  1171  1171 I /system/bin/tombstoned: registered intercept for pid 888 and type kDebuggerdNativeBacktrace
+11-13 20:12:08.903   888   888 I libc    : Requested dump for tid 888 (audioserver)
+11-13 20:12:08.969 20116 20116 I crash_dump64: obtaining output fd from tombstoned, type: kDebuggerdNativeBacktrace
+11-13 20:12:08.969  1171  1171 I /system/bin/tombstoned: received crash request for pid 888
+11-13 20:12:08.969  1171  1171 I /system/bin/tombstoned: found intercept fd 512 for pid 888 and type kDebuggerdNativeBacktrace
+11-13 20:12:08.969 20116 20116 I crash_dump64: performing dump of process 888 (target tid = 888)
+11-13 20:12:08.982   837   837 V DisplayFeatureHal: dataCallback value=< 858.0000,   0.0000,   0.0000>,time=13089535125376, sensor=5, temperature(K)=   0.0000
+11-13 20:12:09.016  1496  1638 I system_server: libdebuggerd_client: done dumping process 888
+11-13 20:12:09.021  1496  1638 I ActivityManager: Collecting stacks for native pid 904
+11-13 20:12:09.021  1496  1638 I system_server: libdebuggerd_client: started dumping process 904
+11-13 20:12:09.021  1171  1171 I /system/bin/tombstoned: registered intercept for pid 904 and type kDebuggerdNativeBacktrace
+11-13 20:12:09.022   904   904 I libc    : Requested dump for tid 904 (surfaceflinger)
+11-13 20:12:09.076 20121 20121 I crash_dump64: obtaining output fd from tombstoned, type: kDebuggerdNativeBacktrace
+11-13 20:12:09.076  1171  1171 I /system/bin/tombstoned: received crash request for pid 904
+11-13 20:12:09.076  1171  1171 I /system/bin/tombstoned: found intercept fd 512 for pid 904 and type kDebuggerdNativeBacktrace
+11-13 20:12:09.076 20121 20121 I crash_dump64: performing dump of process 904 (target tid = 904)
+11-13 20:12:09.122  1496  1638 I system_server: libdebuggerd_client: done dumping process 904
+11-13 20:12:09.129  1496  1638 I ActivityManager: Collecting stacks for native pid 1038
+11-13 20:12:09.129  1496  1638 I system_server: libdebuggerd_client: started dumping process 1038
+11-13 20:12:09.130  1171  1171 I /system/bin/tombstoned: registered intercept for pid 1038 and type kDebuggerdNativeBacktrace
+11-13 20:12:09.131  1038  1038 I libc    : Requested dump for tid 1038 (cameraserver)
+11-13 20:12:09.149   837   837 V DisplayFeatureHal: dataCallback value=< 858.0000,   0.0000,   0.0000>,time=13089701792511, sensor=5, temperature(K)=   0.0000
+11-13 20:12:09.175 20126 20126 I crash_dump32: obtaining output fd from tombstoned, type: kDebuggerdNativeBacktrace
+11-13 20:12:09.175  1171  1171 I /system/bin/tombstoned: received crash request for pid 1038
+11-13 20:12:09.175  1171  1171 I /system/bin/tombstoned: found intercept fd 512 for pid 1038 and type kDebuggerdNativeBacktrace
+11-13 20:12:09.176 20126 20126 I crash_dump32: performing dump of process 1038 (target tid = 1038)
+11-13 20:12:09.200   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:12:09.255  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47467 mC, weight[0] 2
+11-13 20:12:09.256  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38177 mC, weight[1] 1
+11-13 20:12:09.316   837   837 V DisplayFeatureHal: dataCallback value=< 857.0000,   0.0000,   0.0000>,time=13089868458501, sensor=5, temperature(K)=   0.0000
+11-13 20:12:09.357  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47467 mC, weight[0] 2
+11-13 20:12:09.358  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38177 mC, weight[1] 1
+11-13 20:12:09.359  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47467 mC, weight[0] 2
+11-13 20:12:09.360  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38177 mC, weight[1] 1
+11-13 20:12:09.361  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 47467 mC, weight[0] 2
+11-13 20:12:09.362  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 38177 mC, weight[1] 1
+11-13 20:12:09.378   653   653 D OemNetd : setLimit: enable, rate=0
+11-13 20:12:09.482   837   837 V DisplayFeatureHal: dataCallback value=< 858.0000,   0.0000,   0.0000>,time=13090035138136, sensor=5, temperature(K)=   0.0000
+11-13 20:12:09.649   837   837 V DisplayFeatureHal: dataCallback value=< 857.0000,   0.0000,   0.0000>,time=13090201699646, sensor=5, temperature(K)=   0.0000
+11-13 20:12:09.703  5224  5338 I StepList: stepsList new StepMode
+11-13 20:12:09.703  5224  5338 I StepCell: Insert into stepsprovider
+11-13 20:12:09.716  5224  5338 I StepsProvider: Steps Provider Insert
+11-13 20:12:09.716  5224  5338 I StepCell: mSteps:14mMode:2	mBeginTime:2026-11-13 20:09:23:023	mEndTime:2026-11-13 20:09:36:036

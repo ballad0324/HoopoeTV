@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tv generator-info-name="zytx-epg">
+  <programme start="20261113003700 +0800" stop="20261113011900 +0800" channel="东方卫视">
+    <title lang="zh">三大队(22)</title>
+  </programme>
+  <programme start="20261113011900 +0800" stop="20261113020100 +0800" channel="东方卫视">
+    <title lang="zh">三大队(23)</title>
+  </programme>
+  <programme start="20261113020100 +0800" stop="20261113024400 +0800" channel="东方卫视">
+    <title lang="zh">三大队(24)</title>
+  </programme>
+  <programme start="20261113024400 +0800" stop="20261113032800 +0800" channel="东方卫视">
+    <title lang="zh">宿敌(1)</title>
+  </programme>
+  <programme start="20261113032800 +0800" stop="20261113041000 +0800" channel="东方卫视">
+    <title lang="zh">宿敌(2)</title>
+  </programme>
+  <programme start="20261113041000 +0800" stop="20261113045100 +0800" channel="东方卫视">
+    <title lang="zh">宿敌(3)</title>
+  </programme>
+  <programme start="20261113045100 +0800" stop="20261113053300 +0800" channel="东方卫视">
+    <title lang="zh">宿敌</title>
+  </programme>
+  <programme start="20261113053300 +0800" stop="20261113070000 +0800" channel="东方卫视">
+    <title lang="zh">生死抉择通道转兵(上)</title>
+  </programme>
+  <programme start="20261113070000 +0800" stop="20261113070100 +0800" channel="东方卫视">
+    <title lang="zh">中华人民共和国国歌</title>
+  </programme>
+  <programme start="20261113070100 +0800" stop="20261113085900 +0800" channel="东方卫视">
+    <title lang="zh">看东方</title>
+  </programme>
+  <programme start="20261113085900 +0800" stop="20261113090100 +0800" channel="东方卫视">
+    <title lang="zh">天气预报</title>
+  </programme>
+  <programme start="20261113090100 +0800" stop="20261113094400 +0800" channel="东方卫视">
+    <title lang="zh">美人余(24)</title>
+  </programme>
+  <programme start="20261113094400 +0800" stop="20261113102700 +0800" channel="东方卫视">
+    <title lang="zh">美人余(25)</title>
+  </programme>
+  <programme start="20261113102700 +0800" stop="20261113111000 +0800" channel="东方卫视">
+    <title lang="zh">美人余(26)</title>
+  </programme>
+  <programme start="20261113111000 +0800" stop="20261113120000 +0800" channel="东方卫视">
+    <title lang="zh">美人余(27)</title>
+  </programme>
+  <programme start="20261113120000 +0800" stop="20261113122600 +0800" channel="东方卫视">
+    <title lang="zh">午间30分</title>
+  </programme>
+  <programme start="20261113122600 +0800" stop="20261113123000 +0800" channel="东方卫视">
+    <title lang="zh">天气预报</title>
+  </programme>
+  <programme start="20261113123000 +0800" stop="20261113124200 +0800" channel="东方卫视">
+    <title lang="zh">ShanghaiEye</title>
+  </programme>
+  <programme start="20261113124200 +0800" stop="20261113132400 +0800" channel="东方卫视">
+    <title lang="zh">玫瑰的故事(6)</title>
+  </programme>
+  <programme start="20261113132400 +0800" stop="20261113140800 +0800" channel="东方卫视">
+    <title lang="zh">玫瑰的故事(7)</title>
+  </programme>
+  <programme start="20261113140800 +0800" stop="20261113145200 +0800" channel="东方卫视">
+    <title lang="zh">玫瑰的故事(8)</title>
+  </programme>
+  <programme start="20261113145200 +0800" stop="20261113153600 +0800" channel="东方卫视">
+    <title lang="zh">玫瑰的故事(9)</title>
+  </programme>
+  <programme start="20261113153600 +0800" stop="20261113161900 +0800" channel="东方卫视">
+    <title lang="zh">玫瑰的故事(10)</title>
+  </programme>
+  <programme start="20261113161900 +0800" stop="20261113170200 +0800" channel="东方卫视">
+    <title lang="zh">玫瑰的故事(11)</title>
+  </programme>
+  <programme start="20261113170200 +0800" stop="20261113172800 +0800" channel="东方卫视">
+    <title lang="zh">东方新娱乐</title>
+  </programme>
+  <programme start="20261113172800 +0800" stop="20261113180000 +0800" channel="东方卫视">
+    <title lang="zh">名医话养生</title>
+  </programme>
+  <programme start="20261113180000 +0800" stop="20261113185700 +0800" channel="东方卫视">
+    <title lang="zh">东方新闻</title>
+  </programme>
+  <programme start="20261113185700 +0800" stop="20261113190000 +0800" channel="东方卫视">
+    <title lang="zh">天气预报</title>
+  </programme>
+  <programme start="20261113190000 +0800" stop="20261113193200 +0800" channel="东方卫视">
+    <title lang="zh">转播中央台新闻联播</title>
+  </programme>
+  <programme start="20261113193200 +0800" stop="20261113201400 +0800" channel="东方卫视">
+    <title lang="zh">小城良方(27)</title>
+  </programme>
+  <programme start="20261113201400 +0800" stop="20261113202100 +0800" channel="东方卫视">
+    <title lang="zh">明日精彩看点</title>
+  </programme>
+  <programme start="20261113202100 +0800" stop="20261113210900 +0800" channel="东方卫视">
+    <title lang="zh">东方看大剧</title>
+  </programme>
+  <programme start="20261113210900 +0800" stop="20261113212000 +0800" channel="东方卫视">
+    <title lang="zh">今日宜偏爱(38)</title>
+  </programme>
+  <programme start="20261113212000 +0800" stop="20261113215900 +0800" channel="东方卫视">
+    <title lang="zh">今晚</title>
+  </programme>
+  <programme start="20261113215900 +0800" stop="20261113220000 +0800" channel="东方卫视">
+    <title lang="zh">天气预报</title>
+  </programme>
+  <programme start="20261113220000 +0800" stop="20261113222500 +0800" channel="东方卫视">
+    <title lang="zh">执牛耳者</title>
+  </programme>
+  <programme start="20261113222500 +0800" stop="20261113225100 +0800" channel="东方卫视">
+    <title lang="zh">爱上海</title>
+  </programme>
+  <programme start="20261113225100 +0800" stop="20261113233300 +0800" channel="东方卫视">
+    <title lang="zh">宿敌(6)</title>
+  </programme>
+  <programme start="20261113233300 +0800" stop="20261114004800 +0800" channel="东方卫视">
+    <title lang="zh">宿敌(7)</title>
+  </programme>
+</tv>

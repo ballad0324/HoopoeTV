@@ -140,6 +140,12 @@ public class SourceViewModel extends ViewModel {
         }
 
         SourceBean sourceBean = ApiConfig.get().getSource(sourceKey);
+        if (sourceBean == null) {
+            // 空 key 或接口里不存在的源（接口加载失败最常见）：必须在此拦住，否则下面 getType() 直接 NPE
+            LOG.i("echo--getSort-noSource--" + sourceKey);
+            sortResult.postValue(null);
+            return;
+        }
         final int type = sourceBean.getType();
         if (type == 3) {
             Runnable waitResponse = new Runnable() {
@@ -320,7 +326,12 @@ public class SourceViewModel extends ViewModel {
                     }
                 }
             });
-        } else if (type == 0 || type == 1) {
+        } else if (type == 1) {
+            // JSON 接口：分类列表优先用 ac=videolist（苹果CMS 一类接口用它返回列表），
+            // ac=detail 在部分源里是"取详情"，只会返回 1 条，导致一级分类几乎没有内容
+            String cachedAc = jsonListAc.get(homeSourceBean.getKey());
+            fetchCategoryJson(homeSourceBean, sortData, page, cachedAc == null ? "videolist" : cachedAc, cachedAc == null);
+        } else if (type == 0) {
             OkGo.<String>get(homeSourceBean.getApi())
                     .tag(homeSourceBean.getApi())
                     .params("ac", type == 0 ? "videolist" : "detail")
@@ -404,6 +415,59 @@ public class SourceViewModel extends ViewModel {
 
     interface HomeRecCallback {
         void done(List<Movie.Video> videos);
+    }
+
+    // type=1（JSON 接口）每个源用哪个 ac 取分类列表：探测成功一次即记住
+    private static final java.util.HashMap<String, String> jsonListAc = new java.util.HashMap<>();
+
+    private boolean jsonHasList(String json) {
+        try {
+            JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
+            return obj.has("list");
+        } catch (Throwable th) {
+            return false;
+        }
+    }
+
+    private void fetchCategoryJson(final SourceBean site, final MovieSort.SortData sortData, final int page, final String ac, final boolean allowFallback) {
+        OkGo.<String>get(site.getApi())
+                .tag(site.getApi())
+                .params("ac", ac)
+                .params("t", sortData.id)
+                .params("pg", page)
+                .params(sortData.filterSelect)
+                .params("f", (sortData.filterSelect == null || sortData.filterSelect.size() <= 0) ? "" : new JSONObject(sortData.filterSelect).toString())
+                .execute(new AbsCallback<String>() {
+                    @Override
+                    public String convertResponse(okhttp3.Response response) throws Throwable {
+                        if (response.body() != null) {
+                            return response.body().string();
+                        } else {
+                            throw new IllegalStateException("网络请求错误");
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String body = response.body();
+                        if (allowFallback && !jsonHasList(body)) {
+                            fetchCategoryJson(site, sortData, page, "detail", false);
+                            return;
+                        }
+                        jsonListAc.put(site.getKey(), ac);
+                        json(listResult, body, site.getKey());
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        if (allowFallback) {
+                            fetchCategoryJson(site, sortData, page, "detail", false);
+                        } else {
+                            listResult.postValue(null);
+                        }
+                    }
+                });
     }
 
     //    homeVideoContent

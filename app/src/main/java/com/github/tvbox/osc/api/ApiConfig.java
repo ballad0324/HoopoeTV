@@ -138,6 +138,16 @@ public class ApiConfig {
     }
 
     public static String getDefaultApiUrl() {
+        // 手机端模式下 TV 首页未初始化，HomeActivity.getRes() 为 null，必须回退到 Application 的 Resources，
+        // 否则内置源读成空串，直接判成「源地址为空」进错误分支。
+        try {
+            App app = App.getInstance();
+            if (app != null) {
+                return app.getString(R.string.app_source);
+            }
+        } catch (Throwable th) {
+            th.printStackTrace();
+        }
         try {
             return HomeActivity.getRes().getString(R.string.app_source);
         } catch (Throwable th) {
@@ -219,7 +229,8 @@ public class ApiConfig {
                             callback.success();
                         } catch (Throwable th) {
                             th.printStackTrace();
-                            callback.error("解析配置失败");
+                            String why = th.getMessage() == null ? th.getClass().getSimpleName() : th.getMessage();
+                            callback.error("解析配置失败：" + why);
                         }
                     }
 
@@ -377,15 +388,38 @@ public class ApiConfig {
         livePlayHeaders = infoJson.getAsJsonArray("livePlayHeaders");
         // 远端站点源
         SourceBean firstSite = null;
-        JsonArray sites = infoJson.has("video") ? infoJson.getAsJsonObject("video").getAsJsonArray("sites") : infoJson.get("sites").getAsJsonArray();
+        JsonArray sites = null;
+        try {
+            sites = infoJson.has("video")
+                    ? infoJson.getAsJsonObject("video").getAsJsonArray("sites")
+                    : infoJson.getAsJsonArray("sites");
+        } catch (Throwable ignore) {
+            sites = null;
+        }
+        if (sites == null) {
+            // 换源失败的常见原因：填的不是 TVBox 标准配置（缺 video.sites / sites）
+            throw new IllegalStateException("配置里找不到 sites 站点列表，请确认是 TVBox 标准 json 接口地址");
+        }
+        // 记录本次配置里真实存在的站点 key：解析完成后把旧接口遗留的站点清掉，
+        // 否则换了接口地址后 HOME_API 里的旧 key 仍能命中旧站点，首页会继续显示旧源内容
+        List<String> parsedKeys = new ArrayList<>();
         for (JsonElement opt : sites) {
             JsonObject obj = (JsonObject) opt;
             SourceBean sb = new SourceBean();
             String siteKey = obj.get("key").getAsString().trim();
+            parsedKeys.add(siteKey);
             sb.setKey(siteKey);
             sb.setName(obj.has("name")?obj.get("name").getAsString().trim():siteKey);
             sb.setType(obj.get("type").getAsInt());
             sb.setApi(obj.get("api").getAsString().trim());
+            // 稳定性兜底：JS 源在 quickjs 层抛出异常时会让 JNI 带 pending exception 继续
+            // 构造返回值，ART 直接 SIGABRT 杀进程（真机实测一启动就闪退）。
+            // 这里默认跳过 .js 源，只加载 CMS / JAR / PY 源，保证 App 能正常启动与搜索。
+            String api = sb.getApi();
+            if (api != null && (api.endsWith(".js") || api.contains(".js?"))) {
+                LOG.i("HOOPOE_API", "跳过 JS 源: " + siteKey);
+                continue;
+            }
             sb.setSearchable(DefaultConfig.safeJsonInt(obj, "searchable", 1));
             sb.setQuickSearch(DefaultConfig.safeJsonInt(obj, "quickSearch", 1));
             if(siteKey.startsWith("py_")){
@@ -405,13 +439,18 @@ public class ApiConfig {
                 firstSite = sb;
             sourceBeanList.put(siteKey, sb);
         }
-        if (sourceBeanList != null && sourceBeanList.size() > 0) {
+        // 清掉旧接口遗留的站点，保证 sourceBeanList 只反映当前这份配置
+        sourceBeanList.keySet().retainAll(parsedKeys);
+        if (sourceBeanList.size() > 0) {
             String home = Hawk.get(HawkConfig.HOME_API, "");
             SourceBean sh = getSource(home);
-            if (sh == null || sh.getHide() == 1)
-                setSourceBean(firstSite);
-            else
+            if (sh == null || sh.getHide() == 1) {
+                if (firstSite != null) setSourceBean(firstSite);
+            } else {
                 setSourceBean(sh);
+            }
+        } else {
+            mHomeSource = null;
         }
         // 需要使用vip解析的flag
         vipParseFlags = DefaultConfig.safeJsonStringList(infoJson, "flags");
@@ -757,6 +796,12 @@ public class ApiConfig {
                 }
                 liveChannelItem.setChannelSourceNames(sourceNames);
                 liveChannelItem.setChannelUrls(sourceUrls);
+                if (obj.has("catchup")) {
+                    try {
+                        liveChannelItem.setCatchupSource(obj.get("catchup").getAsString());
+                    } catch (Throwable ignored) {
+                    }
+                }
                 liveChannelGroup.getLiveChannels().add(liveChannelItem);
             }
             liveChannelGroupList.add(liveChannelGroup);
@@ -865,8 +910,16 @@ public class ApiConfig {
     }
 
     public IJKCode getIJKCodec(String name) {
+        // 配置还没加载完就进页面（冷启动直接点「直播」）时 ijkCodes 仍是 null，
+        // 这里返回一个不覆盖 IJK 默认参数的临时「软解码」，等配置加载后自然被真实列表取代
+        if (ijkCodes == null || ijkCodes.isEmpty()) {
+            IJKCode fallback = new IJKCode();
+            fallback.setName(android.text.TextUtils.isEmpty(name) ? "软解码" : name);
+            fallback.setOption(new LinkedHashMap<String, String>());
+            return fallback;
+        }
         for (IJKCode code : ijkCodes) {
-            if (code.getName().equals(name))
+            if (code != null && code.getName() != null && code.getName().equals(name))
                 return code;
         }
         return ijkCodes.get(0);

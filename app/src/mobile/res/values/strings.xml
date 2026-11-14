@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 手机端变体专用的应用名：与 webhtv 原版 HoopoeTV 区分，避免桌面同图标混淆 -->
+    <string name="app_name">HoopoeTV Box</string>
+</resources>

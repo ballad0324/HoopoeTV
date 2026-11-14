@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/shape_setting_card"
+    android:clickable="true"
+    android:focusable="true"
+    android:longClickable="true"
+    android:orientation="horizontal"
+    android:padding="6dp">
+
+    <ImageView
+        android:id="@+id/ivPic"
+        android:layout_width="44dp"
+        android:layout_height="60dp"
+        android:background="@drawable/bg_hist_cover"
+        android:clipToOutline="true"
+        android:contentDescription="封面"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/shell_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvSub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/shell_text_dim"
+            android:textSize="10sp" />
+    </LinearLayout>
+</LinearLayout>

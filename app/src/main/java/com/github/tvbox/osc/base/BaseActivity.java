@@ -23,6 +23,7 @@ import com.github.tvbox.osc.callback.EmptyCallback;
 import com.github.tvbox.osc.callback.LoadingCallback;
 import com.github.tvbox.osc.ui.activity.DetailActivity;
 import com.github.tvbox.osc.util.AppManager;
+import com.github.tvbox.osc.util.GlassBgHelper;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.LocaleHelper;
 import com.kingja.loadsir.callback.Callback;
@@ -59,11 +60,27 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
             newBase = ViewPumpContextWrapper.wrap(base, App.viewPump);
         }
 
-        if (Hawk.get(HawkConfig.HOME_LOCALE, 0) == 0) {
-            super.attachBaseContext(LocaleHelper.onAttach(newBase, "zh"));
-        } else {
-            super.attachBaseContext(LocaleHelper.onAttach(newBase, ""));
-        }
+        // 0=简体中文 1=English；英文分支必须传 en，传空串会被当成系统默认语言
+        String lang = Hawk.get(HawkConfig.HOME_LOCALE, 0) == 1 ? "en" : "zh";
+        super.attachBaseContext(LocaleHelper.onAttach(newBase, lang));
+    }
+
+    /**
+     * 子类可覆盖：返回 false 时，onCreate 只完成 Activity 生命周期契约（调 super.onCreate、登记 Activity 栈），
+     * 不设 TV 主题、不 setContentView、不跑 init()。
+     * 用于入口 Activity 在「手机端 UI」模式下把界面交给另一个 Activity——
+     * 旧写法是在 super.onCreate 之前直接 return 做重定向，会触发 SuperNotCalledException 闪退。
+     */
+    protected boolean shouldInitContent() {
+        return true;
+    }
+
+    /**
+     * 子类可覆盖：返回 true 时不再用 TV 主题覆盖清单里的主题，
+     * 让 launcher 的首帧保留启动图（Theme.MobileSplash）那一套 windowBackground。
+     */
+    protected boolean keepManifestTheme() {
+        return false;
     }
 
     @Override
@@ -80,7 +97,25 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
             th.printStackTrace();
         }
 
+        if (!shouldInitContent()) {
+            super.onCreate(savedInstanceState);
+            mContext = this;
+            AppManager.getInstance().addActivity(this);
+            return;
+        }
+
         // takagen99 : Set Theme Color
+        // 允许子类保留清单里声明的启动页主题（如 Theme.MobileSplash），避免首帧被 TV 主题顶掉
+        if (keepManifestTheme()) {
+            super.onCreate(savedInstanceState);
+            setContentView(getLayoutResID());
+            mContext = this;
+            CutoutUtil.adaptCutoutAboveAndroidP(mContext, true);
+            AppManager.getInstance().addActivity(this);
+            init();
+            setScreenOn();
+            return;
+        }
         if (Hawk.get(HawkConfig.THEME_SELECT, 0) == 0) {
             setTheme(R.style.NetfxTheme);
         } else if (Hawk.get(HawkConfig.THEME_SELECT, 0) == 1) {
@@ -249,6 +284,9 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
     public void jumpActivity(Class<? extends BaseActivity> clazz) {
         Intent intent = new Intent(mContext, clazz);
         startActivity(intent);
+        if (com.github.tvbox.osc.setting.CommonSetting.isMobileUi()) {
+            overridePendingTransition(R.anim.liquid_enter, R.anim.liquid_exit);
+        }
     }
 
     public void jumpActivity(Class<? extends BaseActivity> clazz, Bundle bundle) {
@@ -259,6 +297,9 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
         Intent intent = new Intent(mContext, clazz);
         intent.putExtras(bundle);
         startActivity(intent);
+        if (com.github.tvbox.osc.setting.CommonSetting.isMobileUi()) {
+            overridePendingTransition(R.anim.liquid_enter, R.anim.liquid_exit);
+        }
     }
 
     protected String getAssetText(String fileName) {
@@ -319,6 +360,8 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
     protected static BitmapDrawable globalWp = null;
 
     public void changeWallpaper(boolean force) {
+        // 磨砂主题背景图：有自定义图时优先于内置 app_bg
+        if (GlassBgHelper.apply(this)) return;
         if (!force && globalWp != null) {
             getWindow().setBackgroundDrawable(globalWp);
             return;

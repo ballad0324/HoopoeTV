@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 「发现」页筛选胶囊：选中=主题色描边高亮，未选中=半透明玻璃 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="14dp" />
+            <solid android:color="@color/shell_primary_container" />
+            <stroke
+                android:width="1dp"
+                android:color="@color/shell_primary" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="14dp" />
+            <solid android:color="@color/shell_surface" />
+            <stroke
+                android:width="1dp"
+                android:color="@color/shell_outline" />
+        </shape>
+    </item>
+</selector>

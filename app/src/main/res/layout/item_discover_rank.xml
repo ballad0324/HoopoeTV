@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 排行榜行：名次 + 封面 + 标题/元信息/简介 + 热度 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/glass_card"
+    android:orientation="horizontal"
+    android:paddingStart="10dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="10dp">
+
+    <TextView
+        android:id="@+id/tvRankNo"
+        android:layout_width="26dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:gravity="center"
+        android:minHeight="22dp"
+        android:paddingStart="2dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="2dp"
+        android:paddingBottom="2dp"
+        android:textColor="@color/shell_text_dim"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/ivRankPoster"
+        android:layout_width="60dp"
+        android:layout_height="82dp"
+        android:background="@drawable/bg_hist_cover"
+        android:contentDescription="封面"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_loading_placeholder" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvRankName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/shell_text"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvRankTags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/shell_text_dim"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/tvRankDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/shell_text_dim"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/tvRankHits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/shell_primary"
+            android:textSize="11sp" />
+    </LinearLayout>
+</LinearLayout>

@@ -57,6 +57,67 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- 手机端 UI 页面：两套 UI 运行时共存，由「界面模式」设置在 HomeActivity 里分流 -->
+        <activity
+            android:name=".mobile.ui.activity.MobileHomeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".mobile.ui.activity.MobileSettingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".mobile.ui.activity.MobileRecordActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".mobile.ui.activity.MobileDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".mobile.ui.activity.MobileDownloadsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name=".mobile.ui.activity.MobileDiscoverActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".mobile.ui.activity.MobileSearchActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="stateVisible|adjustResize" />        <activity
+            android:name=".mobile.ui.activity.MobilePlayActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".mobile.ui.activity.MobileLiveActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".mobile.ui.activity.MobileLivePlayerActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity
             android:name=".ui.activity.PlayActivity"
             android:screenOrientation="sensorLandscape"

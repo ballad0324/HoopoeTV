@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 视频海报卡（统一风格）：整张封面 + 底部渐变遮罩信息区（播放圆钮 + 标题 + 副标题）
+     信息区贴底全宽，不再用带边距的小圆角信息条：真机大字号下文字会越出底衬、并直接叠在封面自带文字上 -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/ivThumb"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/bg_hist_cover"
+        android:clipToOutline="true"
+        android:contentDescription="封面"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_loading_placeholder" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg_card_scrim" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:id="@+id/ivPlay"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/bg_vod_play"
+            android:contentDescription="播放"
+            android:padding="7dp"
+            android:src="@drawable/play_play" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="#D9FFFFFF"
+                android:textSize="10sp" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

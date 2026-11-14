@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 中文环境下也要覆盖 main/values-zh 的同名 app_name，否则仍显示 HoopoeTV -->
+    <string name="app_name">HoopoeTV Box</string>
+</resources>

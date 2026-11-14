@@ -39,7 +39,7 @@
             android:focusable="true"
             android:focusableInTouchMode="false"
             android:gravity="left|center_vertical"
-            android:nextFocusRight="@id/tvWifi"
+            android:nextFocusRight="@id/btnUiMode"
             android:nextFocusDown="@id/mGridViewCategoryLeft"
             android:singleLine="true"
             android:text="@string/app_name"
@@ -48,6 +48,24 @@
             android:background="@drawable/shape_toplayout_tvname"
             android:textSize="@dimen/ts_30"
             android:textStyle="bold" />
+
+        <!-- 切换到手机端（无文字提示，仅图标） -->
+        <ImageView
+            android:id="@+id/btnUiMode"
+            android:layout_width="@dimen/vs_50"
+            android:layout_height="@dimen/vs_50"
+            android:layout_marginStart="@dimen/vs_15"
+            android:layout_marginLeft="@dimen/vs_15"
+            android:layout_marginEnd="@dimen/vs_15"
+            android:layout_marginRight="@dimen/vs_15"
+            android:background="@drawable/button_dialog_vod"
+            android:clickable="true"
+            android:contentDescription="切换到手机端"
+            android:focusable="true"
+            android:nextFocusLeft="@id/tvName"
+            android:nextFocusRight="@id/tvWifi"
+            android:padding="@dimen/vs_5"
+            android:src="@drawable/ic_ui_phone" />
 
         <ImageView
             android:id="@+id/tvWifi"
@@ -60,7 +78,7 @@
             android:background="@drawable/button_dialog_vod"
             android:clickable="true"
             android:focusable="true"
-            android:nextFocusLeft="@id/tvName"
+            android:nextFocusLeft="@id/btnUiMode"
             android:padding="@dimen/vs_5"
             android:src="@drawable/hm_wifi_no" />
 

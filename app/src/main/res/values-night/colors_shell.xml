@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 磨砂暗黑 · 深蓝夜玻璃 B：严格取自 hoopoe-glass-ui/index.json (dark B tokens)
+         bg_gradient #0C1520->#14243A / surface #FFFFFF@0.11 / border #FFFFFF@0.18
+         accent #4C9AFF / accent_warm #FF8A5C / 底色高于下限 #0C0C0F -->
+    <color name="shell_bg">#FF0C1520</color>
+    <color name="shell_surface">#1CFFFFFF</color>
+    <color name="shell_surface_high">#24FFFFFF</color>
+    <color name="shell_surface_highest">#2EFFFFFF</color>
+    <color name="shell_outline">#2EFFFFFF</color>
+
+    <color name="shell_primary">#FF4C9AFF</color>
+    <color name="shell_on_primary">#FFFFFFFF</color>
+    <color name="shell_primary_container">#264C9AFF</color>
+    <color name="shell_on_primary_container">#FFCFE2FF</color>
+
+    <color name="shell_secondary">#FFFF8A5C</color>
+    <color name="shell_on_secondary">#FF2A1005</color>
+    <color name="shell_secondary_container">#26FF8A5C</color>
+    <color name="shell_on_secondary_container">#FFFFD9C7</color>
+
+    <color name="shell_text">#E6EAF1FA</color>
+    <color name="shell_text_dim">#9993A4B8</color>
+
+    <color name="shell_gold">#FFFF8A5C</color>
+    <color name="shell_badge_hd">#FFF5A623</color>
+    <color name="shell_badge_4k">#FF4C9AFF</color>
+    <color name="shell_badge_new">#FFFF8A5C</color>
+    <color name="shell_card_fill">#F21B2434</color>
+    <color name="shell_card_stroke">#40FFFFFF</color>
+    <color name="shell_overlay">#66000000</color>
+
+    <!-- 玻璃材质专用（暗）：层次靠 1px 高亮描边，不用黑阴影 -->
+    <color name="glass_stroke">#2EFFFFFF</color>
+    <color name="glass_fill">#1CFFFFFF</color>
+    <color name="glass_fill_soft">#14FFFFFF</color>
+    <color name="glass_scrim">#4D000000</color>
+
+    <!-- 页面渐变底 -->
+    <color name="glass_page_start">#FF0C1520</color>
+    <color name="glass_page_end">#FF14243A</color>
+
+    <!-- ===== Liquid Glass 2.0（iOS 26 参考）：暗色玻璃，靠亮边而不是黑影 ===== -->
+    <color name="liquid_fill">#1FFFFFFF</color>
+    <color name="liquid_glow_top">#33FFFFFF</color>
+    <color name="liquid_glow_bottom">#0AFFFFFF</color>
+    <color name="liquid_stroke">#40FFFFFF</color>
+    <color name="liquid_sheen">#33FFFFFF</color>
+    <color name="liquid_pill_fill">#26FFFFFF</color>
+    <color name="liquid_press_overlay">#1AFFFFFF</color></resources>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 「发现」页：上映表 / 专题 / 排行榜 三段 + 底部 dock -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_glass_page"
+    android:orientation="vertical">
+
+    <!-- 顶部：三段切换（上映表 / 专题 / 排行榜）+ 搜索 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="14dp"
+        android:paddingEnd="6dp">
+
+        <TextView
+            android:id="@+id/tabShowtime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="上映表"
+            android:textColor="@color/shell_primary"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tabTopic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="专题"
+            android:textColor="@color/shell_text_dim"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/tabRank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="排行榜"
+            android:textColor="@color/shell_text_dim"
+            android:textSize="17sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/btnDiscoverSearch"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="搜索"
+            android:focusable="true"
+            android:padding="11dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/hm_search"
+            android:tint="@color/shell_text_dim" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- ① 上映表：年份胶囊 + 按上映日期分组的三列海报 -->
+        <ScrollView
+            android:id="@+id/svShowtime"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="8dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/llYearChips"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
+
+                <LinearLayout
+                    android:id="@+id/llShowtime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="12dp" />
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- ② 专题：若干合辑，每辑一行海报 -->
+        <ScrollView
+            android:id="@+id/svTopic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/llTopic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="12dp" />
+        </ScrollView>
+
+        <!-- ③ 排行榜：分类 + 日/周/月/总 榜 + 名次列表 -->
+        <ScrollView
+            android:id="@+id/svRank"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/llRankType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="8dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/llRankPeriod"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
+
+                <LinearLayout
+                    android:id="@+id/llRank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="12dp" />
+            </LinearLayout>
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/tvDiscoverEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="40dp"
+            android:text="加载中…"
+            android:textColor="@color/shell_text_dim"
+            android:textSize="12sp" />
+    </FrameLayout>
+
+    <include layout="@layout/view_mobile_dock" />
+
+</LinearLayout>

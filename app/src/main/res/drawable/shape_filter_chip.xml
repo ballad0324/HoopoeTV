@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Liquid Glass chip：选中为主色玻璃，未选中为透明玻璃 + 边缘高光 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true">
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/shell_primary" />
+                    <corners android:radius="14dp" />
+                </shape>
+            </item>
+            <item>
+                <shape android:shape="rectangle">
+                    <gradient
+                        android:angle="270"
+                        android:startColor="#4DFFFFFF"
+                        android:centerColor="@android:color/transparent"
+                        android:endColor="@android:color/transparent" />
+                    <corners android:radius="14dp" />
+                </shape>
+            </item>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@android:color/transparent" />
+                    <corners android:radius="14dp" />
+                    <stroke android:width="1dp" android:color="#66FFFFFF" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item>
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/liquid_fill" />
+                    <corners android:radius="14dp" />
+                </shape>
+            </item>
+            <item>
+                <shape android:shape="rectangle">
+                    <gradient
+                        android:angle="270"
+                        android:startColor="@color/liquid_glow_top"
+                        android:centerColor="@android:color/transparent"
+                        android:endColor="@android:color/transparent" />
+                    <corners android:radius="14dp" />
+                </shape>
+            </item>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@android:color/transparent" />
+                    <corners android:radius="14dp" />
+                    <stroke android:width="1dp" android:color="@color/liquid_stroke" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

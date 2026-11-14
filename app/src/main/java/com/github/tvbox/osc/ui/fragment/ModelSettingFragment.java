@@ -23,6 +23,9 @@ import com.github.tvbox.osc.player.thirdparty.Kodi;
 import com.github.tvbox.osc.player.thirdparty.MXPlayer;
 import com.github.tvbox.osc.player.thirdparty.ReexPlayer;
 import com.github.tvbox.osc.ui.activity.SettingActivity;
+import com.github.tvbox.osc.ui.activity.HomeActivity;
+import com.github.tvbox.osc.setting.CommonSetting;
+import com.github.tvbox.osc.setting.TvSetting;
 import com.github.tvbox.osc.ui.adapter.ApiHistoryDialogAdapter;
 import com.github.tvbox.osc.ui.adapter.SelectDialogAdapter;
 import com.github.tvbox.osc.ui.dialog.AboutDialog;
@@ -34,7 +37,9 @@ import com.github.tvbox.osc.ui.dialog.MediaSettingDialog;
 import com.github.tvbox.osc.ui.dialog.ResetDialog;
 import com.github.tvbox.osc.ui.dialog.SelectDialog;
 import com.github.tvbox.osc.ui.dialog.XWalkInitDialog;
+import com.github.tvbox.osc.util.CacheHelper;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
+import com.github.tvbox.osc.util.GlassBgHelper;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.HistoryHelper;
 import com.github.tvbox.osc.util.OkGoHelper;
@@ -91,54 +96,13 @@ public class ModelSettingFragment extends BaseLazyFragment {
     private TextView tvDns;
     private TextView tvFastSearchText;
 
-    // ---- 缓存清理：只动 App 的 cache 目录（图片/播放器临时缓存），不动 jar 缓存与数据 ----
-    private File[] cacheDirs() {
-        ArrayList<File> list = new ArrayList<>();
-        try {
-            if (mActivity.getCacheDir() != null) list.add(mActivity.getCacheDir());
-        } catch (Exception ignored) {
-        }
-        try {
-            if (mActivity.getExternalCacheDir() != null) list.add(mActivity.getExternalCacheDir());
-        } catch (Exception ignored) {
-        }
-        return list.toArray(new File[0]);
-    }
-
-    private long dirSize(File f) {
-        if (f == null || !f.exists()) return 0;
-        if (f.isDirectory()) {
-            File[] kids = f.listFiles();
-            long s = 0;
-            if (kids != null) for (File k : kids) s += dirSize(k);
-            return s;
-        }
-        return f.length();
-    }
-
+    // ---- 缓存清理：实现已抽到 CacheHelper，手机端与 TV 端共用同一口径 ----
     private long cacheSize() {
-        long total = 0;
-        for (File dir : cacheDirs()) total += dirSize(dir);
-        return total;
-    }
-
-    private long clearDir(File f) {
-        if (f == null || !f.exists()) return 0;
-        if (f.isDirectory()) {
-            File[] kids = f.listFiles();
-            long s = 0;
-            if (kids != null) for (File k : kids) s += clearDir(k);
-            return s;
-        }
-        long len = f.length();
-        return f.delete() ? len : 0;
+        return CacheHelper.size(mActivity);
     }
 
     private String formatSize(long bytes) {
-        if (bytes < 1024) return bytes + " B";
-        if (bytes < 1024 * 1024) return String.format("%.1f KB", bytes / 1024.0);
-        if (bytes < 1024L * 1024 * 1024) return String.format("%.1f MB", bytes / (1024.0 * 1024.0));
-        return String.format("%.2f GB", bytes / (1024.0 * 1024.0 * 1024.0));
+        return CacheHelper.formatSize(bytes);
     }
 
     public static ModelSettingFragment newInstance() {
@@ -166,16 +130,16 @@ public class ModelSettingFragment extends BaseLazyFragment {
         tvHomeApi = findViewById(R.id.tvHomeApi);
         tvHomeApi.setText(ApiConfig.get().getHomeSourceBean().getName());
         tvHomeShow = findViewById(R.id.tvHomeShow);
-        tvHomeShow.setText(Hawk.get(HawkConfig.HOME_SHOW_SOURCE, false) ? "开启" : "关闭");
+        tvHomeShow.setText(TvSetting.isHomeShowSource() ? "开启" : "关闭");
         tvHomeIcon = findViewById(R.id.tvHomeIcon);
         tvHomeIcon.setText(formatSize(cacheSize()));
         tvHomeRec = findViewById(R.id.tvHomeRec);
-        tvHomeRec.setText(getHomeRecName(Hawk.get(HawkConfig.HOME_REC, 0)));
+        tvHomeRec.setText(getHomeRecName(TvSetting.getHomeRec()));
         tvHomeNum = findViewById(R.id.tvHomeNum);
-        tvHomeNum.setText(HistoryHelper.getHomeRecName(Hawk.get(HawkConfig.HOME_NUM, 0)));
+        tvHomeNum.setText(HistoryHelper.getHomeRecName(TvSetting.getHomeNum()));
         // Player Section
         tvShowPreviewText = findViewById(R.id.showPreviewText);
-        tvShowPreviewText.setText(Hawk.get(HawkConfig.SHOW_PREVIEW, true) ? "开启" : "关闭");
+        tvShowPreviewText.setText(TvSetting.isShowPreview() ? "开启" : "关闭");
         tvScale = findViewById(R.id.tvScaleType);
         tvScale.setText(PlayerHelper.getScaleName(Hawk.get(HawkConfig.PLAY_SCALE, 0)));
         tvPlay = findViewById(R.id.tvPlay);
@@ -198,9 +162,41 @@ public class ModelSettingFragment extends BaseLazyFragment {
         tvDns = findViewById(R.id.tvDns);
         tvDns.setText(OkGoHelper.dnsHttpsList.get(Hawk.get(HawkConfig.DOH_URL, 0)));
         tvHomeDefaultShow = findViewById(R.id.tvHomeDefaultShow);
-        tvHomeDefaultShow.setText(Hawk.get(HawkConfig.HOME_DEFAULT_SHOW, false) ? "开启" : "关闭");
+        tvHomeDefaultShow.setText(TvSetting.isHomeDefaultShowLive() ? "开启" : "关闭");
+
+        // 界面模式：手机端 / 电视端 运行时切换（与手机端设置页写同一个 ui_mode 偏好）
+        TextView tvUiMode = findViewById(R.id.tvUiMode);
+        tvUiMode.setText(CommonSetting.getUiModeName());
+        findViewById(R.id.llUiMode).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FastClickCheckUtil.check(v);
+                int next = CommonSetting.isMobileUi() ? CommonSetting.UI_TV : CommonSetting.UI_MOBILE;
+                CommonSetting.putUiMode(next);
+                // 清栈重启到 HomeActivity，由它按 ui_mode 分流到对应 UI
+                Intent intent = new Intent(mActivity, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
 
         //takagen99 : Set HomeApi as default
+        // 更换背景图（电视端独立存储：与手机端分开，各用各的）
+        refreshBgState();
+        findViewById(R.id.llBgLight).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FastClickCheckUtil.check(v);
+                showBgDialog(false);
+            }
+        });
+        findViewById(R.id.llBgDark).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FastClickCheckUtil.check(v);
+                showBgDialog(true);
+            }
+        });
         findViewById(R.id.llHomeApi).requestFocus();
 
         findViewById(R.id.llDebug).setOnClickListener(new View.OnClickListener() {
@@ -321,8 +317,8 @@ public class ModelSettingFragment extends BaseLazyFragment {
             @Override
             public void onClick(View v) {
                 FastClickCheckUtil.check(v);
-                Hawk.put(HawkConfig.HOME_SHOW_SOURCE, !Hawk.get(HawkConfig.HOME_SHOW_SOURCE, false));
-                tvHomeShow.setText(Hawk.get(HawkConfig.HOME_SHOW_SOURCE, true) ? "开启" : "关闭");
+                TvSetting.putHomeShowSource(!TvSetting.isHomeShowSource());
+                tvHomeShow.setText(TvSetting.isHomeShowSource() ? "开启" : "关闭");
             }
         });
         // 清理缓存项已下线（整块隐藏）
@@ -339,8 +335,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        long freed = 0;
-                        for (File dir : cacheDirs()) freed += clearDir(dir);
+                        long freed = CacheHelper.clear(mActivity);
                         final long freedSize = freed;
                         if (mActivity == null) return;
                         mActivity.runOnUiThread(new Runnable() {
@@ -366,7 +361,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
             @Override
             public void onClick(View v) {
                 FastClickCheckUtil.check(v);
-                int defaultPos = Hawk.get(HawkConfig.HOME_REC, 0);
+                int defaultPos = TvSetting.getHomeRec();
                 ArrayList<Integer> types = new ArrayList<>();
                 types.add(0);
                 types.add(1);
@@ -376,7 +371,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
                 dialog.setAdapter(null, new SelectDialogAdapter.SelectDialogInterface<Integer>() {
                     @Override
                     public void click(Integer value, int pos) {
-                        Hawk.put(HawkConfig.HOME_REC, value);
+                        TvSetting.putHomeRec(value);
                         tvHomeRec.setText(getHomeRecName(value));
                     }
 
@@ -403,7 +398,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
             @Override
             public void onClick(View v) {
                 FastClickCheckUtil.check(v);
-                int defaultPos = Hawk.get(HawkConfig.HOME_NUM, 0);
+                int defaultPos = TvSetting.getHomeNum();
                 ArrayList<Integer> types = new ArrayList<>();
                 types.add(0);
                 types.add(1);
@@ -415,7 +410,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
                 dialog.setAdapter(null, new SelectDialogAdapter.SelectDialogInterface<Integer>() {
                     @Override
                     public void click(Integer value, int pos) {
-                        Hawk.put(HawkConfig.HOME_NUM, value);
+                        TvSetting.putHomeNum(value);
                         tvHomeNum.setText(HistoryHelper.getHomeRecName(value));
                     }
 
@@ -443,8 +438,8 @@ public class ModelSettingFragment extends BaseLazyFragment {
             @Override
             public void onClick(View v) {
                 FastClickCheckUtil.check(v);
-                Hawk.put(HawkConfig.SHOW_PREVIEW, !Hawk.get(HawkConfig.SHOW_PREVIEW, true));
-                tvShowPreviewText.setText(Hawk.get(HawkConfig.SHOW_PREVIEW, true) ? "开启" : "关闭");
+                TvSetting.putShowPreview(!TvSetting.isShowPreview());
+                tvShowPreviewText.setText(TvSetting.isShowPreview() ? "开启" : "关闭");
             }
         });
         // Select Screen Ratio -------------------------------------
@@ -912,8 +907,8 @@ public class ModelSettingFragment extends BaseLazyFragment {
             @Override
             public void onClick(View v) {
                 FastClickCheckUtil.check(v);
-                Hawk.put(HawkConfig.HOME_DEFAULT_SHOW, !Hawk.get(HawkConfig.HOME_DEFAULT_SHOW, false));
-                tvHomeDefaultShow.setText(Hawk.get(HawkConfig.HOME_DEFAULT_SHOW, true) ? "开启" : "关闭");
+                TvSetting.putHomeDefaultShowLive(!TvSetting.isHomeDefaultShowLive());
+                tvHomeDefaultShow.setText(TvSetting.isHomeDefaultShowLive() ? "开启" : "关闭");
             }
         });
 
@@ -988,4 +983,62 @@ public class ModelSettingFragment extends BaseLazyFragment {
         //  System.exit(0);
     }
 
+
+    /* ===================== 更换背景图（电视端，与手机端互不影响） ===================== */
+
+    private void refreshBgState() {
+        TextView light = findViewById(R.id.tvBgLightValue);
+        if (light != null) light.setText(CommonSetting.getGlassBgLight().isEmpty() ? "内置默认" : "已自定义");
+        TextView dark = findViewById(R.id.tvBgDarkValue);
+        if (dark != null) dark.setText(CommonSetting.getGlassBgDark().isEmpty() ? "内置默认" : "已自定义");
+    }
+
+    private void showBgDialog(final boolean night) {
+        String state = night
+                ? (CommonSetting.getGlassBgDark().isEmpty() ? "内置默认" : "已自定义")
+                : (CommonSetting.getGlassBgLight().isEmpty() ? "内置默认" : "已自定义");
+        new androidx.appcompat.app.AlertDialog.Builder(mActivity)
+                .setTitle(night ? "更换背景图 · 黑暗主题" : "更换背景图 · 明亮主题")
+                .setMessage("当前：" + state
+                        + "\n规格要求：" + CommonSetting.BG_SPEC_HINT
+                        + "\n电视端与手机端的背景图分别保存，互不影响。")
+                .setPositiveButton("选择图片", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        pickBgImage(night);
+                    }
+                })
+                .setNeutralButton("恢复默认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (night) CommonSetting.putGlassBgDark("");
+                        else CommonSetting.putGlassBgLight("");
+                        GlassBgHelper.apply(mActivity);
+                        refreshBgState();
+                    }
+                })
+                .setNegativeButton("取消", null)
+                .show();
+    }
+
+    private void pickBgImage(boolean night) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            startActivityForResult(Intent.createChooser(intent, night ? "选择黑暗主题背景图" : "选择明亮主题背景图"),
+                    night ? GlassBgHelper.REQ_BG_DARK : GlassBgHelper.REQ_BG_LIGHT);
+        } catch (Exception e) {
+            Toast.makeText(mActivity, "电视端未提供图片选择器，可把图片拷到 App 私有目录后用设置页恢复默认", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (GlassBgHelper.handleResult(mActivity, requestCode, resultCode, data)) {
+            GlassBgHelper.apply(mActivity);
+            refreshBgState();
+        }
+    }
 }

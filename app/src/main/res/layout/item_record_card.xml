@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 收藏夹 / 历史 卡片：封面 + 底部蓝色进度条 + 标题 + 片源标签；长按出现右上角删除钮 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="7dp">
+
+    <FrameLayout
+        android:id="@+id/cardCover"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:background="@drawable/bg_hist_cover">
+
+        <ImageView
+            android:id="@+id/ivThumb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <!-- 播放进度：蓝条贴封面底部 -->
+        <LinearLayout
+            android:id="@+id/llProgress"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="7dp"
+            android:background="@drawable/shape_record_progress_track"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <View
+                android:id="@+id/vProgressFill"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="50"
+                android:background="@drawable/shape_record_progress_fill" />
+
+            <View
+                android:id="@+id/vProgressRest"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="50" />
+        </LinearLayout>
+
+        <!-- 长按后出现的删除钮 -->
+        <ImageView
+            android:id="@+id/ivDelete"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="6dp"
+            android:background="@drawable/shape_record_delete_bg"
+            android:contentDescription="删除"
+            android:padding="6dp"
+            android:src="@drawable/icon_delete"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/shell_text"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/shape_src_chip"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingStart="6dp"
+        android:paddingTop="3dp"
+        android:paddingEnd="6dp"
+        android:paddingBottom="3dp"
+        android:textColor="@color/shell_text_dim"
+        android:textSize="10sp" />
+
+</LinearLayout>

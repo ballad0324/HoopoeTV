@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 磨砂明亮 · 冷蓝玻璃 B：严格取自 hoopoe-glass-ui/index.json (light B tokens)
+         bg_gradient #EAF2FA->#D8E6F2 / surface #FFFFFF@0.60 / border #FFFFFF@0.70
+         accent #3A7BD5 / accent_warm #E0603A -->
+    <color name="shell_bg">#FFEAF2FA</color>
+    <color name="shell_surface">#99FFFFFF</color>
+    <color name="shell_surface_high">#A3FFFFFF</color>
+    <color name="shell_surface_highest">#A6FFFFFF</color>
+    <color name="shell_outline">#B3FFFFFF</color>
+
+    <color name="shell_primary">#FF3A7BD5</color>
+    <color name="shell_on_primary">#FFFFFFFF</color>
+    <color name="shell_primary_container">#263A7BD5</color>
+    <color name="shell_on_primary_container">#FF0A2E5C</color>
+
+    <color name="shell_secondary">#FFE0603A</color>
+    <color name="shell_on_secondary">#FFFFFFFF</color>
+    <color name="shell_secondary_container">#26E0603A</color>
+    <color name="shell_on_secondary_container">#FF3A1A10</color>
+
+    <color name="shell_text">#E016181D</color>
+    <color name="shell_text_dim">#9E5B6573</color>
+
+    <color name="shell_gold">#FFE0603A</color>
+    <color name="shell_badge_hd">#FFF5A623</color>
+    <color name="shell_badge_4k">#FF3A7BD5</color>
+    <color name="shell_badge_new">#FFE0603A</color>
+    <color name="shell_card_fill">#F4FFFFFF</color>
+    <color name="shell_card_stroke">#1F2B3A55</color>
+    <color name="shell_overlay">#660A1B33</color>
+
+    <!-- 玻璃材质专用 -->
+    <color name="glass_stroke">#B3FFFFFF</color>
+    <color name="glass_fill">#99FFFFFF</color>
+    <color name="glass_fill_soft">#66FFFFFF</color>
+    <color name="glass_scrim">#4D0A1B33</color>
+
+    <!-- 页面渐变底：磨砂必须有内容衬底 -->
+    <color name="glass_page_start">#FFEAF2FA</color>
+    <color name="glass_page_end">#FFD8E6F2</color>
+
+    <!-- ===== Liquid Glass 2.0（iOS 26 参考）：多层玻璃需要的高光/厚度 token ===== -->
+    <!-- 玻璃本体填充（比旧 glass_fill 略透，靠高光与描边立起来） -->
+    <color name="liquid_fill">#8AFFFFFF</color>
+    <!-- 玻璃内部顶部镜面高光（从顶往下衰减） -->
+    <color name="liquid_glow_top">#59FFFFFF</color>
+    <!-- 玻璃内部底部反光（很淡，制造厚度） -->
+    <color name="liquid_glow_bottom">#0DFFFFFF</color>
+    <!-- 边缘高光描边：亮色主题下接近纯白 -->
+    <color name="liquid_stroke">#E6FFFFFF</color>
+    <!-- 扫光带颜色 -->
+    <color name="liquid_sheen">#66FFFFFF</color>
+    <!-- 胶囊导航 / pill 的填充（更厚一点） -->
+    <color name="liquid_pill_fill">#A6FFFFFF</color>
+    <!-- 卡片按下时叠加的高亮 -->
+    <color name="liquid_press_overlay">#26FFFFFF</color></resources>

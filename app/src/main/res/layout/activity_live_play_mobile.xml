@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <com.github.tvbox.osc.player.MyVideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <LinearLayout
+        android:id="@+id/llTop"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="#CC000000"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
+
+        <TextView
+            android:id="@+id/tvBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingEnd="10dp"
+            android:text="@string/m_back"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#CC000000"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/tvGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="#AAFFFFFF"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvPrev"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text="@string/m_prev_ch"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvPlayPause"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text="@string/m_pause"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvNext"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text="@string/m_next_ch"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+        <!-- 收藏当前频道（与直播页「★ 收藏」分组同一份数据） -->
+        <ImageView
+            android:id="@+id/ivFavLive"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:contentDescription="收藏频道"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/hm_fav"
+            android:tint="#FFFFFF" />
+
+        <!-- 下载 / 录制当前直播（默认录 60 秒，成功提示本地路径） -->
+        <ImageView
+            android:id="@+id/ivDlLive"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:contentDescription="下载当前直播"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_download"
+            android:tint="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tvScale"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text="@string/m_scale"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+</FrameLayout>

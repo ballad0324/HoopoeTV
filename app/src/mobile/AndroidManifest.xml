@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 直播开播提醒（Android 13+ 需要，低版本自动忽略） -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application>
+
+        <!--
+          手机端直接由 MobileHomeActivity 承接 launcher：
+          原来 launcher 是横屏的 TV HomeActivity，起来后立刻跳竖屏手机页，
+          于是看到「横屏启动图闪一下 + 手机页再起一次」两个启动屏。
+          这里把 HomeActivity 的 launcher intent-filter 移除，launcher 改挂 MobileHomeActivity，
+          冷启动首帧就用 Theme.MobileSplash（竖版 mobile_startup 启动图），只有一屏。
+          TV 变体不合并本文件，电视端 launcher 仍是 HomeActivity，不受影响。
+        -->
+        <activity
+            android:name="com.github.tvbox.osc.ui.activity.HomeActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:theme="@style/Theme.MobileSplash"
+            tools:node="replace" />
+
+        <activity
+            android:name="com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MobileSplash"
+            tools:replace="android:exported">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 三栏节目单页：左节目源 / 中频道 / 右节目单 -->
+        <activity
+            android:name="com.github.tvbox.osc.mobile.ui.activity.MobileEpgActivity"
+            android:exported="false" />
+
+        <!-- 直播节目开播提醒：AlarmManager 到点后由它发通知 -->
+        <receiver
+            android:name="com.github.tvbox.osc.mobile.live.LiveReminderReceiver"
+            android:exported="false" />
+
+    </application>
+</manifest>

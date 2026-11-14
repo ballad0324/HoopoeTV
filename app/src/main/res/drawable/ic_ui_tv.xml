@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+    <!-- 兔耳天线（左右各一根斜条） -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M198,120 L108,52 L120,42 L210,110 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M314,120 L404,52 L392,42 L302,110 Z" />
+    <!-- 屏幕外框（挖空屏幕） -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M72,120 h368 a24,24 0 0 1 24,24 v208 a24,24 0 0 1 -24,24 h-368 a24,24 0 0 1 -24,-24 v-208 a24,24 0 0 1 24,-24 z M92,164 h328 a8,8 0 0 1 8,8 v176 a8,8 0 0 1 -8,8 h-328 a8,8 0 0 1 -8,-8 v-176 a8,8 0 0 1 8,-8 z" />
+    <!-- 底座 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M232,394 L280,394 L280,452 L232,452 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M164,452 L348,452 L348,474 L164,474 Z" />
+</vector>

@@ -61,10 +61,14 @@ public class App extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        // 崩溃日志落盘：无 USB 调试时也能拿到真实闪退堆栈
+        com.github.tvbox.osc.util.CrashLog.install(this);
         SubtitleHelper.initSubtitleColor(this);
         initParams();
         // takagen99 : Initialize Locale
         initLocale();
+        // 公共设置层：手机端 UI 才应用明暗模式，TV 端保持原有固定深色主题
+        com.github.tvbox.osc.setting.CommonSetting.applyNightModeOnStartup();
         // OKGo
         OkGoHelper.init();
         // 闭关检查模式
@@ -157,10 +161,11 @@ public class App extends MultiDexApplication {
     }
 
     private void initLocale() {
-        // 主题与语言锁定：默认主题 + 简体中文，设置项里已不再提供切换入口
-        Hawk.put(HawkConfig.HOME_LOCALE, 0);
+        // 语言跟随设置项（0=简体中文 / 1=English）：不能每次启动都强写 0，否则设置里切语言下次启动又被重置
+        int savedLang = Hawk.get(HawkConfig.HOME_LOCALE, 0);
+        LocaleHelper.setLocale(App.this, savedLang == 1 ? "en" : "zh");
+        // 主题仍锁定默认主题
         Hawk.put(HawkConfig.THEME_SELECT, 0);
-        LocaleHelper.setLocale(App.this, "zh");
         // 空壳播放器：内置源地址已清空，首次启动时把旧存储的源地址一并清掉
         if (!Hawk.get("shell_url_reset_v1", false)) {
             String def = "";

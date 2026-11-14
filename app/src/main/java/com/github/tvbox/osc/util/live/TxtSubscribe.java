@@ -15,8 +15,19 @@ public class TxtSubscribe {
 
     private static final Pattern NAME_PATTERN = Pattern.compile(".*,(.+?)$");
     private static final Pattern GROUP_PATTERN = Pattern.compile("group-title=\"(.*?)\"");
+    private static final Pattern CATCHUP_SRC_PATTERN = Pattern.compile("catchup-source=\"(.*?)\"");
+    private static final Pattern CATCHUP_FLAG_PATTERN = Pattern.compile("catchup=\"(.*?)\"");
+
+    /** m3u 回看模板：分组名 + "|" + 频道名 -> catchup-source（空串表示该频道不支持回看）
+     *  键里必须带分组：同一个频道名在不同分组里回看能力可能不同（如「央视」组有、「央视频」组标 catchup="none"） */
+    private static final LinkedHashMap<String, String> CATCHUP_MAP = new LinkedHashMap<>();
+
+    private static String catchupKey(String group, String name) {
+        return group + "\u0001" + name;
+    }
 
     public static void parse(LinkedHashMap<String, LinkedHashMap<String, ArrayList<String>>> linkedHashMap, String str) {
+        CATCHUP_MAP.clear();
         if (str.startsWith("#EXTM3U")) {
             parseM3u(linkedHashMap, str);
         } else {
@@ -30,13 +41,31 @@ public class TxtSubscribe {
             BufferedReader bufferedReader = new BufferedReader(new StringReader(str));
             LinkedHashMap<String, ArrayList<String>> channel = new LinkedHashMap<>();
             LinkedHashMap<String, ArrayList<String>> channelTemp = channel;
+            String globalCatchup = "";
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 if (line.equals("")) continue;
-                if (line.startsWith("#EXTM3U")) continue;
+                if (line.startsWith("#EXTM3U")) {
+                    // 全局回看声明：#EXTM3U ... catchup="append" catchup-source="?playbackbegin=${(b)yyyyMMddHHmmss}&..."
+                    String globalSrc = getAttr(CATCHUP_SRC_PATTERN, line);
+                    if (globalSrc != null) globalCatchup = globalSrc;
+                    continue;
+                }
                 if (line.startsWith("#EXTINF")) {
                     String name = getStrByRegex(NAME_PATTERN, line);
                     String group = getStrByRegex(GROUP_PATTERN, line);
+                    // 单频道可以覆盖全局：catchup="none" 表示该频道无回看，自带 catchup-source 以自带为准
+                    String ownFlag = getAttr(CATCHUP_FLAG_PATTERN, line);
+                    String ownSrc = getAttr(CATCHUP_SRC_PATTERN, line);
+                    String catchup;
+                    if (ownSrc != null) {
+                        catchup = ownSrc;
+                    } else if (ownFlag != null) {
+                        catchup = "none".equalsIgnoreCase(ownFlag) ? "" : globalCatchup;
+                    } else {
+                        catchup = globalCatchup;
+                    }
+                    CATCHUP_MAP.put(catchupKey(group, name), catchup == null ? "" : catchup);
                     // 此时再读取一行，就是对应的 url 链接了
                     String url = bufferedReader.readLine().trim();
                     if (linkedHashMap.containsKey(group)) {
@@ -60,6 +89,13 @@ public class TxtSubscribe {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /** 取属性值，取不到返回 null（与 getStrByRegex 的兜底语义区分开，回看属性需要「有没有」的判断） */
+    private static String getAttr(Pattern pattern, String line) {
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find()) return matcher.group(1);
+        return null;
     }
 
     private static String getStrByRegex(Pattern pattern, String line) {
@@ -138,6 +174,9 @@ public class TxtSubscribe {
                         try {
                             jsonobj.addProperty("name", str2);
                             jsonobj.add("urls", jsonarr3);
+                            jsonobj.addProperty("catchup",
+                                    CATCHUP_MAP.containsKey(catchupKey(str, str2))
+                                            ? CATCHUP_MAP.get(catchupKey(str, str2)) : "");
                         } catch (Throwable e) {
                         }
                         jsonarr2.add(jsonobj);

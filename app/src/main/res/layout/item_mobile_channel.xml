@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tvChannel"
+    android:layout_width="match_parent"
+    android:layout_height="42dp"
+    android:layout_margin="4dp"
+    android:background="@drawable/shape_filter_chip"
+    android:ellipsize="end"
+    android:gravity="center"
+    android:paddingStart="6dp"
+    android:paddingEnd="6dp"
+    android:singleLine="true"
+    android:textColor="@color/shell_text"
+    android:textSize="12sp" />

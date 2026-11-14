@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="46dp"
+    android:orientation="horizontal"
+    android:paddingStart="6dp"
+    android:paddingTop="5dp"
+    android:paddingEnd="6dp"
+    android:paddingBottom="5dp">
+
+    <TextView
+        android:id="@+id/tvEpgTime"
+        android:layout_width="34dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="19:32"
+        android:textColor="@color/shell_text_dim"
+        android:textSize="10sp" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvEpgProgram"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="节目名"
+            android:textColor="@color/shell_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvEpgRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="19:32-20:00"
+            android:textColor="@color/shell_text_dim"
+            android:textSize="9sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvEpgBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:paddingStart="6dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="6dp"
+        android:paddingBottom="2dp"
+        android:text="回看"
+        android:textSize="9sp" />
+
+</LinearLayout>

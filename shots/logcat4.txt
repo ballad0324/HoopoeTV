@@ -1,0 +1,964 @@
+--------- beginning of main
+11-13 20:38:33.569   837   837 V DisplayFeatureHal: dataCallback value=< 807.0000,   0.0000,   0.0000>,time=14674118621375, sensor=5, temperature(K)=   0.0000
+11-13 20:38:33.665  2502  2853 D MobileSignalController: onSignalStrengthsChanged: SignalStrength:{mCdma=CellSignalStrengthCdma: cdmaDbm=2147483647 cdmaEcio=2147483647 evdoDbm=2147483647 evdoEcio=2147483647 evdoSnr=2147483647 miuiLevel=0 level=0,mGsm=CellSignalStrengthGsm: rssi=2147483647 ber=2147483647 mTa=2147483647 miuiLevel=0 mLevel=0,mWcdma=CellSignalStrengthWcdma: ss=2147483647 ber=2147483647 rscp=2147483647 ecno=2147483647 miuiLevel=0 level=0,mTdscdma=CellSignalStrengthTdscdma: rssi=2147483647 ber=2147483647 rscp=2147483647 miuiLevel=0 level=0,mLte=CellSignalStrengthLte: rssi=-53 rsrp=-84 rsrq=-13 rssnr=16 cqi=2147483647 ta=2147483647 miuiLevel=5 level=2,mNr=CellSignalStrengthNr:{ csiRsrp = 2147483647 csiRsrq = 2147483647 csiSinr = 2147483647 ssRsrp = 2147483647 ssRsrq = 2147483647 ssSinr = 2147483647 miuiLevel = 0 level = 0 },primary=CellSignalStrengthLte}
+11-13 20:38:33.665  2502  2853 D NetworkController.MobileSignalController(2): 4G level = 5
+--------- beginning of system
+11-13 20:38:33.703  1496  1534 I ActivityManager: Force stopping com.hoopoetv.tvbox appid=10296 user=0: from process:25806
+11-13 20:38:33.704  1496  1534 I AutoStartManagerService: MIUILOG- Reject RestartService packageName :com.hoopoetv.tvbox uid : 10296
+11-13 20:38:33.705  1496  1534 I Process : Sending signal. PID: 25701 SIG: 19
+11-13 20:38:33.696  1496  1496 W Binder:1496_1: type=1400 audit(0.0:11305): avc: denied { sigstop } for scontext=u:r:system_server:s0 tcontext=u:r:untrusted_app_27:s0:c40,c257,c512,c768 tclass=process permissive=0
+11-13 20:38:33.706  1496  1534 I ActivityManager: Killing 25701:com.hoopoetv.tvbox/u0a296 (adj 0): stop com.hoopoetv.tvbox: from process:25806
+11-13 20:38:33.711   555   555 I hwservicemanager: getTransport: Cannot find entry vendor.qti.hardware.servicetracker@1.0::IServicetracker/default in either framework or device manifest.
+11-13 20:38:33.712  1496  1534 W ActivityTaskManager: Force removing ActivityRecord{4544df9 u0 com.hoopoetv.tvbox/com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity t812 f}: app died, no saved state
+11-13 20:38:33.735   837   837 V DisplayFeatureHal: dataCallback value=< 806.0000,   0.0000,   0.0000>,time=14674285164552, sensor=5, temperature(K)=   0.0000
+11-13 20:38:33.739  4249 12352 I ProcessMonitor: onForegroundInfoChanged: ForegroundInfo{mForegroundPackageName='com.miui.home', mForegroundUid=10088, mForegroundPid=2746, mLastForegroundPackageName='com.hoopoetv.tvbox', mLastForegroundUid=10296, mLastForegroundPid=25701, mMultiWindowForegroundPackageName='null', mMultiWindowForegroundUid=-1, mFlags=0}
+11-13 20:38:33.739 14095 14113 D AutoInstallService: onForegroundInfoChanged: com.miui.home
+11-13 20:38:33.739  5238  5380 I GST     : forePkg: com.miui.home, preForePkg: com.hoopoetv.tvbox
+11-13 20:38:33.740  5224  5259 D PerfEngineController: ForegroundInfo{mForegroundPackageName='com.miui.home', mForegroundUid=10088, mForegroundPid=2746, mLastForegroundPackageName='com.hoopoetv.tvbox', mLastForegroundUid=10296, mLastForegroundPid=25701, mMultiWindowForegroundPackageName='null', mMultiWindowForegroundUid=-1, mFlags=0}
+11-13 20:38:33.740  4249 12352 I GameBoosterService: onForegroundInfoChanged: Cur=com.miui.home	 last=com.hoopoetv.tvbox
+11-13 20:38:33.741  4249 12352 D GameBoosterService: onGameStatusChange foreground:ForegroundInfo{mForegroundPackageName='com.miui.home', mForegroundUid=10088, mForegroundPid=2746, mLastForegroundPackageName='com.hoopoetv.tvbox', mLastForegroundUid=10296, mLastForegroundPid=25701, mMultiWindowForegroundPackageName='null', mMultiWindowForegroundUid=-1, mFlags=0}
+11-13 20:38:33.741  4249 12352 I VideoBoxUtils: isSupportVideoBox: false
+11-13 20:38:33.741  4249 12352 I VideoToolBoxService: vtb is closed!!!
+11-13 20:38:33.741  4249  5186 E SuggestManager: openApp name = com.miui.home
+11-13 20:38:33.741  4249  5186 I NewAutoTaskManager: app use - delay = 9223372036854775807, doRemove = false, doPost = false
+11-13 20:38:33.743  9787 25811 D MyLog   : -->log(1): [Tid:1398] [ActivationManager_ac] -->onPackageGoForeground(): packageName=com.miui.home, uid10088, myUid=999, pkgUserId=0
+11-13 20:38:33.743  1496  1534 I Timeline: Timeline: App_transition_ready time:14218561
+11-13 20:38:33.747  1496  4498 I Timeline: Timeline: App_transition_ready time:14218564
+11-13 20:38:33.748  2746  2746 D Launcher.Lifecycle: onStart:UserHandle{0},bae8287,false
+11-13 20:38:33.749  1496  1534 I ActivityManager: Force stopping com.hoopoetv.tvbox appid=10296 user=999: from process:25806
+11-13 20:38:33.750  1496  1534 I AutoStartManagerService: MIUILOG- Reject RestartService packageName :com.hoopoetv.tvbox uid : 99910296
+11-13 20:38:33.750  2746  2746 D Launcher.Lifecycle: onResume:UserHandle{0},bae8287,false
+11-13 20:38:33.750  2746  3039 I RenderThread: RenderThread resumed
+11-13 20:38:33.750  2746  3039 I RenderThread: All controllers paused.
+11-13 20:38:33.750  2746  3039 I RenderThread: RenderThread paused, waiting for signal
+11-13 20:38:33.750  1496  1622 I Timeline: Timeline: App_transition_ready time:14218567
+11-13 20:38:33.750  2746  3039 I RenderThread: RenderThread resumed
+11-13 20:38:33.750  2746  3039 I RenderThread: All controllers paused.
+11-13 20:38:33.750  2746  3039 I RenderThread: RenderThread paused, waiting for signal
+11-13 20:38:33.752 16901 16922 D services: [XMS][observer] ActivityObserver activityResumed packageName: com.miui.home
+11-13 20:38:33.753  1496  1622 I Timeline: Timeline: App_transition_ready time:14218570
+11-13 20:38:33.753 19902 19927 D auth    : [XMS][Auth] ActivityObserver activityResumed packageName: com.miui.home
+11-13 20:38:33.753 19902 19918 D services: [XMS][observer] ActivityObserver activityResumed packageName: com.miui.home
+11-13 20:38:33.753 16901 17129 D auth    : [XMS][Auth] ActivityObserver activityResumed packageName: com.miui.home
+11-13 20:38:33.753  1496  2287 I MiuiNetworkPolicy: removeUidState uid = 10296
+11-13 20:38:33.753  1496  2287 I MiuiNetworkPolicy: updateWmmForUidState uid: 10296 state: 20 wmm: 0
+11-13 20:38:33.753   653   653 D OemNetd : updateWmm: uid=10296, wmm=0
+11-13 20:38:33.754  9787 12831 D MyLog   : -->log(1): [Tid:981] [KeepAliveManager] -->onProcessDied(), pid=25701, uid=10296
+11-13 20:38:33.754 19902 19902 D AppLifecycleObserver: onReceive: com.hoopoetv.tvbox DESTROY
+11-13 20:38:33.755 19902 19902 D PkgUtils: getApplicationInfo packageName:com.hoopoetv.tvbox, flags:128 applicationInfo:ApplicationInfo{d5e7874 com.hoopoetv.tvbox} needSecondSpace:false
+11-13 20:38:33.755  2502  2502 D EventBus: [2502, u0] send(AppTransitionFinishedEvent)
+11-13 20:38:33.756 19902 19902 D AppLifecycleObserver: onReceive: com.miui.home FOREGROUND
+11-13 20:38:33.756  2502  2502 D EventBus: [2502, u0]  -> ForcedResizableInfoActivityController [0xfc7de91, P1] onBusEvent(AppTransitionFinishedEvent)
+11-13 20:38:33.756  2502  2502 D EventBus: [2502, u0] onBusEvent(AppTransitionFinishedEvent) duration: 13 microseconds, avg: 84
+11-13 20:38:33.756  4465  4486 D MyLog   : -->log(1): [Tid:260] [KeepAliveManager] -->onProcessDied(), pid=25701, uid=10296
+11-13 20:38:33.756 16901 16901 D AppLifecycleObserver: onReceive: com.hoopoetv.tvbox DESTROY
+11-13 20:38:33.757  1496  2287 I MiuiNetworkPolicy: updateMLUid uid:10296,old:2,new:20
+11-13 20:38:33.757  1496  2287 I MiuiNetworkPolicy: isMLEnabled state:2,uid:10296,connect:DISCONNECTED
+11-13 20:38:33.757  1496  2287 I MiuiNetworkPolicy: isMLEnabled state:20,uid:10296,connect:DISCONNECTED
+11-13 20:38:33.757  1496  2287 I MiuiNetworkPolicy: updateUidState uid = 10088, uidState = 2
+11-13 20:38:33.757  1496  2287 I MiuiNetworkPolicy: updateWmmForUidState uid: 10088 state: 2 wmm: 1
+11-13 20:38:33.758   653   653 D OemNetd : updateWmm: uid=10088, wmm=1
+11-13 20:38:33.758  3699  3699 D RegisteredServicesCache: Intent action: android.intent.action.PACKAGE_RESTARTED
+11-13 20:38:33.759  4043  4043 D AggregateListener: notifyAction action:android.intent.action.PACKAGE_RESTARTED
+11-13 20:38:33.759  4043  4043 D AggregateListener: onPackageRestarted packageName:com.hoopoetv.tvbox
+11-13 20:38:33.761  4465  4891 D MyLog   : -->log(0): [Tid:282] pcc handle intent in sjm android.intent.action.PACKAGE_RESTARTED
+11-13 20:38:33.762 19902 19902 D PkgUtils: getApplicationInfo packageName:com.miui.home, flags:128 applicationInfo:ApplicationInfo{7a4d19d com.miui.home} needSecondSpace:false
+11-13 20:38:33.762  1496  2287 I MiuiNetworkPolicy: updateMLUid uid:10088,old:6,new:2
+11-13 20:38:33.762  1496  2287 I MiuiNetworkPolicy: isMLEnabled state:6,uid:10088,connect:DISCONNECTED
+11-13 20:38:33.762  1496  2287 I MiuiNetworkPolicy: isMLEnabled state:2,uid:10088,connect:DISCONNECTED
+11-13 20:38:33.764 16901 16901 D PkgUtils: getApplicationInfo packageName:com.hoopoetv.tvbox, flags:128 applicationInfo:ApplicationInfo{d0a41f7 com.hoopoetv.tvbox} needSecondSpace:false
+11-13 20:38:33.764 16901 16901 D AppLifecycleObserver: onReceive: com.miui.home FOREGROUND
+11-13 20:38:33.767  2727  2727 D CarrierSvcBindHelper: No carrier app for: 0
+11-13 20:38:33.767   904   974 D Layer   : ---setAlpha Launcher=1.000000
+11-13 20:38:33.767  1496  1535 I Timeline: Timeline: App_transition_ready time:14218584
+11-13 20:38:33.768 16901 16901 D PkgUtils: getApplicationInfo packageName:com.miui.home, flags:128 applicationInfo:ApplicationInfo{9818864 com.miui.home} needSecondSpace:false
+11-13 20:38:33.770  2727  2727 D CarrierSvcBindHelper: No carrier app for: 1
+11-13 20:38:33.774  3699  3699 E RegisteredServicesCache: Skipping application component ComponentInfo{com.autonavi.minimap/com.alibaba.ariver.commonability.device.jsapi.nfc.service.TinyAppHostApduService}: it must request the permission android.permission.NFC
+11-13 20:38:33.774  2746  2851 D StatusBarController: handleMessage: flag 800000  disable false
+11-13 20:38:33.775  9787  9979 D MyLog   : -->log(0): [Tid:656] pcc handle intent in sjm android.intent.action.PACKAGE_RESTARTED
+11-13 20:38:33.776  3699  3699 E RegisteredServicesCache: Skipping application component ComponentInfo{com.autonavi.minimap/com.alipay.mobile.aompdevice.nfc.service.TinyAppHostApduService}: it must request the permission android.permission.NFC
+11-13 20:38:33.776  2746  2746 D ScreenView_ScreenView: dispatchDraw:0
+11-13 20:38:33.776  2746  2746 D ScreenView_Workspace: dispatchDraw:3240
+11-13 20:38:33.776  2746  2746 D ScreenView_HotSeats: dispatchDraw:0
+11-13 20:38:33.777  2746  2746 D ScreenView_MinusOneScreenView: dispatchDraw:1080
+11-13 20:38:33.777   904   974 D Layer   : ---setAlpha Launcher=1.000000
+11-13 20:38:33.778  5114  5458 D AppOpsAdapter: using permission notify! 32 , groundState 1
+11-13 20:38:33.780   904   974 D Layer   : ---setAlpha Launcher=1.000000
+11-13 20:38:33.780  1496  1622 I Timeline: Timeline: App_transition_ready time:14218597
+11-13 20:38:33.783  1496  4360 V LocSvc_HIDL_IzatProvider_jni: [onRemoveRequest][180] [HC] =>> [HS]
+11-13 20:38:33.783   772   772 V LocSvc_HIDL_IzatProvider: [onRemoveRequest][210] [HS] <<<<= [HC]
+11-13 20:38:33.783   772   772 I IzatSvc_IzatManager: LocTech-Label :: IZATMANAGER :: Remove Request In
+11-13 20:38:33.783   772   772 I IzatSvc_IzatManager: LocTech-Value :: Provider: 2, Num Updates: 2147483647, TTFF: 0, Interval: 1000, Displacement: 0.000000, Horizontal Accuracy: 1, Altitude Accuracy: 2, Bearing Accuracy: 2
+11-13 20:38:33.786  3699  3699 D NQApduServiceInfo: No com.nxp.nfc.extensions meta-data
+11-13 20:38:33.786  3699  3699 E NQApduServiceInfo: SE extension not present, Setting default offhost seID
+11-13 20:38:33.786  3699  3699 D RegisteredServicesCache: Adding service: ComponentInfo{com.google.android.gms/com.google.android.gms.nearby.mediums.nearfieldcommunication.NfcAdvertisingService} AIDs: [F00000FE2C]
+11-13 20:38:33.786  3699  3699 D RegisteredServicesCache: Adding service: ComponentInfo{com.cainiao.wireless/com.alipay.mobile.aompdevice.nfc.service.TinyAppHostApduService} AIDs: []
+11-13 20:38:33.786  3699  3699 D RegisteredServicesCache: Adding service: ComponentInfo{com.tencent.mm/com.tencent.mm.plugin.appbrand.jsapi.nfc.hce.HCEService} AIDs: [F123456789]
+11-13 20:38:33.786  3699  3699 D RegisteredServicesCache: Adding service: ComponentInfo{com.tencent.mobileqq/com.tencent.mm.plugin.appbrand.jsapi.nfc.hce.HCEService} AIDs: [F123456789]
+11-13 20:38:33.786  3699  3699 D RegisteredServicesCache: Adding service: ComponentInfo{com.google.android.gms/com.google.android.gms.fido.hybrid.NfcEmulationService} AIDs: [A0000006472F0002]
+11-13 20:38:33.786  3699  3699 D RegisteredServicesCache: Adding service: ComponentInfo{com.xinhang.mobileclient/com.dsop.nfcsimmanager.sim.core.WalletOffHostApduService} AIDs: [D1560001018003810000000200000002]
+11-13 20:38:33.786  3699  3699 D RegisteredServicesCache:  Reading service state data always from file
+11-13 20:38:33.787  1496  2652 V LocSvc_HIDL_OsNpGlue_jni: [onStopRequest][73] [HC] <<= [HS]
+11-13 20:38:33.787  3699  3699 D RegisteredServicesCache: ServiceStateFileVersion=1.0
+11-13 20:38:33.787  3699  3699 E RegisteredServicesCache: Next Tag=services
+11-13 20:38:33.787  3699  3699 D RegisteredServicesCache:  curr component com.google.android.gms/com.google.android.gms.nearby.mediums.nearfieldcommunication.NfcAdvertisingService
+11-13 20:38:33.787  3699  3699 D RegisteredServicesCache:  curr uid 10168
+11-13 20:38:33.787  3699  3699 D RegisteredServicesCache:  curr state 1
+11-13 20:38:33.787  3699  3699 E RegisteredServicesCache: installedServices no uidString 
+11-13 20:38:33.787  3699  3699 D RegisteredServicesCache:  curr component com.google.android.gms/com.google.android.gms.fido.hybrid.NfcEmulationService
+11-13 20:38:33.787  3699  3699 D RegisteredServicesCache:  curr uid 10168
+11-13 20:38:33.787  3699  3699 D RegisteredServicesCache:  curr state 1
+11-13 20:38:33.787  3699  3699 E RegisteredServicesCache: installedServices contains uidString : 10168
+11-13 20:38:33.787  3699  3699 D RegisteredServicesCache:  curr component com.google.android.gms/com.google.android.gms.nearby.mediums.nearfieldcommunication.NfcAdvertisingService
+11-13 20:38:33.787  3699  3699 D RegisteredServicesCache:  curr uid 99910168
+11-13 20:38:33.787  3699  3699 D RegisteredServicesCache:  curr state 2
+11-13 20:38:33.787  3699  3699 E RegisteredServicesCache: installedServices no uidString 
+11-13 20:38:33.787  3699  3699 D RegisteredServicesCache:  curr component com.google.android.gms/com.google.android.gms.fido.hybrid.NfcEmulationService
+11-13 20:38:33.787  3699  3699 D RegisteredServicesCache:  curr uid 99910168
+11-13 20:38:33.787  3699  3699 D RegisteredServicesCache:  curr state 2
+11-13 20:38:33.787  3699  3699 E RegisteredServicesCache: installedServices contains uidString : 99910168
+11-13 20:38:33.787  3699  3699 E RegisteredServicesCache: 1invalidateCache:WriteServiceStateToFile
+11-13 20:38:33.787  3699  3699 E RegisteredServicesCache:  Writing service state Data Always
+11-13 20:38:33.788  3699  3699 E RegisteredServicesCache: component namecom.google.android.gms/com.google.android.gms.nearby.mediums.nearfieldcommunication.NfcAdvertisingService
+11-13 20:38:33.788  3699  3699 E RegisteredServicesCache: component namecom.google.android.gms/com.google.android.gms.fido.hybrid.NfcEmulationService
+11-13 20:38:33.788  3699  3699 E RegisteredServicesCache: component namecom.google.android.gms/com.google.android.gms.nearby.mediums.nearfieldcommunication.NfcAdvertisingService
+11-13 20:38:33.788  3699  3699 E RegisteredServicesCache: component namecom.google.android.gms/com.google.android.gms.fido.hybrid.NfcEmulationService
+11-13 20:38:33.789  2727  2727 D CarrierSvcBindHelper: No carrier app for: 0
+11-13 20:38:33.790  2727  2727 D CarrierSvcBindHelper: No carrier app for: 1
+11-13 20:38:33.790  3699  3699 D CardEmulationManager: Current default: ComponentInfo{com.tencent.mm/com.tencent.mm.plugin.appbrand.jsapi.nfc.hce.HCEService}
+11-13 20:38:33.790  3699  3699 D CardEmulationManager: Default payment service still ok.
+11-13 20:38:33.790  3699  3699 D RegisteredAidCache: onServicesUpdated
+11-13 20:38:33.790  3699  3699 D RegisteredAidCache: generateServiceMap component: ComponentInfo{com.google.android.gms/com.google.android.gms.nearby.mediums.nearfieldcommunication.NfcAdvertisingService}
+11-13 20:38:33.790  3699  3699 D RegisteredAidCache: generateServiceMap component: ComponentInfo{com.cainiao.wireless/com.alipay.mobile.aompdevice.nfc.service.TinyAppHostApduService}
+11-13 20:38:33.790  3699  3699 D RegisteredAidCache: generateServiceMap component: ComponentInfo{com.tencent.mm/com.tencent.mm.plugin.appbrand.jsapi.nfc.hce.HCEService}
+11-13 20:38:33.790  3699  3699 D RegisteredAidCache: generateServiceMap component: ComponentInfo{com.tencent.mobileqq/com.tencent.mm.plugin.appbrand.jsapi.nfc.hce.HCEService}
+11-13 20:38:33.790  3699  3699 D RegisteredAidCache: generateServiceMap component: ComponentInfo{com.google.android.gms/com.google.android.gms.fido.hybrid.NfcEmulationService}
+11-13 20:38:33.790  3699  3699 D RegisteredAidCache: generateServiceMap component: ComponentInfo{com.xinhang.mobileclient/com.dsop.nfcsimmanager.sim.core.WalletOffHostApduService}
+11-13 20:38:33.790  3699  3699 D RegisteredAidCache: generateAidCacheLocked: starting with aid A0000006472F0002
+11-13 20:38:33.790  3699  3699 D RegisteredAidCache: Exact AID, resolving.
+11-13 20:38:33.790  3699  3699 D RegisteredAidCache: resolveAidLocked: DECISION: making single handling service ComponentInfo{com.google.android.gms/com.google.android.gms.fido.hybrid.NfcEmulationService} default.
+11-13 20:38:33.790  3699  3699 D RegisteredAidCache: AIDs: [A0000006472F0002] were resolved.
+11-13 20:38:33.790  3699  3699 D RegisteredAidCache: generateAidCacheLocked: starting with aid D1560001018003810000000200000002
+11-13 20:38:33.790  3699  3699 D RegisteredAidCache: Exact AID, resolving.
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: resolveAidLocked: (Ignoring handling service ComponentInfo{com.xinhang.mobileclient/com.dsop.nfcsimmanager.sim.core.WalletOffHostApduService} because it's not the payment default.)
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: resolveAidLocked: DECISION: routing to all matching services
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: AIDs: [D1560001018003810000000200000002] were resolved.
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: generateAidCacheLocked: starting with aid F00000FE2C
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: Exact AID, resolving.
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: resolveAidLocked: DECISION: making single handling service ComponentInfo{com.google.android.gms/com.google.android.gms.nearby.mediums.nearfieldcommunication.NfcAdvertisingService} default.
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: AIDs: [F00000FE2C] were resolved.
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: generateAidCacheLocked: starting with aid F123456789
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: Exact AID, resolving.
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: resolveAidLocked: (Ignoring handling service ComponentInfo{com.tencent.mobileqq/com.tencent.mm.plugin.appbrand.jsapi.nfc.hce.HCEService} because it's not the payment default.)
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: resolveAidLocked: DECISION: routing to payment default default ApduService: ComponentInfo{com.tencent.mm/com.tencent.mm.plugin.appbrand.jsapi.nfc.hce.HCEService}, description: 微信, Static AID Groups: Category: payment, AIDs:F123456789, , Dynamic AID Groups: 
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: AIDs: [F123456789] were resolved.
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: Exact or Prefix AID.F123456789
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: AIDs: [F123456789] were resolved.
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: Exact or Prefix AID.F00000FE2C
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: AIDs: [F00000FE2C] were resolved.
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: Exact or Prefix AID.D1560001018003810000000200000002
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: AIDs: [D1560001018003810000000200000002] were resolved.
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: Exact or Prefix AID.A0000006472F0002
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: AIDs: [A0000006472F0002] were resolved.
+11-13 20:38:33.791  3699  3699 D RegisteredAidCache: Not updating routing table because NFC is off.
+11-13 20:38:33.791   904   974 D BufferQueueLayer: Launcher new frame Arrived
+11-13 20:38:33.791  3699  3699 D RegisteredServicesCache: ApduService: ComponentInfo{com.google.android.gms/com.google.android.gms.nearby.mediums.nearfieldcommunication.NfcAdvertisingService}, description: Nearby, Static AID Groups: Category: other, AIDs:F00000FE2C, , Dynamic AID Groups: 
+11-13 20:38:33.791  3699  3699 D RegisteredServicesCache: ApduService: ComponentInfo{com.cainiao.wireless/com.alipay.mobile.aompdevice.nfc.service.TinyAppHostApduService}, description: 支付宝(Alipay) NFC, Static AID Groups: , Dynamic AID Groups: 
+11-13 20:38:33.791  3699  3699 D RegisteredServicesCache: ApduService: ComponentInfo{com.tencent.mm/com.tencent.mm.plugin.appbrand.jsapi.nfc.hce.HCEService}, description: 微信, Static AID Groups: Category: payment, AIDs:F123456789, , Dynamic AID Groups: 
+11-13 20:38:33.791  3699  3699 D RegisteredServicesCache: ApduService: ComponentInfo{com.tencent.mobileqq/com.tencent.mm.plugin.appbrand.jsapi.nfc.hce.HCEService}, description: 微信, Static AID Groups: Category: payment, AIDs:F123456789, , Dynamic AID Groups: 
+11-13 20:38:33.791  3699  3699 D RegisteredServicesCache: ApduService: ComponentInfo{com.google.android.gms/com.google.android.gms.fido.hybrid.NfcEmulationService}, description: Fido NFC Emulation Service, Static AID Groups: Category: other, AIDs:A0000006472F0002, , Dynamic AID Groups: 
+11-13 20:38:33.791  3699  3699 D RegisteredServicesCache: ApduService: ComponentInfo{com.xinhang.mobileclient/com.dsop.nfcsimmanager.sim.core.WalletOffHostApduService}, description: 中国移动河南, Static AID Groups: Category: payment, AIDs:D1560001018003810000000200000002, , Dynamic AID Groups: 
+11-13 20:38:33.791  3699  3699 D RegisteredNfcFServicesCache: Service unchanged, not updating
+11-13 20:38:33.791  3699  3699 D RegisteredServicesCache: Intent action: android.intent.action.PACKAGE_RESTARTED
+11-13 20:38:33.793   904   970 D Layer   : ---setAlpha Launcher=1.000000
+11-13 20:38:33.794  2746  2746 D RecentsImpl: mActivityStateObserver com.miui.home.launcher.Launcher
+11-13 20:38:33.794  2746  2746 W RecentsImpl: onResumed className=com.miui.home.launcher.Launcher   mIsInAnotherPro=false
+11-13 20:38:33.794  2746  2746 D Launcher.Lifecycle: onWindowFocusChanged:true,UserHandle{0},bae8287,false
+11-13 20:38:33.794  2746  2746 D Launcher_UnlockAnimationStateMachine: onWindowFocus:IDLE
+11-13 20:38:33.796  2478  2478 D MiWallpaper: onVisibilityChanged: resume
+11-13 20:38:33.796  2478  2478 D MamlSurface: onResume
+11-13 20:38:33.796  2478  2478 D ScreenElementRoot: resume
+11-13 20:38:33.796   904   970 D Layer   : ---setAlpha Launcher=1.000000
+11-13 20:38:33.796  2502  2502 D StatusBar: recevie broadbcast ACTION_APPLICATION_MESSAGE_QUERY, requestFirstTime=false
+11-13 20:38:33.797  1496  2228 W InputDispatcher: channel '13dea67 com.hoopoetv.tvbox/com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity (server)' ~ Consumer closed input channel or an error occurred.  events=0x9
+11-13 20:38:33.798  1496  2228 E InputDispatcher: channel '13dea67 com.hoopoetv.tvbox/com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity (server)' ~ Channel is unrecoverably broken and will be disposed!
+11-13 20:38:33.799  1496  1622 I Timeline: Timeline: App_transition_ready time:14218616
+11-13 20:38:33.802  1496  1622 W WindowManager: Failed to deliver inset state change
+11-13 20:38:33.802  1496  1622 W WindowManager: android.os.DeadObjectException
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at android.os.BinderProxy.transactNative(Native Method)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at android.os.BinderProxy.transact(Unknown Source:108)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at android.view.IWindow$Stub$Proxy.insetsChanged(Unknown Source:27)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.WindowState.notifyInsetsChanged(Unknown Source:14)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.InsetsStateController.lambda$new$0(Unknown Source:6)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.-$$Lambda$InsetsStateController$sIYEJIR4ztgffCLMi5Z1RvdxyYs.accept(Unknown Source:2)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.WindowContainer$ForAllWindowsConsumerWrapper.apply(Unknown Source:2)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.WindowContainer$ForAllWindowsConsumerWrapper.apply(Unknown Source:2)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.WindowState.applyInOrderWithImeWindows(Unknown Source:9)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.WindowState.forAllWindows(Unknown Source:8)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.WindowContainer.forAllWindows(Unknown Source:20)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.AppWindowToken.forAllWindowsUnchecked(Unknown Source:0)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.DisplayContent$TaskStackContainers.forAllExitingAppTokenWindows(Unknown Source:35)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.DisplayContent$TaskStackContainers.forAllWindows(Unknown Source:10)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.DisplayContent.forAllWindows(Unknown Source:27)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.WindowContainer.forAllWindows(Unknown Source:4)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.InsetsStateController.notifyInsetsChanged(Unknown Source:5)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.InsetsStateController.onPostLayout(Unknown Source:52)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.DisplayContent.applySurfaceChangesTransaction(Unknown Source:116)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.RootWindowContainer.applySurfaceChangesTransaction(Unknown Source:139)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacementNoTrace(Unknown Source:94)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacement(Unknown Source:7)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacementLoop(Unknown Source:151)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(Unknown Source:11)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(Unknown Source:1)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.lambda$new$0$WindowSurfacePlacer(Unknown Source:8)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.wm.-$$Lambda$WindowSurfacePlacer$4Hbamt-LFcbu8AoZBoOZN_LveKQ.run(Unknown Source:2)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at android.os.Handler.handleCallback(Unknown Source:2)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at android.os.Handler.dispatchMessage(Unknown Source:4)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at android.os.Looper.loop(Unknown Source:242)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at android.os.HandlerThread.run(Unknown Source:28)
+11-13 20:38:33.802  1496  1622 W WindowManager: 	at com.android.server.ServiceThread.run(Unknown Source:12)
+11-13 20:38:33.803  2502  2502 D StatusBar: disable<e i a s b h r c s > disable2<q i n g r >
+11-13 20:38:33.804   904   970 D Layer   : ---setAlpha Launcher=1.000000
+11-13 20:38:33.805  1496  2228 W InputDispatcher: channel '7c3b5e4 com.hoopoetv.tvbox/com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity (server)' ~ Consumer closed input channel or an error occurred.  events=0xd
+11-13 20:38:33.805  1496  2228 E InputDispatcher: channel '7c3b5e4 com.hoopoetv.tvbox/com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity (server)' ~ Channel is unrecoverably broken and will be disposed!
+11-13 20:38:33.807  2502  2502 D PhoneStatusBar/NavigationBarView: setDisabledFlags back:false home:false recent:false
+11-13 20:38:33.803  1496  1622 W WindowManager: Failed to deliver inset state change
+11-13 20:38:33.803  1496  1622 W WindowManager: android.os.DeadObjectException
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at android.os.BinderProxy.transactNative(Native Method)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at android.os.BinderProxy.transact(Unknown Source:108)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at android.view.IWindow$Stub$Proxy.insetsChanged(Unknown Source:27)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.WindowState.notifyInsetsChanged(Unknown Source:14)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.InsetsStateController.lambda$new$0(Unknown Source:6)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.-$$Lambda$InsetsStateController$sIYEJIR4ztgffCLMi5Z1RvdxyYs.accept(Unknown Source:2)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.WindowContainer$ForAllWindowsConsumerWrapper.apply(Unknown Source:2)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.WindowContainer$ForAllWindowsConsumerWrapper.apply(Unknown Source:2)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.WindowState.applyInOrderWithImeWindows(Unknown Source:9)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.WindowState.forAllWindows(Unknown Source:8)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.WindowContainer.forAllWindows(Unknown Source:20)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.AppWindowToken.forAllWindowsUnchecked(Unknown Source:0)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.DisplayContent$TaskStackContainers.forAllExitingAppTokenWindows(Unknown Source:35)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.DisplayContent$TaskStackContainers.forAllWindows(Unknown Source:10)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.DisplayContent.forAllWindows(Unknown Source:27)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.WindowContainer.forAllWindows(Unknown Source:4)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.InsetsStateController.notifyInsetsChanged(Unknown Source:5)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.InsetsStateController.onPostLayout(Unknown Source:52)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.DisplayContent.applySurfaceChangesTransaction(Unknown Source:116)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.RootWindowContainer.applySurfaceChangesTransaction(Unknown Source:139)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacementNoTrace(Unknown Source:94)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.RootWindowContainer.performSurfacePlacement(Unknown Source:7)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacementLoop(Unknown Source:151)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(Unknown Source:11)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement(Unknown Source:1)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.WindowSurfacePlacer.lambda$new$0$WindowSurfacePlacer(Unknown Source:8)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.wm.-$$Lambda$WindowSurfacePlacer$4Hbamt-LFcbu8AoZBoOZN_LveKQ.run(Unknown Source:2)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at android.os.Handler.handleCallback(Unknown Source:2)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at android.os.Handler.dispatchMessage(Unknown Source:4)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at android.os.Looper.loop(Unknown Source:242)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at android.os.HandlerThread.run(Unknown Source:28)
+11-13 20:38:33.803  1496  1622 W WindowManager: 	at com.android.server.ServiceThread.run(Unknown Source:12)
+11-13 20:38:33.807  1496  1534 W InputMethodManagerService: Got RemoteException sending setActive(false) notification to pid 25701 uid 10296
+11-13 20:38:33.809  2746  2746 D Launcher_WallpaperUtils: changeStatusBarMode:false
+11-13 20:38:33.810  2746  2746 W RecentsImpl: updateFsgWindowVisibilityState   isEnter=false   typeFrom=typefrom_home   isOpen=true   mIsInAnotherPro=false   mIsStatusBarExpansion=false
+11-13 20:38:33.810  2746  2746 W RecentsImpl: getTopActivity from observer.   cn=ComponentInfo{com.miui.home/com.miui.home.launcher.Launcher}
+11-13 20:38:33.810  2746  2875 D RecentsImpl: showNavStubView
+11-13 20:38:33.810  2746  2874 D RecentsImpl: hideBackStubWindow
+11-13 20:38:33.812   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:33.814  1496  1640 I libprocessgroup: Successfully killed process cgroup uid 10296 pid 25701 in 106ms
+11-13 20:38:33.815  1496  4437 I WindowManager: WIN DEATH: Window{7c3b5e4 u0 com.hoopoetv.tvbox/com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity}
+11-13 20:38:33.815  1496  4437 W InputDispatcher: Attempted to unregister already unregistered input channel '7c3b5e4 com.hoopoetv.tvbox/com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity (server)'
+11-13 20:38:33.815   654   654 I Zygote  : Process 25701 exited due to signal 9 (Killed)
+11-13 20:38:33.817  1496  4461 I WindowManager: WIN DEATH: Window{13dea67 u0 com.hoopoetv.tvbox/com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity}
+11-13 20:38:33.817  1496  4461 W InputDispatcher: Attempted to unregister already unregistered input channel '13dea67 com.hoopoetv.tvbox/com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity (server)'
+11-13 20:38:33.820  4249  7168 I SCTaskStackListener: onTaskStackChanged! inSplit = false
+11-13 20:38:33.820  4249 12352 I SCTaskStackListener: onTaskStackChanged! inSplit = false
+11-13 20:38:33.822  1496  4498 W ActivityManager: Sending non-protected broadcast com.android.systemui.fullscreen.statechange from system 2502:com.android.systemui/1000 pkg com.android.systemui. Callers=
+11-13 20:38:33.822  1496  1620 W ActivityManager: setHasOverlayUi called on unknown pid: 25701
+11-13 20:38:33.822  1496  4498 W ActivityManager: Sending non-protected broadcast com.android.systemui.fullscreen.statechange from system 2502:com.android.systemui/1000 pkg com.android.systemui. Callers=
+11-13 20:38:33.823  2502  2502 D StatusBarClock:  isNormalMode= true clock visible=true
+11-13 20:38:33.823  2502  2502 D EventBus: [2502, u0] send(AppTransitionFinishedEvent)
+11-13 20:38:33.823  2502  2502 D EventBus: [2502, u0]  -> ForcedResizableInfoActivityController [0xfc7de91, P1] onBusEvent(AppTransitionFinishedEvent)
+11-13 20:38:33.823  1496  2287 I MiuiNetworkPolicy: updateUidState uid = 10073, uidState = 6
+11-13 20:38:33.823  1496  2287 I MiuiNetworkPolicy: updateMLUid uid:10073,old:20,new:6
+11-13 20:38:33.823  1496  2287 I MiuiNetworkPolicy: isMLEnabled state:20,uid:10073,connect:DISCONNECTED
+11-13 20:38:33.823  1496  2287 I MiuiNetworkPolicy: isMLEnabled state:6,uid:10073,connect:DISCONNECTED
+11-13 20:38:33.824  2502  2502 D EventBus: [2502, u0] onBusEvent(AppTransitionFinishedEvent) duration: 467 microseconds, avg: 84
+11-13 20:38:33.827 17464 17482 W Wth2:WeatherProvider: query() URL_ACTUAL_WEATHER_DATA: user don't agree to run
+11-13 20:38:33.828   904   904 D SurfaceFlinger: Launcher Changed hasLauncher=1
+11-13 20:38:33.837  2746  2746 D ScreenView_ScreenView: dispatchDraw:0
+11-13 20:38:33.837  2746  2746 D ScreenView_Workspace: dispatchDraw:3240
+11-13 20:38:33.838  2746  2746 D ScreenView_HotSeats: dispatchDraw:0
+11-13 20:38:33.838  2746  2746 D ScreenView_MinusOneScreenView: dispatchDraw:1080
+11-13 20:38:33.844   904  1701 D BufferQueueLayer: Launcher new frame Arrived
+11-13 20:38:33.895  2746  2746 W RecentsImpl: updateFsgWindowVisibilityState   isEnter=false   typeFrom=typefrom_home   isOpen=true   mIsInAnotherPro=false   mIsStatusBarExpansion=false
+11-13 20:38:33.895  2746  2746 W RecentsImpl: getTopActivity from observer.   cn=ComponentInfo{com.miui.home/com.miui.home.launcher.Launcher}
+11-13 20:38:33.895  2746  2875 D RecentsImpl: showNavStubView
+11-13 20:38:33.895  2746  2874 D RecentsImpl: hideBackStubWindow
+11-13 20:38:33.899   837   837 V DisplayFeatureHal: dataCallback value=< 804.0000,   0.0000,   0.0000>,time=14674451952625, sensor=5, temperature(K)=   0.0000
+11-13 20:38:33.936  4465  5015 D MyLog   : -->log(0): [Tid:310] GamePopupListeneronForegroundAppEnter: pkg=com.miui.home cls=com.miui.home.launcher.Launcher
+11-13 20:38:33.937  4465  5015 D MyLog   : -->log(0): [Tid:310] GamePopupJudgefindMatchedPlans: matched 0 plans for pkg=com.miui.home, cls=com.miui.home.launcher.Launcher
+11-13 20:38:33.937  4465  5015 D MyLog   : -->log(0): [Tid:310] GamePopupListeneronForegroundAppEnter: no matching plans found, pkg=com.miui.home, cls=com.miui.home.launcher.Launcher, totalPlans=0
+11-13 20:38:33.942  1496  1622 I Timeline: Timeline: Activity_windows_visible id: ActivityRecord{c9f2413 u0 com.miui.home/.launcher.Launcher t1} time:14218759
+11-13 20:38:33.942  2502  2502 D EventBus: [2502, u0] send(AppTransitionFinishedEvent)
+11-13 20:38:33.943  2502  2502 D EventBus: [2502, u0]  -> ForcedResizableInfoActivityController [0xfc7de91, P1] onBusEvent(AppTransitionFinishedEvent)
+11-13 20:38:33.943  2502  2502 D EventBus: [2502, u0] onBusEvent(AppTransitionFinishedEvent) duration: 14 microseconds, avg: 84
+11-13 20:38:33.943  1496  1622 I Timeline: Timeline: App_transition_stopped time:14218760
+11-13 20:38:33.945  2746  2746 E RotationHelper: setCurrentTransitionRequest: request=0
+11-13 20:38:34.065   837   837 V DisplayFeatureHal: dataCallback value=< 803.0000,   0.0000,   0.0000>,time=14674618619969, sensor=5, temperature(K)=   0.0000
+11-13 20:38:34.170  9787 10072 D MyLog   : -->log(0): [Tid:683] GamePopupListeneronForegroundAppEnter: pkg=com.miui.home cls=com.miui.home.launcher.Launcher
+11-13 20:38:34.173  9787 10072 D MyLog   : -->log(0): [Tid:683] GamePopupJudgefindMatchedPlans: matched 0 plans for pkg=com.miui.home, cls=com.miui.home.launcher.Launcher
+11-13 20:38:34.173  9787 10072 D MyLog   : -->log(0): [Tid:683] GamePopupListeneronForegroundAppEnter: no matching plans found, pkg=com.miui.home, cls=com.miui.home.launcher.Launcher, totalPlans=0
+11-13 20:38:34.197  2746  2874 D GestureStubView: hideGestureStub
+11-13 20:38:34.197  2746  2874 D GestureStubView: hideGestureStub
+11-13 20:38:34.215  2746  2874 D GestureStubView: gatherTransparentRegion: need render w:54  h:1296
+11-13 20:38:34.221  2746  2874 D GestureStubView: gatherTransparentRegion: need render w:54  h:1296
+11-13 20:38:34.233   837   837 V DisplayFeatureHal: dataCallback value=< 802.0000,   0.0000,   0.0000>,time=14674785283094, sensor=5, temperature(K)=   0.0000
+11-13 20:38:34.288  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42906 mC, weight[0] 2
+11-13 20:38:34.289  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:34.301  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42906 mC, weight[0] 2
+11-13 20:38:34.302  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:34.303  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42906 mC, weight[0] 2
+11-13 20:38:34.304  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:34.305  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42906 mC, weight[0] 2
+11-13 20:38:34.306  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:34.400   837   837 V DisplayFeatureHal: dataCallback value=< 800.0000,   0.0000,   0.0000>,time=14674951950958, sensor=5, temperature(K)=   0.0000
+11-13 20:38:34.568   837   837 V DisplayFeatureHal: dataCallback value=< 800.0000,   0.0000,   0.0000>,time=14675118719031, sensor=5, temperature(K)=   0.0000
+11-13 20:38:34.584  1496  2295 D WifiClientModeImpl: fetchRssiLinkSpeedAndFrequencyNative rssi=-34 TxLinkspeed=400 freq=5260 RxLinkSpeed=400
+11-13 20:38:34.585  1496  2295 V WifiConfigManager: Updating scan detail cache freq=5260 BSSID=10:da:43:bd:a9:55 RSSI=-34 for "CMCC_G"-WPA_PSK
+11-13 20:38:34.592  1496  2295 D WifiClientModeImpl:  L2ConnectedState screen=on 25 0 "CMCC_G" 10:da:43:bd:a9:55 rssi=-34 f=5260 sc=60 link=400 tx=2.1, 0.0, 0.0  rx=0.0 bcn=10419 [on:1141 tx:2 rx:3 period:3047] from screen [on:186141 period:572647] score=60
+11-13 20:38:34.593  1496  2882 I WifiService: getCurrentNetwork uid=1000
+11-13 20:38:34.594  2630  5132 D QCNEJ/WlanStaInfoRelay: Received action: android.net.wifi.RSSI_CHANGED
+11-13 20:38:34.596  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:38:34.627  2502  2502 I chatty  : uid=1000(system) com.android.systemui identical 10 lines
+11-13 20:38:34.628  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:38:34.734   837   837 V DisplayFeatureHal: dataCallback value=< 800.0000,   0.0000,   0.0000>,time=14675285281167, sensor=5, temperature(K)=   0.0000
+11-13 20:38:34.813   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:34.848  1496  2287 I MiuiNetworkPolicy: updateUidState uid = 10073, uidState = 16
+11-13 20:38:34.848  1496  2287 I MiuiNetworkPolicy: updateMLUid uid:10073,old:6,new:16
+11-13 20:38:34.849  1496  2287 I MiuiNetworkPolicy: isMLEnabled state:6,uid:10073,connect:DISCONNECTED
+11-13 20:38:34.849  1496  2287 I MiuiNetworkPolicy: isMLEnabled state:16,uid:10073,connect:DISCONNECTED
+11-13 20:38:34.900   837   837 V DisplayFeatureHal: dataCallback value=< 802.0000,   0.0000,   0.0000>,time=14675451948510, sensor=5, temperature(K)=   0.0000
+11-13 20:38:35.061   653   653 D OemNetd : setLimit: disable, rate=0
+11-13 20:38:35.067   837   837 V DisplayFeatureHal: dataCallback value=< 802.0000,   0.0000,   0.0000>,time=14675618720646, sensor=5, temperature(K)=   0.0000
+11-13 20:38:35.233   837   837 V DisplayFeatureHal: dataCallback value=< 801.0000,   0.0000,   0.0000>,time=14675785281531, sensor=5, temperature(K)=   0.0000
+11-13 20:38:35.291  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42965 mC, weight[0] 2
+11-13 20:38:35.292  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:35.400   837   837 V DisplayFeatureHal: dataCallback value=< 801.0000,   0.0000,   0.0000>,time=14675951948562, sensor=5, temperature(K)=   0.0000
+11-13 20:38:35.566   837   837 V DisplayFeatureHal: dataCallback value=< 801.0000,   0.0000,   0.0000>,time=14676118612312, sensor=5, temperature(K)=   0.0000
+11-13 20:38:35.733   837   837 V DisplayFeatureHal: dataCallback value=< 804.0000,   0.0000,   0.0000>,time=14676285278406, sensor=5, temperature(K)=   0.0000
+11-13 20:38:35.813   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:35.900   837   837 V DisplayFeatureHal: dataCallback value=< 803.0000,   0.0000,   0.0000>,time=14676451948510, sensor=5, temperature(K)=   0.0000
+11-13 20:38:35.902  2502  2853 D MobileSignalController: onSignalStrengthsChanged: SignalStrength:{mCdma=CellSignalStrengthCdma: cdmaDbm=2147483647 cdmaEcio=2147483647 evdoDbm=2147483647 evdoEcio=2147483647 evdoSnr=2147483647 miuiLevel=0 level=0,mGsm=CellSignalStrengthGsm: rssi=2147483647 ber=2147483647 mTa=2147483647 miuiLevel=0 mLevel=0,mWcdma=CellSignalStrengthWcdma: ss=2147483647 ber=2147483647 rscp=2147483647 ecno=2147483647 miuiLevel=0 level=0,mTdscdma=CellSignalStrengthTdscdma: rssi=2147483647 ber=2147483647 rscp=2147483647 miuiLevel=0 level=0,mLte=CellSignalStrengthLte: rssi=-51 rsrp=-77 rsrq=-11 rssnr=52 cqi=2147483647 ta=2147483647 miuiLevel=5 level=3,mNr=CellSignalStrengthNr:{ csiRsrp = 2147483647 csiRsrq = 2147483647 csiSinr = 2147483647 ssRsrp = 2147483647 ssRsrq = 2147483647 ssSinr = 2147483647 miuiLevel = 0 level = 0 },primary=CellSignalStrengthLte}
+11-13 20:38:35.903  2502  2853 D NetworkController.MobileSignalController(1): 4G level = 5
+11-13 20:38:36.025  2502  2502 D KeyguardUpdateMonitor: received broadcast android.intent.action.BATTERY_CHANGED
+11-13 20:38:36.027  3699  3699 D NfcService: Received android.intent.action.BATTERY_CHANGED
+11-13 20:38:36.031  4249  4249 I PowerSaveService: onReceive: android.intent.action.BATTERY_CHANGED
+11-13 20:38:36.034  5224  5570 D PowerCheckerService: onBatteryChanged, mBatteryLevel = 100, status = 2, level = 100, plug = 1, scale = 100
+11-13 20:38:36.035  4249  4249 I PowerNoticeUI: handleBatteryChanged oldPlugType 1 mPlugType 1 oldBatteryLevel 100 mBatteryLevel 100 temperature 350
+11-13 20:38:36.035  4249  4249 I ChargerBatteryIntelligenceReceiver: onBatteryChanged temperature：35,plugType:1
+11-13 20:38:36.035  4249  4249 I PowerFeatureUtils: getVendorName:qcom
+11-13 20:38:36.066   837   837 V DisplayFeatureHal: dataCallback value=< 804.0000,   0.0000,   0.0000>,time=14676618610646, sensor=5, temperature(K)=   0.0000
+11-13 20:38:36.067  1496  2882 W XSpaceManagerService: checkXSpaceControl, from:com.android.shell, to:com.hoopoetv.tvbox, with act:null, callingUserId:0, toUserId:0
+11-13 20:38:36.067  1496  2882 I ActivityTaskManager: START u0 {flg=0x10000000 cmp=com.hoopoetv.tvbox/com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity} from uid 2000
+11-13 20:38:36.068  1496  2882 D MiuiMultiWindowAdapter: MiuiMultiWindowAdapter::getFreeformBlackList::sSmallWindowBlackList = [com.miui.securitycenter, com.miui.weather2, com.miui.miservice, com.android.calendar, com.xiaomi.calendar, com.android.contacts, com.miui.mishare.connectivity, com.android.settings, com.android.printspooler, com.miui.backup, com.miui.huanji, com.miui.calculator, com.android.deskclock, com.android.thememanager, com.mfashiongallery.emag, com.miui.virtualsim, com.miui.smarttravel, com.mi.health, com.android.camera, com.lbe.security.miui, com.miui.cleanmaster, com.miui.newhome, com.miui.voiceassist, com.android.phone, com.miui.yellowpage, com.android.updater, com.miui.tsmclient, com.miui.securitycore, com.xiaomi.account, com.xiaomi.shop, com.xiaomi.smarthome, com.mipay.wallet, com.xiaomi.youpin, com.xiaomi.hm.health, com.miui.bugreport, com.xiaomi.mibrain.speech, com.xiaomi.mimoji, com.xiaomi.scanner, com.duokan.phone.remotecontroller, com.miui.hybrid, com.android.incallui, com.miui.video, com.miui.videoplayer, com.miui.player, com.miui.fm, com.miui.packageinstaller, com.mi.android.globallauncher, com.mi.android.globallauncher-poco, com.google.android.dialer, com.google.android.apps.magazines, com.miui.compass, com.miui.greenguard, com.kiteguard, com.google.android.apps.prodcasts, com.google.ar.lens, com.xiangkan.android, com.android.bankabc, com.sohu.inputmethod.sogou, com.tencent.mtt, com.shyz.toutiao, com.netease.mc.mi, com.outfit7.talkingtomgoldrun.mi, com.doudz.mi, com.wepie.snake.new.mi, cn.jj, com.standddz002.mi, com.miHoYo.bh3.mi, com.qqgame.hlddz, com.happyelements.AndroidAnimal, com.minitech.miniworld.TMobile.mi, com.mfp.jelly.xiaomi, com.lilithgames.afk.mi, com.tencent.peng, com.teenpatti.hd.gold, blockpuzzle.jewelgames.jewelslegend, com.playgendary.tanks, com.chillingo.robberybobfree.android.row, com.episodeinteractive.android.catalog, com.playrix.township, com.ansangha.drdriving, com.google.android.youtube, com.gbits.atm.mi, com.tencent.tetris, com.sukhavati.gotoplaying.bubble.BubbleShooter.mint, com.block.puzzle.game.hippo.mi, com.youzu.bs.mi, com.appsomniacs.da2, com.miHoYo.Yuanshen, com.baidu.BaiduMap, com.google.android.googlequicksearchbox]
+11-13 20:38:36.070  1496  2882 E ANDR-PERF-JNI: com_qualcomm_qtiperformance_native_perf_io_prefetch_start
+11-13 20:38:36.078  1496  2882 D CompatibilityInfo: mCompatibilityFlags - 0
+11-13 20:38:36.078  1496  2882 D CompatibilityInfo: applicationDensity - 440
+11-13 20:38:36.078  1496  2882 D CompatibilityInfo: applicationScale - 1.0
+11-13 20:38:36.078  2127  2132 E ANDR-IOP: io prefetch is disabled
+11-13 20:38:36.079  1496  2882 D ActivityTrigger: ActivityTrigger activityPauseTrigger 
+11-13 20:38:36.082  2746  2746 D Launcher.Lifecycle: onPause:UserHandle{0},bae8287,true
+11-13 20:38:36.082  2746  2746 D Launcher_UnlockAnimationStateMachine: setState:PAUSE_WAIT
+11-13 20:38:36.091  1496  2287 I MiuiNetworkPolicy: updateUidState uid = 10296, uidState = 20
+11-13 20:38:36.102  2746  2851 D StatusBarController: handleMessage: flag 800000  disable false
+11-13 20:38:36.104   904   970 D BufferQueueLayer: Launcher new frame Arrived
+11-13 20:38:36.116  2746  2746 D Launcher_WallpaperUtils: changeStatusBarMode:false
+11-13 20:38:36.118  2746  2746 D Launcher.Lifecycle: onWindowFocusChanged:false,UserHandle{0},bae8287,true
+11-13 20:38:36.120   904  1701 D BufferQueueLayer: Launcher new frame Arrived
+11-13 20:38:36.125   654   654 D Zygote  : Forked child process 25824
+11-13 20:38:36.128   653   653 D OemNetd : setPidForPackage: packageName=com.hoopoetv.tvbox, pid=25824, pid=10296
+11-13 20:38:36.128  1496  1639 I ActivityManager: Start proc 25824:com.hoopoetv.tvbox/u0a296 for activity {com.hoopoetv.tvbox/com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity} caller=com.android.shell
+11-13 20:38:36.132 25824 25824 I .hoopoetv.tvbo: Late-enabling -Xcheck:jni
+11-13 20:38:36.154 25824 25824 E .hoopoetv.tvbo: Unknown bits set in runtime_flags: 0x8000
+11-13 20:38:36.173  1496  4498 D CompatibilityInfo: mCompatibilityFlags - 0
+11-13 20:38:36.173  1496  4498 D CompatibilityInfo: applicationDensity - 440
+11-13 20:38:36.173  1496  4498 D CompatibilityInfo: applicationScale - 1.0
+11-13 20:38:36.176  1496  4498 D CompatibilityInfo: mCompatibilityFlags - 0
+11-13 20:38:36.176  1496  4498 D CompatibilityInfo: applicationDensity - 440
+11-13 20:38:36.176  1496  4498 D CompatibilityInfo: applicationScale - 1.0
+11-13 20:38:36.177 14095 14113 D AutoInstallService: onForegroundInfoChanged: com.hoopoetv.tvbox
+11-13 20:38:36.177  4249 12352 I ProcessMonitor: onForegroundInfoChanged: ForegroundInfo{mForegroundPackageName='com.hoopoetv.tvbox', mForegroundUid=10296, mForegroundPid=25824, mLastForegroundPackageName='com.miui.home', mLastForegroundUid=10088, mLastForegroundPid=2746, mMultiWindowForegroundPackageName='null', mMultiWindowForegroundUid=-1, mFlags=1}
+11-13 20:38:36.177  5224  5262 D PerfEngineController: ForegroundInfo{mForegroundPackageName='com.hoopoetv.tvbox', mForegroundUid=10296, mForegroundPid=25824, mLastForegroundPackageName='com.miui.home', mLastForegroundUid=10088, mLastForegroundPid=2746, mMultiWindowForegroundPackageName='null', mMultiWindowForegroundUid=-1, mFlags=1}
+11-13 20:38:36.178  5238  5380 I GST     : forePkg: com.hoopoetv.tvbox, preForePkg: com.miui.home
+11-13 20:38:36.178  1496  4498 I qspmsvc-client: inside perf_hint_qspm
+11-13 20:38:36.178  4249 12352 I GameBoosterService: onForegroundInfoChanged: Cur=com.hoopoetv.tvbox	 last=com.miui.home
+11-13 20:38:36.184  1496  1622 I Timeline: Timeline: App_transition_ready time:14221001
+11-13 20:38:36.187  2502  2502 D StatusBar: disable<e i a s b h r c s > disable2<q i n g r >
+11-13 20:38:36.190  4249 12352 D GameBoosterService: onGameStatusChange foreground:ForegroundInfo{mForegroundPackageName='com.hoopoetv.tvbox', mForegroundUid=10296, mForegroundPid=25824, mLastForegroundPackageName='com.miui.home', mLastForegroundUid=10088, mLastForegroundPid=2746, mMultiWindowForegroundPackageName='null', mMultiWindowForegroundUid=-1, mFlags=1}
+11-13 20:38:36.190  4249 12352 I VideoBoxUtils: isSupportVideoBox: false
+11-13 20:38:36.190  4249 12352 I VideoToolBoxService: vtb is closed!!!
+11-13 20:38:36.190  4249  5186 E SuggestManager: openApp name = com.hoopoetv.tvbox
+11-13 20:38:36.190  4249  5186 I NewAutoTaskManager: app use - delay = 9223372036854775807, doRemove = false, doPost = false
+11-13 20:38:36.191  2502  2502 D PhoneStatusBar/NavigationBarView: setDisabledFlags back:false home:false recent:false
+11-13 20:38:36.191  2502  2502 D StatusBarClock:  isNormalMode= true clock visible=true
+11-13 20:38:36.195  9787 25811 D MyLog   : -->log(1): [Tid:1398] [ActivationManager_ac] -->onPackageGoForeground(): packageName=com.hoopoetv.tvbox, uid10296, myUid=999, pkgUserId=0
+11-13 20:38:36.197 16901 16901 D AppLifecycleObserver: onReceive: com.hoopoetv.tvbox FOREGROUND
+11-13 20:38:36.197  4249  7168 I SCTaskStackListener: onTaskStackChanged! inSplit = false
+11-13 20:38:36.197 16901 17963 I GameEventTag: notify start com.hoopoetv.tvbox event=3
+11-13 20:38:36.199  1496  2287 I MiuiNetworkPolicy: updateUidState uid = 10296, uidState = 2
+11-13 20:38:36.199 19902 19902 D AppLifecycleObserver: onReceive: com.hoopoetv.tvbox FOREGROUND
+11-13 20:38:36.199  1496  2287 I MiuiNetworkPolicy: updateWmmForUidState uid: 10296 state: 2 wmm: 1
+11-13 20:38:36.199  4249 12352 I SCTaskStackListener: onTaskStackChanged! inSplit = false
+11-13 20:38:36.199 19902 21405 I GameEventTag: notify start com.hoopoetv.tvbox event=3
+11-13 20:38:36.200   653   653 D OemNetd : updateWmm: uid=10296, wmm=1
+11-13 20:38:36.200 16901 16901 D PkgUtils: getApplicationInfo packageName:com.hoopoetv.tvbox, flags:128 applicationInfo:ApplicationInfo{50dbacd com.hoopoetv.tvbox} needSecondSpace:false
+11-13 20:38:36.201 16901 17963 I GameEventTag: notify failed, pkg=com.hoopoetv.tvbox event=3 metadata not match
+11-13 20:38:36.201 16901 17963 I GameEventTag: notify end
+11-13 20:38:36.201  1496  2287 I MiuiNetworkPolicy: updateMLUid uid:10296,old:20,new:2
+11-13 20:38:36.201  1496  2287 I MiuiNetworkPolicy: isMLEnabled state:20,uid:10296,connect:DISCONNECTED
+11-13 20:38:36.201  1496  2287 I MiuiNetworkPolicy: isMLEnabled state:2,uid:10296,connect:DISCONNECTED
+11-13 20:38:36.203 19902 19902 D PkgUtils: getApplicationInfo packageName:com.hoopoetv.tvbox, flags:128 applicationInfo:ApplicationInfo{5794612 com.hoopoetv.tvbox} needSecondSpace:false
+11-13 20:38:36.204 19902 21405 I GameEventTag: notify failed, pkg=com.hoopoetv.tvbox event=3 metadata not match
+11-13 20:38:36.204 19902 21405 I GameEventTag: notify end
+11-13 20:38:36.232   837   837 V DisplayFeatureHal: dataCallback value=< 803.0000,   0.0000,   0.0000>,time=14676785277104, sensor=5, temperature(K)=   0.0000
+11-13 20:38:36.244  9787 10072 D MyLog   : -->log(0): [Tid:683] GamePopupListeneronForegroundAppEnter: pkg=com.hoopoetv.tvbox cls=com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity
+11-13 20:38:36.246  9787 10072 D MyLog   : -->log(0): [Tid:683] GamePopupJudgefindMatchedPlans: matched 0 plans for pkg=com.hoopoetv.tvbox, cls=com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity
+11-13 20:38:36.246  9787 10072 D MyLog   : -->log(0): [Tid:683] GamePopupListeneronForegroundAppEnter: no matching plans found, pkg=com.hoopoetv.tvbox, cls=com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity, totalPlans=0
+11-13 20:38:36.262  1496  1530 W System  : A resource failed to call close. 
+11-13 20:38:36.262  1496  1530 W System  : A resource failed to call close. 
+11-13 20:38:36.263  1496  1530 W System  : A resource failed to call release. 
+11-13 20:38:36.263  1496  1530 W System  : A resource failed to call close. 
+11-13 20:38:36.263  1496  1530 W System  : A resource failed to call close. 
+11-13 20:38:36.294  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42965 mC, weight[0] 2
+11-13 20:38:36.295  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:36.307  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42965 mC, weight[0] 2
+11-13 20:38:36.308  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:36.309  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42965 mC, weight[0] 2
+11-13 20:38:36.310  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:36.311  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42965 mC, weight[0] 2
+11-13 20:38:36.312  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:36.314 25824 25824 I Perf    : Connecting to perf service.
+11-13 20:38:36.324 25824 25824 I MultiDex: VM with version 2.1.0 has multidex support
+11-13 20:38:36.324 25824 25824 I MultiDex: Installing application
+11-13 20:38:36.324 25824 25824 I MultiDex: VM has multidex support, MultiDex support library is disabled.
+11-13 20:38:36.328 25824 25824 D AndroidAutoSize: designWidthInDp = 1280, designHeightInDp = 720, screenWidth = 1080, screenHeight = 2030
+11-13 20:38:36.329 25824 25824 D AndroidAutoSize: initDensity = 2.75, initScaledDensity = 2.75
+11-13 20:38:36.342 25824 25824 I FeatureParser: can't find polaris.xml in assets/device_features/,it may be in /system/etc/device_features
+11-13 20:38:36.354 25824 25824 E libc    : Access denied finding property "ro.vendor.df.effect.conflict"
+11-13 20:38:36.346 25824 25824 W .hoopoetv.tvbox: type=1400 audit(0.0:11306): avc: denied { read } for name="u:object_r:vendor_displayfeature_prop:s0" dev="tmpfs" ino=15629 scontext=u:r:untrusted_app_27:s0:c40,c257,c512,c768 tcontext=u:object_r:vendor_displayfeature_prop:s0 tclass=file permissive=0
+11-13 20:38:36.382  2746  2746 D Launcher_UnlockAnimationStateMachine: mResetIdleStateRunnable
+11-13 20:38:36.395 25824 25824 D NetworkSecurityConfig: Using Network Security Config from resource network_security_config debugBuild: true
+11-13 20:38:36.400   837   837 V DisplayFeatureHal: dataCallback value=< 804.0000,   0.0000,   0.0000>,time=14676952050125, sensor=5, temperature(K)=   0.0000
+11-13 20:38:36.402 25824 25824 W .hoopoetv.tvbo: Accessing hidden method Ldalvik/system/CloseGuard;->get()Ldalvik/system/CloseGuard; (greylist,core-platform-api, reflection, allowed)
+11-13 20:38:36.402 25824 25824 W .hoopoetv.tvbo: Accessing hidden method Ldalvik/system/CloseGuard;->open(Ljava/lang/String;)V (greylist,core-platform-api, reflection, allowed)
+11-13 20:38:36.402 25824 25824 W .hoopoetv.tvbo: Accessing hidden method Ldalvik/system/CloseGuard;->warnIfOpen()V (greylist,core-platform-api, reflection, allowed)
+11-13 20:38:36.418 25824 25824 W System.err: java.io.FileNotFoundException: epg_data.json
+11-13 20:38:36.418 25824 25824 W System.err: 	at android.content.res.AssetManager.nativeOpenAsset(Native Method)
+11-13 20:38:36.418 25824 25824 W System.err: 	at android.content.res.AssetManager.open(Unknown Source:11)
+11-13 20:38:36.418 25824 25824 W System.err: 	at android.content.res.AssetManager.open(Unknown Source:1)
+11-13 20:38:36.418 25824 25824 W System.err: 	at com.github.tvbox.osc.util.EpgUtil.init(EpgUtil.java:28)
+11-13 20:38:36.418 25824 25824 W System.err: 	at com.github.tvbox.osc.base.App.onCreate(App.java:77)
+11-13 20:38:36.418 25824 25824 W System.err: 	at android.app.Instrumentation.callApplicationOnCreate(Unknown Source:0)
+11-13 20:38:36.418 25824 25824 W System.err: 	at android.app.ActivityThread.handleBindApplication(Unknown Source:1216)
+11-13 20:38:36.418 25824 25824 W System.err: 	at android.app.ActivityThread.access$1400(Unknown Source:0)
+11-13 20:38:36.418 25824 25824 W System.err: 	at android.app.ActivityThread$H.handleMessage(Unknown Source:710)
+11-13 20:38:36.418 25824 25824 W System.err: 	at android.os.Handler.dispatchMessage(Unknown Source:19)
+11-13 20:38:36.418 25824 25824 W System.err: 	at android.os.Looper.loop(Unknown Source:242)
+11-13 20:38:36.418 25824 25824 W System.err: 	at android.app.ActivityThread.main(Unknown Source:98)
+11-13 20:38:36.418 25824 25824 W System.err: 	at java.lang.reflect.Method.invoke(Native Method)
+11-13 20:38:36.418 25824 25824 W System.err: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(Unknown Source:11)
+11-13 20:38:36.418 25824 25824 W System.err: 	at com.android.internal.os.ZygoteInit.main(Unknown Source:275)
+11-13 20:38:36.424 25824 25824 D J4A     : J4ALoader: OK: 'android.os.Build$VERSION' loaded
+11-13 20:38:36.424 25824 25824 D J4A     : J4ALoader: OK: 'android.os.Build' loaded
+11-13 20:38:36.424 25824 25824 D J4A     : J4ALoader: OK: 'java.nio.Buffer' loaded
+11-13 20:38:36.424 25824 25824 D J4A     : J4ALoader: OK: 'java.nio.ByteBuffer' loaded
+11-13 20:38:36.424 25824 25824 D J4A     : J4ALoader: OK: 'java.util.ArrayList' loaded
+11-13 20:38:36.424 25824 25824 I J4A     : API-Level: 29
+11-13 20:38:36.424 25824 25824 D J4A     : J4ALoader: OK: 'android.media.AudioTrack' loaded
+11-13 20:38:36.424 25824 25824 D J4A     : J4ALoader: OK: 'android.media.MediaCodec$BufferInfo' loaded
+11-13 20:38:36.424 25824 25824 D J4A     : J4ALoader: OK: 'android.media.MediaCodec' loaded
+11-13 20:38:36.424 25824 25824 D J4A     : J4ALoader: OK: 'android.media.MediaFormat' loaded
+11-13 20:38:36.424 25824 25824 D J4A     : J4ALoader: OK: 'android.media.PlaybackParams' loaded
+11-13 20:38:36.424 25824 25824 D J4A     : J4ALoader: OK: 'android.os.Bundle' loaded
+11-13 20:38:36.425 25824 25824 D J4A     : J4ALoader: OK: 'tv.danmaku.ijk.media.player.misc.IMediaDataSource' loaded
+11-13 20:38:36.425 25824 25824 D J4A     : J4ALoader: OK: 'tv.danmaku.ijk.media.player.misc.IAndroidIO' loaded
+11-13 20:38:36.425 25824 25824 D J4A     : J4ALoader: OK: 'tv.danmaku.ijk.media.player.IjkMediaPlayer' loaded
+11-13 20:38:36.426 25824 25824 D TVBoxOSCMEDIA: ijkmediaplayer version : TVBoxOSC Ijk20230802
+11-13 20:38:36.451 25824 25857 E Perf    : Fail to get file list com.hoopoetv.tvbox
+11-13 20:38:36.451 25824 25857 E Perf    : getFolderSize() : Exception_1 = java.lang.NullPointerException: Attempt to get length of null array
+11-13 20:38:36.451 25824 25857 E Perf    : Fail to get file list oat
+11-13 20:38:36.451 25824 25857 E Perf    : getFolderSize() : Exception_1 = java.lang.NullPointerException: Attempt to get length of null array
+11-13 20:38:36.453 25824 25824 D AppCompatDelegate: Checking for metadata for AppLocalesMetadataHolderService : Service not found
+11-13 20:38:36.479 25824 25824 D AndroidAutoSize: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity implemented by me.jessyan.autosize.internal.CustomAdapt!
+11-13 20:38:36.481 25824 25824 D AndroidAutoSize: The com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity has been adapted! 
+11-13 20:38:36.481 25824 25824 D AndroidAutoSize: MobileHomeActivity Info: isBaseOnWidth = true, designWidthInDp = 360.000000, designWidthInSubunits = 360.000000, targetDensity = 5.427778, targetScaledDensity = 5.427778, targetDensityDpi = 868, targetXdpi = 5.427778, targetScreenWidthDp = 360, targetScreenHeightDp = 184
+11-13 20:38:36.502 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:36.513 25824 25824 I chatty  : uid=10296(com.hoopoetv.tvbox) identical 4 lines
+11-13 20:38:36.517 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:36.517  2502  2502 D StatusBar: disable<e i a s b h r c s > disable2<q i n g r >
+11-13 20:38:36.518  1496  4213 W ActivityManager: Sending non-protected broadcast com.android.systemui.fullscreen.statechange from system 2502:com.android.systemui/1000 pkg com.android.systemui. Callers=
+11-13 20:38:36.518  1496  4213 W ActivityManager: Sending non-protected broadcast com.android.systemui.fullscreen.statechange from system 2502:com.android.systemui/1000 pkg com.android.systemui. Callers=
+11-13 20:38:36.519  2502  2502 D StatusBarClock:  isNormalMode= true clock visible=true
+11-13 20:38:36.543 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:36.555 25824 25824 I chatty  : uid=10296(com.hoopoetv.tvbox) identical 2 lines
+11-13 20:38:36.563 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:36.565   837   837 V DisplayFeatureHal: dataCallback value=< 804.0000,   0.0000,   0.0000>,time=14677118606739, sensor=5, temperature(K)=   0.0000
+11-13 20:38:36.567 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:36.579 25824 25824 I chatty  : uid=10296(com.hoopoetv.tvbox) identical 6 lines
+11-13 20:38:36.581 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:36.583  1496  1620 D ActivityManager: thread tid=2746, priority is set to -10
+11-13 20:38:36.583  1496  1620 D ActivityManager: thread tid=2884, priority is set to -10
+11-13 20:38:36.586 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:36.596 25824 25824 I chatty  : uid=10296(com.hoopoetv.tvbox) identical 6 lines
+11-13 20:38:36.597 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:36.599  2502  2502 D EventBus: [2502, u0] send(AppTransitionFinishedEvent)
+11-13 20:38:36.599  2502  2502 D EventBus: [2502, u0]  -> ForcedResizableInfoActivityController [0xfc7de91, P1] onBusEvent(AppTransitionFinishedEvent)
+11-13 20:38:36.599  2502  2502 D EventBus: [2502, u0] onBusEvent(AppTransitionFinishedEvent) duration: 13 microseconds, avg: 84
+11-13 20:38:36.600 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:36.622 25824 25824 I chatty  : uid=10296(com.hoopoetv.tvbox) identical 12 lines
+11-13 20:38:36.624 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:36.626  2478  2478 D MiWallpaper: onVisibilityChanged: pause
+11-13 20:38:36.626  2478  2478 D MamlSurface: onPause
+11-13 20:38:36.626  2478  2478 D ScreenElementRoot: pause
+11-13 20:38:36.627 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:36.627 25824 25824 I chatty  : uid=10296(com.hoopoetv.tvbox) identical 1 line
+11-13 20:38:36.630 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:36.635   904   904 D SurfaceFlinger: Launcher Changed hasLauncher=0
+11-13 20:38:36.641  2478  2478 I RenderVsyncUpdater: All controllers paused.
+11-13 20:38:36.641  2478  2478 I RenderVsyncUpdater: All controllers paused.
+11-13 20:38:36.732   837   837 V DisplayFeatureHal: dataCallback value=< 803.0000,   0.0000,   0.0000>,time=14677285274292, sensor=5, temperature(K)=   0.0000
+11-13 20:38:36.814   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:36.898   837   837 V DisplayFeatureHal: dataCallback value=< 803.0000,   0.0000,   0.0000>,time=14677451939812, sensor=5, temperature(K)=   0.0000
+11-13 20:38:36.917 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:36.922 25824 25824 I PyLoader: normal flavor: clear() 调用，但不支持 Python 功能。
+11-13 20:38:36.924 25824 25824 I System.out: 从本地缓存加载/data/user/0/com.hoopoetv.tvbox/files/4a839650a41ce48449f310ece5cbcb2f
+11-13 20:38:36.931 25824 25824 W System.err: java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
+11-13 20:38:36.931 25824 25824 W System.err: 	at java.util.ArrayList.get(ArrayList.java:437)
+11-13 20:38:36.931 25824 25824 W System.err: 	at com.google.gson.JsonArray.get(JsonArray.java:228)
+11-13 20:38:36.931 25824 25824 W System.err: 	at com.github.tvbox.osc.api.ApiConfig.parseJson(ApiConfig.java:495)
+11-13 20:38:36.931 25824 25824 W System.err: 	at com.github.tvbox.osc.api.ApiConfig.parseJson(ApiConfig.java:375)
+11-13 20:38:36.931 25824 25824 W System.err: 	at com.github.tvbox.osc.api.ApiConfig.loadConfig(ApiConfig.java:180)
+11-13 20:38:36.931 25824 25824 W System.err: 	at com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity.loadConfig(MobileHomeActivity.java:607)
+11-13 20:38:36.931 25824 25824 W System.err: 	at com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity.loadConfig(MobileHomeActivity.java:600)
+11-13 20:38:36.931 25824 25824 W System.err: 	at com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity.init(MobileHomeActivity.java:122)
+11-13 20:38:36.931 25824 25824 W System.err: 	at com.github.tvbox.osc.base.BaseActivity.onCreate(BaseActivity.java:140)
+11-13 20:38:36.931 25824 25824 W System.err: 	at com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity.onCreate(MobileHomeActivity.java:750)
+11-13 20:38:36.931 25824 25824 W System.err: 	at android.app.Activity.performCreate(Unknown Source:19)
+11-13 20:38:36.931 25824 25824 W System.err: 	at android.app.Activity.performCreate(Unknown Source:1)
+11-13 20:38:36.931 25824 25824 W System.err: 	at android.app.Instrumentation.callActivityOnCreate(Unknown Source:3)
+11-13 20:38:36.931 25824 25824 W System.err: 	at android.app.ActivityThread.performLaunchActivity(Unknown Source:376)
+11-13 20:38:36.931 25824 25824 W System.err: 	at android.app.ActivityThread.handleLaunchActivity(Unknown Source:47)
+11-13 20:38:36.931 25824 25824 W System.err: 	at android.app.servertransaction.LaunchActivityItem.execute(Unknown Source:63)
+11-13 20:38:36.932 25824 25824 W System.err: 	at android.app.servertransaction.TransactionExecutor.executeCallbacks(Unknown Source:77)
+11-13 20:38:36.932 25824 25824 W System.err: 	at android.app.servertransaction.TransactionExecutor.execute(Unknown Source:73)
+11-13 20:38:36.932 25824 25824 W System.err: 	at android.app.ActivityThread$H.handleMessage(Unknown Source:43)
+11-13 20:38:36.932 25824 25824 W System.err: 	at android.os.Handler.dispatchMessage(Unknown Source:19)
+11-13 20:38:36.932 25824 25824 W System.err: 	at android.os.Looper.loop(Unknown Source:242)
+11-13 20:38:36.932 25824 25824 W System.err: 	at android.app.ActivityThread.main(Unknown Source:98)
+11-13 20:38:36.932 25824 25824 W System.err: 	at java.lang.reflect.Method.invoke(Native Method)
+11-13 20:38:36.932 25824 25824 W System.err: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(Unknown Source:11)
+11-13 20:38:36.932 25824 25824 W System.err: 	at com.android.internal.os.ZygoteInit.main(Unknown Source:275)
+11-13 20:38:36.939 25824 25824 I TVBox   : echo--getSort-start
+11-13 20:38:36.944 25824 25824 D EventBus: No subscribers registered for event class com.github.tvbox.osc.event.LogEvent
+11-13 20:38:36.944 25824 25824 D EventBus: No subscribers registered for event class org.greenrobot.eventbus.NoSubscriberEvent
+11-13 20:38:36.946  4465  5015 D MyLog   : -->log(0): [Tid:310] GamePopupListeneronForegroundAppEnter: pkg=com.hoopoetv.tvbox cls=com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity
+11-13 20:38:36.947  4465  5015 D MyLog   : -->log(0): [Tid:310] GamePopupJudgefindMatchedPlans: matched 0 plans for pkg=com.hoopoetv.tvbox, cls=com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity
+11-13 20:38:36.947  4465  5015 D MyLog   : -->log(0): [Tid:310] GamePopupListeneronForegroundAppEnter: no matching plans found, pkg=com.hoopoetv.tvbox, cls=com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity, totalPlans=0
+11-13 20:38:36.953 25824 25824 D AndroidAutoSize: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity implemented by me.jessyan.autosize.internal.CustomAdapt!
+11-13 20:38:36.954 25824 25824 D AndroidAutoSize: The com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity has been adapted! 
+11-13 20:38:36.954 25824 25824 D AndroidAutoSize: MobileHomeActivity Info: isBaseOnWidth = true, designWidthInDp = 360.000000, designWidthInSubunits = 360.000000, targetDensity = 5.427778, targetScaledDensity = 5.427778, targetDensityDpi = 868, targetXdpi = 5.427778, targetScreenWidthDp = 360, targetScreenHeightDp = 184
+11-13 20:38:36.966  2502  2502 D EventBus: [2502, u0] send(AppTransitionFinishedEvent)
+11-13 20:38:36.967  2502  2502 D EventBus: [2502, u0]  -> ForcedResizableInfoActivityController [0xfc7de91, P1] onBusEvent(AppTransitionFinishedEvent)
+11-13 20:38:36.967  2502  2502 D EventBus: [2502, u0] onBusEvent(AppTransitionFinishedEvent) duration: 15 microseconds, avg: 84
+11-13 20:38:36.967  1496  1622 I Timeline: Timeline: App_transition_stopped time:14221784
+11-13 20:38:36.987 25824 25824 W Looper  : Slow Looper main: Activity com.hoopoetv.tvbox/com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity is 683ms late (wall=0ms running=0ms ClientTransaction{ callbacks=[android.app.servertransaction.TopResumedActivityChangeItem] }) because of 2 msg, msg 1 took 252ms (seq=2 running=222ms runnable=11ms io=2ms late=1ms h=android.app.ActivityThread$H w=110), msg 2 took 550ms (seq=3 running=509ms runnable=7ms io=3ms late=134ms h=android.app.ActivityThread$H w=159)
+11-13 20:38:36.987 25824 25824 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+11-13 20:38:36.987 16901 16921 D services: [XMS][observer] ActivityObserver activityResumed packageName: com.hoopoetv.tvbox
+11-13 20:38:36.987 19902 19927 D auth    : [XMS][Auth] ActivityObserver activityResumed packageName: com.hoopoetv.tvbox
+11-13 20:38:36.987 19902 19920 D services: [XMS][observer] ActivityObserver activityResumed packageName: com.hoopoetv.tvbox
+11-13 20:38:36.987  2746  2746 D RecentsImpl: mActivityStateObserver com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity
+11-13 20:38:36.987  4465  5354 W PushService: [Tid:350] [SubGroupManager] onAppActive: pkg=com.hoopoetv.tvbox no OP_CHANNEL_GROUP meta-data, skip compensation
+11-13 20:38:36.987  2746  2746 W RecentsImpl: onResumed className=com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity   mIsInAnotherPro=false
+11-13 20:38:36.987 16901 17125 D auth    : [XMS][Auth] ActivityObserver activityResumed packageName: com.hoopoetv.tvbox
+11-13 20:38:36.988  2746  2875 D RecentsImpl: showNavStubView
+11-13 20:38:36.988  2746  2874 W RecentsImpl: disableBackStubWindow    disableTouch=false
+11-13 20:38:36.988  2746  2874 D RecentsImpl: showBackStubWindow  mHasNavigationBar=true   mDisabledByDriveMode=false
+11-13 20:38:36.988  2746  2874 W GestureStubView: adaptRotation   currentRotation=0   mRotation=0
+11-13 20:38:36.988  2746  2874 D GestureStubView: resetRenderProperty: showGestureStub
+11-13 20:38:36.988  2746  2874 D GestureStubView: showGestureStub
+11-13 20:38:36.989  2746  2874 W GestureStubView: adaptRotation   currentRotation=0   mRotation=0
+11-13 20:38:36.989  2746  2874 D GestureStubView: resetRenderProperty: showGestureStub
+11-13 20:38:36.989  2746  2874 D GestureStubView: showGestureStub
+11-13 20:38:37.002  2746  2874 D GestureStubView: gatherTransparentRegion: need render w:54  h:1296
+11-13 20:38:37.004  2746  2874 D GestureStubView: gatherTransparentRegion: need render w:54  h:1296
+11-13 20:38:37.009 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:37.013 25824 25824 I chatty  : uid=10296(com.hoopoetv.tvbox) identical 3 lines
+11-13 20:38:37.015 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:37.026  1496  2295 D WifiNetworkFactory: got request NetworkRequest [ TRACK_DEFAULT id=637, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10296] ] with score 60 and serial -1
+11-13 20:38:37.026  1496  2295 D UntrustedWifiNetworkFactory: got request NetworkRequest [ TRACK_DEFAULT id=637, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10296] ] with score 60 and serial -1
+11-13 20:38:37.026  1496  2425 D Ethernet: got request NetworkRequest [ TRACK_DEFAULT id=637, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10296] ] with score 60 and serial -1
+11-13 20:38:37.027   653   653 I netd    : networkSetPermissionForNetwork(102, 1) <0.01ms>
+11-13 20:38:37.027  2727  2727 D PhoneSwitcherNetworkRequstListener: got request NetworkRequest [ TRACK_DEFAULT id=637, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10296] ] with score 60 and serial -1
+11-13 20:38:37.048 25824 25858 I AdrenoGLES: QUALCOMM build                   : e541a88, I20154638fb
+11-13 20:38:37.048 25824 25858 I AdrenoGLES: Build Date                       : 09/15/20
+11-13 20:38:37.048 25824 25858 I AdrenoGLES: OpenGL ES Shader Compiler Version: EV031.27.05.01
+11-13 20:38:37.048 25824 25858 I AdrenoGLES: Local Branch                     : 
+11-13 20:38:37.048 25824 25858 I AdrenoGLES: Remote Branch                    : refs/tags/AU_LINUX_ANDROID_LA.UM.8.3.R1.10.00.00.520.058
+11-13 20:38:37.048 25824 25858 I AdrenoGLES: Remote Branch                    : NONE
+11-13 20:38:37.048 25824 25858 I AdrenoGLES: Reconstruct Branch               : NOTHING
+11-13 20:38:37.048 25824 25858 I AdrenoGLES: Build Config                     : S P 8.0.11 AArch64
+11-13 20:38:37.036 25824 25824 W RenderThread: type=1400 audit(0.0:11307): avc: denied { search } for name="clients" dev="debugfs" ino=1139 scontext=u:r:untrusted_app_27:s0:c40,c257,c512,c768 tcontext=u:object_r:debugfs_ion:s0 tclass=dir permissive=0
+11-13 20:38:37.051 25824 25858 I AdrenoGLES: PFP: 0x016ee187, ME: 0x00000000
+11-13 20:38:37.036 25824 25824 W RenderThread: type=1400 audit(0.0:11308): avc: denied { search } for name="clients" dev="debugfs" ino=1139 scontext=u:r:untrusted_app_27:s0:c40,c257,c512,c768 tcontext=u:object_r:debugfs_ion:s0 tclass=dir permissive=0
+11-13 20:38:37.052 25824 25858 W AdrenoUtils: <ReadGpuID_from_sysfs:194>: Failed to open /sys/class/kgsl/kgsl-3d0/gpu_model
+11-13 20:38:37.052 25824 25858 W AdrenoUtils: <ReadGpuID:218>: Failed to read chip ID from gpu_model. Fallback to use the GSL path
+11-13 20:38:37.036 25824 25824 W RenderThread: type=1400 audit(0.0:11309): avc: denied { read } for name="gpu_model" dev="sysfs" ino=49549 scontext=u:r:untrusted_app_27:s0:c40,c257,c512,c768 tcontext=u:object_r:sysfs_kgsl:s0 tclass=file permissive=0
+11-13 20:38:37.065   837   837 V DisplayFeatureHal: dataCallback value=< 803.0000,   0.0000,   0.0000>,time=14677618606271, sensor=5, temperature(K)=   0.0000
+11-13 20:38:37.070   555   555 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@3.0::IMapper/default in either framework or device manifest.
+11-13 20:38:37.071 25824 25858 W Gralloc3: mapper 3.x is not supported
+11-13 20:38:37.095 25824 25858 I OpenGLRenderer: Davey! duration=747ms; Flags=1, IntendedVsync=14221164407009, Vsync=14221797740317, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=14221805235824, AnimationStart=14221805382855, PerformTraversalsStart=14221805803011, DrawStart=14221879423688, SyncQueued=14221887014782, SyncStart=14221887193063, IssueDrawCommandsStart=14221887346865, SwapBuffers=14221911017334, FrameCompleted=14221912297282, DequeueBufferDuration=50000, QueueBufferDuration=666000, 
+11-13 20:38:37.096 25824 25824 W Looper  : Slow Looper main: doFrame is 640ms late because of 3 msg, msg 1 took 252ms (seq=2 running=222ms runnable=11ms io=2ms late=1ms h=android.app.ActivityThread$H w=110), msg 2 took 550ms (seq=3 running=509ms runnable=7ms io=3ms late=134ms h=android.app.ActivityThread$H w=159)
+11-13 20:38:37.098 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:37.100  1496  1622 I Timeline: Timeline: Activity_windows_visible id: ActivityRecord{6ba2115 u0 com.hoopoetv.tvbox/com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity t813} time:14221917
+11-13 20:38:37.104  1496  1637 I ActivityTaskManager: Displayed com.hoopoetv.tvbox/com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity: +1s34ms
+11-13 20:38:37.108 25824 25824 D ForceDarkHelper: updateByCheckExcludeList: pkg: com.hoopoetv.tvbox activity: com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity@579cc94
+11-13 20:38:37.232   837   837 V DisplayFeatureHal: dataCallback value=< 776.0000,   0.0000,   0.0000>,time=14677785271167, sensor=5, temperature(K)=   0.0000
+11-13 20:38:37.296  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42965 mC, weight[0] 2
+11-13 20:38:37.297  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:37.399   837   837 V DisplayFeatureHal: dataCallback value=< 616.0000,   0.0000,   0.0000>,time=14677951937729, sensor=5, temperature(K)=   0.0000
+11-13 20:38:37.566   837   837 V DisplayFeatureHal: dataCallback value=< 611.0000,   0.0000,   0.0000>,time=14678118707937, sensor=5, temperature(K)=   0.0000
+11-13 20:38:37.610  1496  2295 D WifiClientModeImpl: fetchRssiLinkSpeedAndFrequencyNative rssi=-33 TxLinkspeed=400 freq=5260 RxLinkSpeed=400
+11-13 20:38:37.610  1496  2295 V WifiConfigManager: Updating scan detail cache freq=5260 BSSID=10:da:43:bd:a9:55 RSSI=-33 for "CMCC_G"-WPA_PSK
+11-13 20:38:37.614  2630  5132 D QCNEJ/WlanStaInfoRelay: Received action: android.net.wifi.RSSI_CHANGED
+11-13 20:38:37.614  1496  3239 I WifiService: getCurrentNetwork uid=1000
+11-13 20:38:37.615  1496  2295 D WifiClientModeImpl:  L2ConnectedState screen=on 25 0 "CMCC_G" 10:da:43:bd:a9:55 rssi=-33 f=5260 sc=60 link=400 tx=1.6, 0.0, 0.0  rx=0.0 bcn=10429 [on:865 tx:2 rx:3 period:3021] from screen [on:187006 period:575669] score=60
+11-13 20:38:37.615  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:38:37.624  2502  2502 I chatty  : uid=1000(system) com.android.systemui identical 10 lines
+11-13 20:38:37.624  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:38:37.732   837   837 V DisplayFeatureHal: dataCallback value=< 631.0000,   0.0000,   0.0000>,time=14678285270177, sensor=5, temperature(K)=   0.0000
+11-13 20:38:37.814   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:37.899   837   837 V DisplayFeatureHal: dataCallback value=< 781.0000,   0.0000,   0.0000>,time=14678451812729, sensor=5, temperature(K)=   0.0000
+11-13 20:38:38.065   837   837 V DisplayFeatureHal: dataCallback value=< 778.0000,   0.0000,   0.0000>,time=14678618706062, sensor=5, temperature(K)=   0.0000
+11-13 20:38:38.234   837   837 V DisplayFeatureHal: dataCallback value=< 777.0000,   0.0000,   0.0000>,time=14678785270177, sensor=5, temperature(K)=   0.0000
+11-13 20:38:38.299  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43023 mC, weight[0] 2
+11-13 20:38:38.300  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:38.313  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43023 mC, weight[0] 2
+11-13 20:38:38.315  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:38.316  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43023 mC, weight[0] 2
+11-13 20:38:38.317  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:38.318  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43023 mC, weight[0] 2
+11-13 20:38:38.319  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:38.400   837   837 V DisplayFeatureHal: dataCallback value=< 778.0000,   0.0000,   0.0000>,time=14678951935802, sensor=5, temperature(K)=   0.0000
+11-13 20:38:38.568   837   837 V DisplayFeatureHal: dataCallback value=< 776.0000,   0.0000,   0.0000>,time=14679118707052, sensor=5, temperature(K)=   0.0000
+11-13 20:38:38.603  2445  2445 D wpa_supplicant: p2p0: BSS: Remove id 32 BSSID 10:da:43:bd:a9:55 SSID 'CMCC_G' due to wpa_bss_flush_by_age
+11-13 20:38:38.603  2445  2445 D wpa_supplicant: p2p0: BSS: Remove id 33 BSSID 10:da:43:bd:a9:44 SSID 'CMCC_D' due to wpa_bss_flush_by_age
+11-13 20:38:38.604  2445  2445 D wpa_supplicant: p2p0: BSS: Remove id 34 BSSID fc:61:79:17:65:c7 SSID 'ZTE_1765C7' due to wpa_bss_flush_by_age
+11-13 20:38:38.604  2445  2445 D wpa_supplicant: p2p0: BSS: Remove id 35 BSSID 7c:00:4d:61:a4:d8 SSID 'GCB_5G' due to wpa_bss_flush_by_age
+11-13 20:38:38.604  2445  2445 D wpa_supplicant: p2p0: BSS: Remove id 36 BSSID d4:83:04:44:16:d6 SSID '\xe4\xb8\x8d\xe9\x94\x88\xe9\x92\xa2' due to wpa_bss_flush_by_age
+11-13 20:38:38.604  2445  2445 D wpa_supplicant: p2p0: BSS: Remove id 37 BSSID e4:7e:9a:e2:a1:58 SSID 'CMCC-eUF6' due to wpa_bss_flush_by_age
+11-13 20:38:38.604  2445  2445 D wpa_supplicant: wlan0: BSS: Remove id 631 BSSID 10:da:43:bd:a9:44 SSID 'CMCC_D' due to wpa_bss_flush_by_age
+11-13 20:38:38.604  2445  2445 D wpa_supplicant: wlan0: BSS: Remove id 632 BSSID fc:61:79:17:65:c7 SSID 'ZTE_1765C7' due to wpa_bss_flush_by_age
+11-13 20:38:38.604  2445  2445 D wpa_supplicant: wlan0: BSS: Remove id 633 BSSID 7c:00:4d:61:a4:d8 SSID 'GCB_5G' due to wpa_bss_flush_by_age
+11-13 20:38:38.605  2445  2445 D wpa_supplicant: wlan0: BSS: Remove id 634 BSSID d4:83:04:44:16:d6 SSID '\xe4\xb8\x8d\xe9\x94\x88\xe9\x92\xa2' due to wpa_bss_flush_by_age
+11-13 20:38:38.605  2445  2445 D wpa_supplicant: wlan0: BSS: Remove id 635 BSSID e4:7e:9a:e2:a1:58 SSID 'CMCC-eUF6' due to wpa_bss_flush_by_age
+11-13 20:38:38.734   837   837 V DisplayFeatureHal: dataCallback value=< 773.0000,   0.0000,   0.0000>,time=14679285263927, sensor=5, temperature(K)=   0.0000
+11-13 20:38:38.815   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:38.900   837   837 V DisplayFeatureHal: dataCallback value=< 771.0000,   0.0000,   0.0000>,time=14679451932521, sensor=5, temperature(K)=   0.0000
+11-13 20:38:39.067   837   837 V DisplayFeatureHal: dataCallback value=< 771.0000,   0.0000,   0.0000>,time=14679618598979, sensor=5, temperature(K)=   0.0000
+11-13 20:38:39.234   837   837 V DisplayFeatureHal: dataCallback value=< 772.0000,   0.0000,   0.0000>,time=14679785263614, sensor=5, temperature(K)=   0.0000
+11-13 20:38:39.302  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43081 mC, weight[0] 2
+11-13 20:38:39.303  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:39.400   837   837 V DisplayFeatureHal: dataCallback value=< 773.0000,   0.0000,   0.0000>,time=14679951931062, sensor=5, temperature(K)=   0.0000
+11-13 20:38:39.416  2502  2853 D MobileSignalController: onSignalStrengthsChanged: SignalStrength:{mCdma=CellSignalStrengthCdma: cdmaDbm=2147483647 cdmaEcio=2147483647 evdoDbm=2147483647 evdoEcio=2147483647 evdoSnr=2147483647 miuiLevel=0 level=0,mGsm=CellSignalStrengthGsm: rssi=2147483647 ber=2147483647 mTa=2147483647 miuiLevel=0 mLevel=0,mWcdma=CellSignalStrengthWcdma: ss=2147483647 ber=2147483647 rscp=2147483647 ecno=2147483647 miuiLevel=0 level=0,mTdscdma=CellSignalStrengthTdscdma: rssi=2147483647 ber=2147483647 rscp=2147483647 miuiLevel=0 level=0,mLte=CellSignalStrengthLte: rssi=-55 rsrp=-84 rsrq=-11 rssnr=50 cqi=2147483647 ta=2147483647 miuiLevel=5 level=3,mNr=CellSignalStrengthNr:{ csiRsrp = 2147483647 csiRsrq = 2147483647 csiSinr = 2147483647 ssRsrp = 2147483647 ssRsrq = 2147483647 ssSinr = 2147483647 miuiLevel = 0 level = 0 },primary=CellSignalStrengthLte}
+11-13 20:38:39.416  2502  2853 D NetworkController.MobileSignalController(2): 4G level = 5
+11-13 20:38:39.568   837   837 V DisplayFeatureHal: dataCallback value=< 626.0000,   0.0000,   0.0000>,time=14680118597885, sensor=5, temperature(K)=   0.0000
+11-13 20:38:39.733   837   837 V DisplayFeatureHal: dataCallback value=< 620.0000,   0.0000,   0.0000>,time=14680285260542, sensor=5, temperature(K)=   0.0000
+11-13 20:38:39.815   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:39.901   837   837 V DisplayFeatureHal: dataCallback value=< 615.0000,   0.0000,   0.0000>,time=14680451929292, sensor=5, temperature(K)=   0.0000
+11-13 20:38:40.063   653   653 D OemNetd : setLimit: enable, rate=0
+11-13 20:38:40.066   837   837 V DisplayFeatureHal: dataCallback value=< 757.0000,   0.0000,   0.0000>,time=14680618595437, sensor=5, temperature(K)=   0.0000
+11-13 20:38:40.233   837   837 V DisplayFeatureHal: dataCallback value=< 761.0000,   0.0000,   0.0000>,time=14680785261427, sensor=5, temperature(K)=   0.0000
+11-13 20:38:40.305  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43139 mC, weight[0] 2
+11-13 20:38:40.306  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:40.321  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43139 mC, weight[0] 2
+11-13 20:38:40.322  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:40.323  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43139 mC, weight[0] 2
+11-13 20:38:40.325  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:40.326  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43139 mC, weight[0] 2
+11-13 20:38:40.327  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:40.400   837   837 V DisplayFeatureHal: dataCallback value=< 765.0000,   0.0000,   0.0000>,time=14680951926271, sensor=5, temperature(K)=   0.0000
+11-13 20:38:40.567   837   837 V DisplayFeatureHal: dataCallback value=< 770.0000,   0.0000,   0.0000>,time=14681118594552, sensor=5, temperature(K)=   0.0000
+11-13 20:38:40.670  1496  2295 D WifiClientModeImpl: fetchRssiLinkSpeedAndFrequencyNative rssi=-32 TxLinkspeed=400 freq=5260 RxLinkSpeed=400
+11-13 20:38:40.670  1496  2295 V WifiConfigManager: Updating scan detail cache freq=5260 BSSID=10:da:43:bd:a9:55 RSSI=-32 for "CMCC_G"-WPA_PSK
+11-13 20:38:40.677  1496  2295 D WifiClientModeImpl:  L2ConnectedState screen=on 25 0 "CMCC_G" 10:da:43:bd:a9:55 rssi=-32 f=5260 sc=60 link=400 tx=2.5, 0.0, 0.0  rx=1.3 bcn=10435 [on:572 tx:2 rx:2 period:3061] from screen [on:187578 period:578732] score=60
+11-13 20:38:40.677  1496  4213 I WifiService: getCurrentNetwork uid=1000
+11-13 20:38:40.678  2630  5132 D QCNEJ/WlanStaInfoRelay: Received action: android.net.wifi.RSSI_CHANGED
+11-13 20:38:40.679  2502  3161 V WifiManager: TrafficStateCallbackProxy: onStateChanged state=3
+11-13 20:38:40.680  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:38:40.715  2502  2502 I chatty  : uid=1000(system) com.android.systemui identical 16 lines
+11-13 20:38:40.715  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:38:40.734   837   837 V DisplayFeatureHal: dataCallback value=< 771.0000,   0.0000,   0.0000>,time=14681285257573, sensor=5, temperature(K)=   0.0000
+11-13 20:38:40.815   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:40.901   837   837 V DisplayFeatureHal: dataCallback value=< 770.0000,   0.0000,   0.0000>,time=14681451924396, sensor=5, temperature(K)=   0.0000
+11-13 20:38:41.067   837   837 V DisplayFeatureHal: dataCallback value=< 767.0000,   0.0000,   0.0000>,time=14681618591427, sensor=5, temperature(K)=   0.0000
+11-13 20:38:41.234   837   837 V DisplayFeatureHal: dataCallback value=< 765.0000,   0.0000,   0.0000>,time=14681785256427, sensor=5, temperature(K)=   0.0000
+11-13 20:38:41.307  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43197 mC, weight[0] 2
+11-13 20:38:41.308  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:41.312 25824 25847 I .hoopoetv.tvbo: Waiting for a blocking GC ProfileSaver
+11-13 20:38:41.399   837   837 V DisplayFeatureHal: dataCallback value=< 765.0000,   0.0000,   0.0000>,time=14681951923614, sensor=5, temperature(K)=   0.0000
+11-13 20:38:41.567   837   837 V DisplayFeatureHal: dataCallback value=< 767.0000,   0.0000,   0.0000>,time=14682118587885, sensor=5, temperature(K)=   0.0000
+11-13 20:38:41.722 25824 25847 I .hoopoetv.tvbo: WaitForGcToComplete blocked ProfileSaver on ClassLinker for 410.597ms
+11-13 20:38:41.733   837   837 V DisplayFeatureHal: dataCallback value=< 767.0000,   0.0000,   0.0000>,time=14682285135125, sensor=5, temperature(K)=   0.0000
+11-13 20:38:41.816   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:41.900   837   837 V DisplayFeatureHal: dataCallback value=< 767.0000,   0.0000,   0.0000>,time=14682451917833, sensor=5, temperature(K)=   0.0000
+11-13 20:38:42.067   837   837 V DisplayFeatureHal: dataCallback value=< 765.0000,   0.0000,   0.0000>,time=14682618588354, sensor=5, temperature(K)=   0.0000
+11-13 20:38:42.233   837   837 V DisplayFeatureHal: dataCallback value=< 766.0000,   0.0000,   0.0000>,time=14682785253042, sensor=5, temperature(K)=   0.0000
+11-13 20:38:42.310  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43255 mC, weight[0] 2
+11-13 20:38:42.311  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:42.329  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43197 mC, weight[0] 2
+11-13 20:38:42.330  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:42.332  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43255 mC, weight[0] 2
+11-13 20:38:42.333  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:42.334  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43255 mC, weight[0] 2
+11-13 20:38:42.335  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:42.400   837   837 V DisplayFeatureHal: dataCallback value=< 764.0000,   0.0000,   0.0000>,time=14682951918927, sensor=5, temperature(K)=   0.0000
+11-13 20:38:42.566   837   837 V DisplayFeatureHal: dataCallback value=< 763.0000,   0.0000,   0.0000>,time=14683118689187, sensor=5, temperature(K)=   0.0000
+11-13 20:38:42.733   837   837 V DisplayFeatureHal: dataCallback value=< 763.0000,   0.0000,   0.0000>,time=14683285249344, sensor=5, temperature(K)=   0.0000
+11-13 20:38:42.816   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:42.900   837   837 V DisplayFeatureHal: dataCallback value=< 765.0000,   0.0000,   0.0000>,time=14683452019604, sensor=5, temperature(K)=   0.0000
+11-13 20:38:43.068   837   837 V DisplayFeatureHal: dataCallback value=< 766.0000,   0.0000,   0.0000>,time=14683618583614, sensor=5, temperature(K)=   0.0000
+11-13 20:38:43.234   837   837 V DisplayFeatureHal: dataCallback value=< 765.0000,   0.0000,   0.0000>,time=14683785247937, sensor=5, temperature(K)=   0.0000
+11-13 20:38:43.314  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43313 mC, weight[0] 2
+11-13 20:38:43.316  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:43.402   837   837 V DisplayFeatureHal: dataCallback value=< 765.0000,   0.0000,   0.0000>,time=14683951913667, sensor=5, temperature(K)=   0.0000
+11-13 20:38:43.567   837   837 V DisplayFeatureHal: dataCallback value=< 766.0000,   0.0000,   0.0000>,time=14684118578979, sensor=5, temperature(K)=   0.0000
+11-13 20:38:43.734   837   837 V DisplayFeatureHal: dataCallback value=< 765.0000,   0.0000,   0.0000>,time=14684285244135, sensor=5, temperature(K)=   0.0000
+11-13 20:38:43.736  1496  2295 D WifiClientModeImpl: fetchRssiLinkSpeedAndFrequencyNative rssi=-32 TxLinkspeed=400 freq=5260 RxLinkSpeed=400
+11-13 20:38:43.736  1496  2295 V WifiConfigManager: Updating scan detail cache freq=5260 BSSID=10:da:43:bd:a9:55 RSSI=-32 for "CMCC_G"-WPA_PSK
+11-13 20:38:43.741  1496  2295 D WifiClientModeImpl:  L2ConnectedState screen=on 25 0 "CMCC_G" 10:da:43:bd:a9:55 rssi=-32 f=5260 sc=60 link=400 tx=1.5, 0.0, 0.0  rx=0.5 bcn=10442 [on:603 tx:0 rx:1 period:3064] from screen [on:188181 period:581796] score=60
+11-13 20:38:43.742  2630  5132 D QCNEJ/WlanStaInfoRelay: Received action: android.net.wifi.RSSI_CHANGED
+11-13 20:38:43.742  1496  4213 I WifiService: getCurrentNetwork uid=1000
+11-13 20:38:43.743  2502  3161 V WifiManager: TrafficStateCallbackProxy: onStateChanged state=2
+11-13 20:38:43.745  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:38:43.774  2502  2502 I chatty  : uid=1000(system) com.android.systemui identical 10 lines
+11-13 20:38:43.774  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:38:43.816   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:43.900   837   837 V DisplayFeatureHal: dataCallback value=< 765.0000,   0.0000,   0.0000>,time=14684451912469, sensor=5, temperature(K)=   0.0000
+11-13 20:38:44.068   837   837 V DisplayFeatureHal: dataCallback value=< 765.0000,   0.0000,   0.0000>,time=14684618515333, sensor=5, temperature(K)=   0.0000
+11-13 20:38:44.235   837   837 V DisplayFeatureHal: dataCallback value=< 767.0000,   0.0000,   0.0000>,time=14684785149083, sensor=5, temperature(K)=   0.0000
+11-13 20:38:44.318  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43313 mC, weight[0] 2
+11-13 20:38:44.319  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:44.336  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43313 mC, weight[0] 2
+11-13 20:38:44.337  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:44.339  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43313 mC, weight[0] 2
+11-13 20:38:44.340  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:44.341  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43313 mC, weight[0] 2
+11-13 20:38:44.342  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:44.401   837   837 V DisplayFeatureHal: dataCallback value=< 767.0000,   0.0000,   0.0000>,time=14684952016635, sensor=5, temperature(K)=   0.0000
+11-13 20:38:44.567   837   837 V DisplayFeatureHal: dataCallback value=< 767.0000,   0.0000,   0.0000>,time=14685118577417, sensor=5, temperature(K)=   0.0000
+11-13 20:38:44.734   837   837 V DisplayFeatureHal: dataCallback value=< 767.0000,   0.0000,   0.0000>,time=14685285246323, sensor=5, temperature(K)=   0.0000
+11-13 20:38:44.817   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:44.901   837   837 V DisplayFeatureHal: dataCallback value=< 767.0000,   0.0000,   0.0000>,time=14685451907781, sensor=5, temperature(K)=   0.0000
+11-13 20:38:45.068   837   837 V DisplayFeatureHal: dataCallback value=< 767.0000,   0.0000,   0.0000>,time=14685618574917, sensor=5, temperature(K)=   0.0000
+11-13 20:38:45.235   837   837 V DisplayFeatureHal: dataCallback value=< 767.0000,   0.0000,   0.0000>,time=14685785241219, sensor=5, temperature(K)=   0.0000
+11-13 20:38:45.321  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43255 mC, weight[0] 2
+11-13 20:38:45.322  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:45.401   837   837 V DisplayFeatureHal: dataCallback value=< 767.0000,   0.0000,   0.0000>,time=14685951907000, sensor=5, temperature(K)=   0.0000
+11-13 20:38:45.567   837   837 V DisplayFeatureHal: dataCallback value=< 766.0000,   0.0000,   0.0000>,time=14686118572885, sensor=5, temperature(K)=   0.0000
+11-13 20:38:45.734   837   837 V DisplayFeatureHal: dataCallback value=< 765.0000,   0.0000,   0.0000>,time=14686285343771, sensor=5, temperature(K)=   0.0000
+11-13 20:38:45.817   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:45.901   837   837 V DisplayFeatureHal: dataCallback value=< 764.0000,   0.0000,   0.0000>,time=14686451783562, sensor=5, temperature(K)=   0.0000
+11-13 20:38:46.067   837   837 V DisplayFeatureHal: dataCallback value=< 765.0000,   0.0000,   0.0000>,time=14686618570385, sensor=5, temperature(K)=   0.0000
+11-13 20:38:46.082  1496  1620 W ActivityTaskManager: Launch timeout has expired, giving up wake lock!
+11-13 20:38:46.178  1496  1620 D ActivityTrigger: ActivityTrigger activityStopTrigger 
+11-13 20:38:46.181  1496  2287 I MiuiNetworkPolicy: updateUidState uid = 10088, uidState = 6
+11-13 20:38:46.181  1496  2287 I MiuiNetworkPolicy: updateWmmForUidState uid: 10088 state: 6 wmm: 0
+11-13 20:38:46.182   653   653 D OemNetd : updateWmm: uid=10088, wmm=0
+11-13 20:38:46.184  1496  2287 I MiuiNetworkPolicy: updateMLUid uid:10088,old:2,new:6
+11-13 20:38:46.184  1496  2287 I MiuiNetworkPolicy: isMLEnabled state:2,uid:10088,connect:DISCONNECTED
+11-13 20:38:46.184  1496  2287 I MiuiNetworkPolicy: isMLEnabled state:6,uid:10088,connect:DISCONNECTED
+11-13 20:38:46.184  2746  2746 D Launcher.Lifecycle: onStop:UserHandle{0},bae8287,false
+11-13 20:38:46.218 19902 19902 D AppLifecycleObserver: onReceive: com.miui.home BACKGROUND
+11-13 20:38:46.218 16901 16901 D AppLifecycleObserver: onReceive: com.miui.home BACKGROUND
+11-13 20:38:46.221 19902 19902 D PkgUtils: getApplicationInfo packageName:com.miui.home, flags:128 applicationInfo:ApplicationInfo{be881e3 com.miui.home} needSecondSpace:false
+11-13 20:38:46.222 16901 16901 D PkgUtils: getApplicationInfo packageName:com.miui.home, flags:128 applicationInfo:ApplicationInfo{d512f82 com.miui.home} needSecondSpace:false
+11-13 20:38:46.235   837   837 V DisplayFeatureHal: dataCallback value=< 767.0000,   0.0000,   0.0000>,time=14686785162781, sensor=5, temperature(K)=   0.0000
+11-13 20:38:46.325  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43197 mC, weight[0] 2
+11-13 20:38:46.326  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:46.343  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43197 mC, weight[0] 2
+11-13 20:38:46.344  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:46.344  1013  1305 I ThermalEngine: ACTION: CPU - Setting CPU[4] to 9
+11-13 20:38:46.346  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43197 mC, weight[0] 2
+11-13 20:38:46.347  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:46.348  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43197 mC, weight[0] 2
+11-13 20:38:46.349  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:46.400   837   837 V DisplayFeatureHal: dataCallback value=< 772.0000,   0.0000,   0.0000>,time=14686951901687, sensor=5, temperature(K)=   0.0000
+11-13 20:38:46.567   837   837 V DisplayFeatureHal: dataCallback value=< 780.0000,   0.0000,   0.0000>,time=14687118569604, sensor=5, temperature(K)=   0.0000
+11-13 20:38:46.734   837   837 V DisplayFeatureHal: dataCallback value=< 791.0000,   0.0000,   0.0000>,time=14687285337312, sensor=5, temperature(K)=   0.0000
+11-13 20:38:46.781  1496  2295 D WifiClientModeImpl: fetchRssiLinkSpeedAndFrequencyNative rssi=-34 TxLinkspeed=400 freq=5260 RxLinkSpeed=400
+11-13 20:38:46.782  1496  2295 V WifiConfigManager: Updating scan detail cache freq=5260 BSSID=10:da:43:bd:a9:55 RSSI=-33 for "CMCC_G"-WPA_PSK
+11-13 20:38:46.787  1496  2295 D WifiClientModeImpl:  L2ConnectedState screen=on 25 0 "CMCC_G" 10:da:43:bd:a9:55 rssi=-34 f=5260 sc=60 link=400 tx=0.8, 0.0, 0.0  rx=0.2 bcn=10443 [on:27 tx:0 rx:1 period:3046] from screen [on:188208 period:584842] score=60
+11-13 20:38:46.788  2630  5132 D QCNEJ/WlanStaInfoRelay: Received action: android.net.wifi.RSSI_CHANGED
+11-13 20:38:46.789  1496  3239 I WifiService: getCurrentNetwork uid=1000
+11-13 20:38:46.791  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:38:46.813  2502  2502 I chatty  : uid=1000(system) com.android.systemui identical 8 lines
+11-13 20:38:46.813  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:38:46.817   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:46.831  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:38:46.832  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:38:46.901   837   837 V DisplayFeatureHal: dataCallback value=< 799.0000,   0.0000,   0.0000>,time=14687451899552, sensor=5, temperature(K)=   0.0000
+11-13 20:38:47.068   837   837 V DisplayFeatureHal: dataCallback value=< 805.0000,   0.0000,   0.0000>,time=14687618566739, sensor=5, temperature(K)=   0.0000
+11-13 20:38:47.104  2502  2853 D MobileSignalController: onSignalStrengthsChanged: SignalStrength:{mCdma=CellSignalStrengthCdma: cdmaDbm=2147483647 cdmaEcio=2147483647 evdoDbm=2147483647 evdoEcio=2147483647 evdoSnr=2147483647 miuiLevel=0 level=0,mGsm=CellSignalStrengthGsm: rssi=2147483647 ber=2147483647 mTa=2147483647 miuiLevel=0 mLevel=0,mWcdma=CellSignalStrengthWcdma: ss=2147483647 ber=2147483647 rscp=2147483647 ecno=2147483647 miuiLevel=0 level=0,mTdscdma=CellSignalStrengthTdscdma: rssi=2147483647 ber=2147483647 rscp=2147483647 miuiLevel=0 level=0,mLte=CellSignalStrengthLte: rssi=-51 rsrp=-77 rsrq=-9 rssnr=76 cqi=2147483647 ta=2147483647 miuiLevel=5 level=3,mNr=CellSignalStrengthNr:{ csiRsrp = 2147483647 csiRsrq = 2147483647 csiSinr = 2147483647 ssRsrp = 2147483647 ssRsrq = 2147483647 ssSinr = 2147483647 miuiLevel = 0 level = 0 },primary=CellSignalStrengthLte}
+11-13 20:38:47.104  2502  2853 D NetworkController.MobileSignalController(1): 4G level = 5
+11-13 20:38:47.235   837   837 V DisplayFeatureHal: dataCallback value=< 806.0000,   0.0000,   0.0000>,time=14687785232781, sensor=5, temperature(K)=   0.0000
+11-13 20:38:47.329  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43139 mC, weight[0] 2
+11-13 20:38:47.330  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:47.401   837   837 V DisplayFeatureHal: dataCallback value=< 806.0000,   0.0000,   0.0000>,time=14687951897781, sensor=5, temperature(K)=   0.0000
+11-13 20:38:47.568   837   837 V DisplayFeatureHal: dataCallback value=< 809.0000,   0.0000,   0.0000>,time=14688118563667, sensor=5, temperature(K)=   0.0000
+11-13 20:38:47.734   837   837 V DisplayFeatureHal: dataCallback value=< 810.0000,   0.0000,   0.0000>,time=14688285233614, sensor=5, temperature(K)=   0.0000
+11-13 20:38:47.818   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:47.901   837   837 V DisplayFeatureHal: dataCallback value=< 812.0000,   0.0000,   0.0000>,time=14688451896479, sensor=5, temperature(K)=   0.0000
+11-13 20:38:48.067   837   837 V DisplayFeatureHal: dataCallback value=< 809.0000,   0.0000,   0.0000>,time=14688618564239, sensor=5, temperature(K)=   0.0000
+11-13 20:38:48.234   837   837 V DisplayFeatureHal: dataCallback value=< 808.0000,   0.0000,   0.0000>,time=14688785227521, sensor=5, temperature(K)=   0.0000
+11-13 20:38:48.332  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43081 mC, weight[0] 2
+11-13 20:38:48.333  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:48.350  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43081 mC, weight[0] 2
+11-13 20:38:48.351  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:48.351  1013  1305 I ThermalEngine: ACTION: CPU - Setting CPU[4] to 10
+11-13 20:38:48.353  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43081 mC, weight[0] 2
+11-13 20:38:48.354  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:48.355  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 43081 mC, weight[0] 2
+11-13 20:38:48.356  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37083 mC, weight[1] 1
+11-13 20:38:48.401   837   837 V DisplayFeatureHal: dataCallback value=< 801.0000,   0.0000,   0.0000>,time=14688951894656, sensor=5, temperature(K)=   0.0000
+11-13 20:38:48.567   837   837 V DisplayFeatureHal: dataCallback value=< 740.0000,   0.0000,   0.0000>,time=14689118559864, sensor=5, temperature(K)=   0.0000
+11-13 20:38:48.733   837   837 V DisplayFeatureHal: dataCallback value=< 570.0000,   0.0000,   0.0000>,time=14689285226323, sensor=5, temperature(K)=   0.0000
+11-13 20:38:48.818   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:48.902   837   837 V DisplayFeatureHal: dataCallback value=< 538.0000,   0.0000,   0.0000>,time=14689451771687, sensor=5, temperature(K)=   0.0000
+11-13 20:38:49.011  2502  2853 D MobileSignalController: onSignalStrengthsChanged: SignalStrength:{mCdma=CellSignalStrengthCdma: cdmaDbm=2147483647 cdmaEcio=2147483647 evdoDbm=2147483647 evdoEcio=2147483647 evdoSnr=2147483647 miuiLevel=0 level=0,mGsm=CellSignalStrengthGsm: rssi=2147483647 ber=2147483647 mTa=2147483647 miuiLevel=0 mLevel=0,mWcdma=CellSignalStrengthWcdma: ss=2147483647 ber=2147483647 rscp=2147483647 ecno=2147483647 miuiLevel=0 level=0,mTdscdma=CellSignalStrengthTdscdma: rssi=2147483647 ber=2147483647 rscp=2147483647 miuiLevel=0 level=0,mLte=CellSignalStrengthLte: rssi=-53 rsrp=-84 rsrq=-15 rssnr=24 cqi=2147483647 ta=2147483647 miuiLevel=5 level=2,mNr=CellSignalStrengthNr:{ csiRsrp = 2147483647 csiRsrq = 2147483647 csiSinr = 2147483647 ssRsrp = 2147483647 ssRsrq = 2147483647 ssSinr = 2147483647 miuiLevel = 0 level = 0 },primary=CellSignalStrengthLte}
+11-13 20:38:49.012  2502  2853 D NetworkController.MobileSignalController(2): 4G level = 5
+11-13 20:38:49.066   837   837 V DisplayFeatureHal: dataCallback value=< 588.0000,   0.0000,   0.0000>,time=14689618473719, sensor=5, temperature(K)=   0.0000
+11-13 20:38:49.234   837   837 V DisplayFeatureHal: dataCallback value=< 748.0000,   0.0000,   0.0000>,time=14689785224292, sensor=5, temperature(K)=   0.0000
+11-13 20:38:49.336  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42965 mC, weight[0] 2
+11-13 20:38:49.338  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:49.401   837   837 V DisplayFeatureHal: dataCallback value=< 780.0000,   0.0000,   0.0000>,time=14689951890698, sensor=5, temperature(K)=   0.0000
+11-13 20:38:49.567   837   837 V DisplayFeatureHal: dataCallback value=< 792.0000,   0.0000,   0.0000>,time=14690118557885, sensor=5, temperature(K)=   0.0000
+11-13 20:38:49.733   837   837 V DisplayFeatureHal: dataCallback value=< 801.0000,   0.0000,   0.0000>,time=14690285219969, sensor=5, temperature(K)=   0.0000
+11-13 20:38:49.818   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:49.836  1496  2295 D WifiClientModeImpl: fetchRssiLinkSpeedAndFrequencyNative rssi=-34 TxLinkspeed=400 freq=5260 RxLinkSpeed=400
+11-13 20:38:49.836  1496  2295 V WifiConfigManager: Updating scan detail cache freq=5260 BSSID=10:da:43:bd:a9:55 RSSI=-33 for "CMCC_G"-WPA_PSK
+11-13 20:38:49.841  2630  5132 D QCNEJ/WlanStaInfoRelay: Received action: android.net.wifi.RSSI_CHANGED
+11-13 20:38:49.841  1496  2295 D WifiClientModeImpl:  L2ConnectedState screen=on 25 0 "CMCC_G" 10:da:43:bd:a9:55 rssi=-34 f=5260 sc=60 link=400 tx=1.1, 0.0, 0.0  rx=0.1 bcn=10451 [on:815 tx:1 rx:2 period:3053] from screen [on:189023 period:587896] score=60
+11-13 20:38:49.841  1496  4213 I WifiService: getCurrentNetwork uid=1000
+11-13 20:38:49.901   837   837 V DisplayFeatureHal: dataCallback value=< 808.0000,   0.0000,   0.0000>,time=14690451887833, sensor=5, temperature(K)=   0.0000
+11-13 20:38:49.933  1496  4213 D NtpTrustedTime: currentTimeMillis() cache hit
+11-13 20:38:49.943   653   653 I netd    : tetherGetStats() <3.77ms>
+11-13 20:38:49.952  1496  4213 D NtpTrustedTime: currentTimeMillis() cache hit
+11-13 20:38:49.956  4249  4970 D TrafficManageService: onReceive: intent.action = com.android.server.action.NETWORK_STATS_UPDATED
+11-13 20:38:50.068   837   837 V DisplayFeatureHal: dataCallback value=< 808.0000,   0.0000,   0.0000>,time=14690618430437, sensor=5, temperature(K)=   0.0000
+11-13 20:38:50.235   837   837 V DisplayFeatureHal: dataCallback value=< 808.0000,   0.0000,   0.0000>,time=14690785217833, sensor=5, temperature(K)=   0.0000
+11-13 20:38:50.339  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42965 mC, weight[0] 2
+11-13 20:38:50.340  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:50.358  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42965 mC, weight[0] 2
+11-13 20:38:50.359  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:50.359  1013  1305 I ThermalEngine: ACTION: CPU - Setting CPU[4] to 9
+11-13 20:38:50.361  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42965 mC, weight[0] 2
+11-13 20:38:50.362  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:50.363  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42965 mC, weight[0] 2
+11-13 20:38:50.364  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:50.406   837   837 V DisplayFeatureHal: dataCallback value=< 808.0000,   0.0000,   0.0000>,time=14690951861323, sensor=5, temperature(K)=   0.0000
+11-13 20:38:50.566   837   837 V DisplayFeatureHal: dataCallback value=< 809.0000,   0.0000,   0.0000>,time=14691118551427, sensor=5, temperature(K)=   0.0000
+11-13 20:38:50.733   837   837 V DisplayFeatureHal: dataCallback value=< 809.0000,   0.0000,   0.0000>,time=14691285216479, sensor=5, temperature(K)=   0.0000
+11-13 20:38:50.819   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:50.901   837   837 V DisplayFeatureHal: dataCallback value=< 809.0000,   0.0000,   0.0000>,time=14691451990437, sensor=5, temperature(K)=   0.0000
+11-13 20:38:50.931  2502  2502 D KeyguardUpdateMonitor: received broadcast android.intent.action.BATTERY_CHANGED
+11-13 20:38:50.932  3699  3699 D NfcService: Received android.intent.action.BATTERY_CHANGED
+11-13 20:38:50.936  4249  4249 I PowerSaveService: onReceive: android.intent.action.BATTERY_CHANGED
+11-13 20:38:50.937  5224  5570 D PowerCheckerService: onBatteryChanged, mBatteryLevel = 100, status = 2, level = 100, plug = 1, scale = 100
+11-13 20:38:50.940  4249  4249 I PowerNoticeUI: handleBatteryChanged oldPlugType 1 mPlugType 1 oldBatteryLevel 100 mBatteryLevel 100 temperature 350
+11-13 20:38:50.940  4249  4249 I ChargerBatteryIntelligenceReceiver: onBatteryChanged temperature：35,plugType:1
+11-13 20:38:50.940  4249  4249 I PowerFeatureUtils: getVendorName:qcom
+11-13 20:38:51.068   837   837 V DisplayFeatureHal: dataCallback value=< 808.0000,   0.0000,   0.0000>,time=14691618547781, sensor=5, temperature(K)=   0.0000
+11-13 20:38:51.234   837   837 V DisplayFeatureHal: dataCallback value=< 808.0000,   0.0000,   0.0000>,time=14691785216062, sensor=5, temperature(K)=   0.0000
+11-13 20:38:51.343  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42906 mC, weight[0] 2
+11-13 20:38:51.344  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:51.400   837   837 V DisplayFeatureHal: dataCallback value=< 808.0000,   0.0000,   0.0000>,time=14691951882729, sensor=5, temperature(K)=   0.0000
+11-13 20:38:51.568   837   837 V DisplayFeatureHal: dataCallback value=< 808.0000,   0.0000,   0.0000>,time=14692118547573, sensor=5, temperature(K)=   0.0000
+11-13 20:38:51.583  2502  2853 D MobileSignalController: onSignalStrengthsChanged: SignalStrength:{mCdma=CellSignalStrengthCdma: cdmaDbm=2147483647 cdmaEcio=2147483647 evdoDbm=2147483647 evdoEcio=2147483647 evdoSnr=2147483647 miuiLevel=0 level=0,mGsm=CellSignalStrengthGsm: rssi=2147483647 ber=2147483647 mTa=2147483647 miuiLevel=0 mLevel=0,mWcdma=CellSignalStrengthWcdma: ss=2147483647 ber=2147483647 rscp=2147483647 ecno=2147483647 miuiLevel=0 level=0,mTdscdma=CellSignalStrengthTdscdma: rssi=2147483647 ber=2147483647 rscp=2147483647 miuiLevel=0 level=0,mLte=CellSignalStrengthLte: rssi=-51 rsrp=-77 rsrq=-11 rssnr=86 cqi=2147483647 ta=2147483647 miuiLevel=5 level=3,mNr=CellSignalStrengthNr:{ csiRsrp = 2147483647 csiRsrq = 2147483647 csiSinr = 2147483647 ssRsrp = 2147483647 ssRsrq = 2147483647 ssSinr = 2147483647 miuiLevel = 0 level = 0 },primary=CellSignalStrengthLte}
+11-13 20:38:51.583  2502  2853 D NetworkController.MobileSignalController(1): 4G level = 5
+11-13 20:38:51.591  2502  2853 D MobileSignalController: onSignalStrengthsChanged: SignalStrength:{mCdma=CellSignalStrengthCdma: cdmaDbm=2147483647 cdmaEcio=2147483647 evdoDbm=2147483647 evdoEcio=2147483647 evdoSnr=2147483647 miuiLevel=0 level=0,mGsm=CellSignalStrengthGsm: rssi=2147483647 ber=2147483647 mTa=2147483647 miuiLevel=0 mLevel=0,mWcdma=CellSignalStrengthWcdma: ss=2147483647 ber=2147483647 rscp=2147483647 ecno=2147483647 miuiLevel=0 level=0,mTdscdma=CellSignalStrengthTdscdma: rssi=2147483647 ber=2147483647 rscp=2147483647 miuiLevel=0 level=0,mLte=CellSignalStrengthLte: rssi=-55 rsrp=-85 rsrq=-12 rssnr=20 cqi=2147483647 ta=2147483647 miuiLevel=5 level=2,mNr=CellSignalStrengthNr:{ csiRsrp = 2147483647 csiRsrq = 2147483647 csiSinr = 2147483647 ssRsrp = 2147483647 ssRsrq = 2147483647 ssSinr = 2147483647 miuiLevel = 0 level = 0 },primary=CellSignalStrengthLte}
+11-13 20:38:51.591  2502  2853 D NetworkController.MobileSignalController(2): 4G level = 5
+11-13 20:38:51.734   837   837 V DisplayFeatureHal: dataCallback value=< 807.0000,   0.0000,   0.0000>,time=14692285212312, sensor=5, temperature(K)=   0.0000
+11-13 20:38:51.819   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:51.900   837   837 V DisplayFeatureHal: dataCallback value=< 807.0000,   0.0000,   0.0000>,time=14692451878510, sensor=5, temperature(K)=   0.0000
+11-13 20:38:52.068   837   837 V DisplayFeatureHal: dataCallback value=< 808.0000,   0.0000,   0.0000>,time=14692618545281, sensor=5, temperature(K)=   0.0000
+11-13 20:38:52.234   837   837 V DisplayFeatureHal: dataCallback value=< 809.0000,   0.0000,   0.0000>,time=14692785211010, sensor=5, temperature(K)=   0.0000
+11-13 20:38:52.346  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42965 mC, weight[0] 2
+11-13 20:38:52.347  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:52.366  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42965 mC, weight[0] 2
+11-13 20:38:52.367  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:52.367  1013  1305 I ThermalEngine: ACTION: CPU - Setting CPU[4] to 8
+11-13 20:38:52.368  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42965 mC, weight[0] 2
+11-13 20:38:52.370  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:52.371  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42965 mC, weight[0] 2
+11-13 20:38:52.372  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:52.401   837   837 V DisplayFeatureHal: dataCallback value=< 809.0000,   0.0000,   0.0000>,time=14692951879552, sensor=5, temperature(K)=   0.0000
+11-13 20:38:52.568   837   837 V DisplayFeatureHal: dataCallback value=< 809.0000,   0.0000,   0.0000>,time=14693118648614, sensor=5, temperature(K)=   0.0000
+11-13 20:38:52.735   837   837 V DisplayFeatureHal: dataCallback value=< 810.0000,   0.0000,   0.0000>,time=14693285207781, sensor=5, temperature(K)=   0.0000
+11-13 20:38:52.820   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:52.896  1496  2295 D WifiClientModeImpl: fetchRssiLinkSpeedAndFrequencyNative rssi=-35 TxLinkspeed=400 freq=5260 RxLinkSpeed=400
+11-13 20:38:52.896  1496  2295 V WifiConfigManager: Updating scan detail cache freq=5260 BSSID=10:da:43:bd:a9:55 RSSI=-34 for "CMCC_G"-WPA_PSK
+11-13 20:38:52.900   837   837 V DisplayFeatureHal: dataCallback value=< 810.0000,   0.0000,   0.0000>,time=14693451875281, sensor=5, temperature(K)=   0.0000
+11-13 20:38:52.903  1496  2295 D WifiClientModeImpl:  L2ConnectedState screen=on 25 0 "CMCC_G" 10:da:43:bd:a9:55 rssi=-35 f=5260 sc=60 link=400 tx=1.2, 0.0, 0.0  rx=0.0 bcn=10461 [on:918 tx:2 rx:3 period:3062] from screen [on:189941 period:590958] score=60
+11-13 20:38:52.903  2630  5132 D QCNEJ/WlanStaInfoRelay: Received action: android.net.wifi.RSSI_CHANGED
+11-13 20:38:52.904  1496  4497 I WifiService: getCurrentNetwork uid=1000
+11-13 20:38:52.906  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:38:52.924  2502  2502 I chatty  : uid=1000(system) com.android.systemui identical 10 lines
+11-13 20:38:52.925  2502  2502 D SignalClusterView: updateMobileTypeImage  0
+11-13 20:38:53.068   837   837 V DisplayFeatureHal: dataCallback value=< 811.0000,   0.0000,   0.0000>,time=14693618541792, sensor=5, temperature(K)=   0.0000
+11-13 20:38:53.234   837   837 V DisplayFeatureHal: dataCallback value=< 811.0000,   0.0000,   0.0000>,time=14693785208979, sensor=5, temperature(K)=   0.0000
+11-13 20:38:53.349  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42965 mC, weight[0] 2
+11-13 20:38:53.351  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:53.402   837   837 V DisplayFeatureHal: dataCallback value=< 807.0000,   0.0000,   0.0000>,time=14693951873562, sensor=5, temperature(K)=   0.0000
+11-13 20:38:53.568   837   837 V DisplayFeatureHal: dataCallback value=< 799.0000,   0.0000,   0.0000>,time=14694118538094, sensor=5, temperature(K)=   0.0000
+11-13 20:38:53.734   837   837 V DisplayFeatureHal: dataCallback value=< 790.0000,   0.0000,   0.0000>,time=14694285203667, sensor=5, temperature(K)=   0.0000
+11-13 20:38:53.820 23862 24054 I PlayCommon: [3101] Preparing logs for uploading
+11-13 20:38:53.820   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:53.821  2502  2853 D MobileSignalController: onSignalStrengthsChanged: SignalStrength:{mCdma=CellSignalStrengthCdma: cdmaDbm=2147483647 cdmaEcio=2147483647 evdoDbm=2147483647 evdoEcio=2147483647 evdoSnr=2147483647 miuiLevel=0 level=0,mGsm=CellSignalStrengthGsm: rssi=2147483647 ber=2147483647 mTa=2147483647 miuiLevel=0 mLevel=0,mWcdma=CellSignalStrengthWcdma: ss=2147483647 ber=2147483647 rscp=2147483647 ecno=2147483647 miuiLevel=0 level=0,mTdscdma=CellSignalStrengthTdscdma: rssi=2147483647 ber=2147483647 rscp=2147483647 miuiLevel=0 level=0,mLte=CellSignalStrengthLte: rssi=-51 rsrp=-77 rsrq=-9 rssnr=72 cqi=2147483647 ta=2147483647 miuiLevel=5 level=3,mNr=CellSignalStrengthNr:{ csiRsrp = 2147483647 csiRsrq = 2147483647 csiSinr = 2147483647 ssRsrp = 2147483647 ssRsrq = 2147483647 ssSinr = 2147483647 miuiLevel = 0 level = 0 },primary=CellSignalStrengthLte}
+11-13 20:38:53.822  2502  2853 D NetworkController.MobileSignalController(1): 4G level = 5
+11-13 20:38:53.822 23862 24054 I PlayCommon: [3101] Connecting to server for timestamp: https://play.googleapis.com/play/log/timestamp
+11-13 20:38:53.826   653 25878 E ResolverController: No valid NAT64 prefix (106, <unspecified>/0)
+11-13 20:38:53.900   837   837 V DisplayFeatureHal: dataCallback value=< 781.0000,   0.0000,   0.0000>,time=14694451871896, sensor=5, temperature(K)=   0.0000
+11-13 20:38:54.068   837   837 V DisplayFeatureHal: dataCallback value=< 778.0000,   0.0000,   0.0000>,time=14694618642364, sensor=5, temperature(K)=   0.0000
+11-13 20:38:54.234   837   837 V DisplayFeatureHal: dataCallback value=< 775.0000,   0.0000,   0.0000>,time=14694785079917, sensor=5, temperature(K)=   0.0000
+11-13 20:38:54.354  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42906 mC, weight[0] 2
+11-13 20:38:54.355  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:54.374  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42906 mC, weight[0] 2
+11-13 20:38:54.375  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:54.376  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42906 mC, weight[0] 2
+11-13 20:38:54.377  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:54.379  1013  1305 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42906 mC, weight[0] 2
+11-13 20:38:54.380  1013  1305 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:54.401   837   837 V DisplayFeatureHal: dataCallback value=< 775.0000,   0.0000,   0.0000>,time=14694951870385, sensor=5, temperature(K)=   0.0000
+11-13 20:38:54.568   837   837 V DisplayFeatureHal: dataCallback value=< 775.0000,   0.0000,   0.0000>,time=14695118535489, sensor=5, temperature(K)=   0.0000
+11-13 20:38:54.734   837   837 V DisplayFeatureHal: dataCallback value=< 775.0000,   0.0000,   0.0000>,time=14695285200437, sensor=5, temperature(K)=   0.0000
+11-13 20:38:54.821   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:54.902   837   837 V DisplayFeatureHal: dataCallback value=< 776.0000,   0.0000,   0.0000>,time=14695451868667, sensor=5, temperature(K)=   0.0000
+11-13 20:38:55.067   837   837 V DisplayFeatureHal: dataCallback value=< 775.0000,   0.0000,   0.0000>,time=14695618532104, sensor=5, temperature(K)=   0.0000
+11-13 20:38:55.235   837   837 V DisplayFeatureHal: dataCallback value=< 776.0000,   0.0000,   0.0000>,time=14695785198667, sensor=5, temperature(K)=   0.0000
+11-13 20:38:55.357  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42848 mC, weight[0] 2
+11-13 20:38:55.358  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1
+11-13 20:38:55.401   837   837 V DisplayFeatureHal: dataCallback value=< 780.0000,   0.0000,   0.0000>,time=14695951866792, sensor=5, temperature(K)=   0.0000
+11-13 20:38:55.555  2502  2853 D MobileSignalController: onSignalStrengthsChanged: SignalStrength:{mCdma=CellSignalStrengthCdma: cdmaDbm=2147483647 cdmaEcio=2147483647 evdoDbm=2147483647 evdoEcio=2147483647 evdoSnr=2147483647 miuiLevel=0 level=0,mGsm=CellSignalStrengthGsm: rssi=2147483647 ber=2147483647 mTa=2147483647 miuiLevel=0 mLevel=0,mWcdma=CellSignalStrengthWcdma: ss=2147483647 ber=2147483647 rscp=2147483647 ecno=2147483647 miuiLevel=0 level=0,mTdscdma=CellSignalStrengthTdscdma: rssi=2147483647 ber=2147483647 rscp=2147483647 miuiLevel=0 level=0,mLte=CellSignalStrengthLte: rssi=-51 rsrp=-83 rsrq=-13 rssnr=60 cqi=2147483647 ta=2147483647 miuiLevel=5 level=3,mNr=CellSignalStrengthNr:{ csiRsrp = 2147483647 csiRsrq = 2147483647 csiSinr = 2147483647 ssRsrp = 2147483647 ssRsrq = 2147483647 ssSinr = 2147483647 miuiLevel = 0 level = 0 },primary=CellSignalStrengthLte}
+11-13 20:38:55.556  2502  2853 D NetworkController.MobileSignalController(2): 4G level = 5
+11-13 20:38:55.568   837   837 V DisplayFeatureHal: dataCallback value=< 789.0000,   0.0000,   0.0000>,time=14696118531427, sensor=5, temperature(K)=   0.0000
+11-13 20:38:55.734   837   837 V DisplayFeatureHal: dataCallback value=< 800.0000,   0.0000,   0.0000>,time=14696285195958, sensor=5, temperature(K)=   0.0000
+11-13 20:38:55.822   841   841 E FIDOCA : : get_fp_vendor property_get : none
+11-13 20:38:55.901   837   837 V DisplayFeatureHal: dataCallback value=< 807.0000,   0.0000,   0.0000>,time=14696451864135, sensor=5, temperature(K)=   0.0000
+11-13 20:38:55.982  1496  2295 D WifiClientModeImpl: fetchRssiLinkSpeedAndFrequencyNative rssi=-35 TxLinkspeed=400 freq=5260 RxLinkSpeed=400
+11-13 20:38:55.982  1496  2295 V WifiConfigManager: Updating scan detail cache freq=5260 BSSID=10:da:43:bd:a9:55 RSSI=-34 for "CMCC_G"-WPA_PSK
+11-13 20:38:55.987  1496  2295 D WifiClientModeImpl:  L2ConnectedState screen=on 25 0 "CMCC_G" 10:da:43:bd:a9:55 rssi=-35 f=5260 sc=60 link=400 tx=1.7, 0.0, 0.0  rx=0.0 bcn=10472 [on:1024 tx:2 rx:3 period:3084] from screen [on:190965 period:594042] score=60
+11-13 20:38:55.988  2630  5132 D QCNEJ/WlanStaInfoRelay: Received action: android.net.wifi.RSSI_CHANGED
+11-13 20:38:55.990  1496  3622 I WifiService: getCurrentNetwork uid=1000
+11-13 20:38:56.067   837   837 V DisplayFeatureHal: dataCallback value=< 810.0000,   0.0000,   0.0000>,time=14696618528667, sensor=5, temperature(K)=   0.0000
+11-13 20:38:56.235   837   837 V DisplayFeatureHal: dataCallback value=< 811.0000,   0.0000,   0.0000>,time=14696785195333, sensor=5, temperature(K)=   0.0000
+11-13 20:38:56.360  1013  1299 I ThermalEngine: vs_get_temperature: read[0] xo_therm 42790 mC, weight[0] 2
+11-13 20:38:56.361  1013  1299 I ThermalEngine: vs_get_temperature: read[1] quiet_therm 37031 mC, weight[1] 1

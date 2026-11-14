@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 节目单底部弹层：独立 dialog 主题，避免依赖 App 的 AppCompat 主题去找 Material 样式 -->
+    <style name="Theme.Hoopoe.BottomSheet" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Hoopoe.BottomSheetStyle</item>
+    </style>
+
+    <style name="Hoopoe.BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="behavior_peekHeight">400dp</item>
+        <item name="behavior_fitToContents">false</item>
+    </style>
+</resources>

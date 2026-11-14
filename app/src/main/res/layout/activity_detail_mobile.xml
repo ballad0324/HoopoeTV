@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/detailRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_glass_page"
+    android:orientation="vertical">
+
+    <!-- ================= 顶部播放器（本页播放） ================= -->
+    <FrameLayout
+        android:id="@+id/playerWrap"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:background="@android:color/black">
+
+        <com.github.tvbox.osc.player.MyVideoView
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ProgressBar
+            android:id="@+id/pbPlayerLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/ivBigPlay"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_vod_play"
+            android:scaleType="centerInside"
+            android:src="@drawable/play_play"
+            android:tint="#FFFFFF" />
+
+        <!-- 播放器顶部：返回 + 标题 -->
+        <LinearLayout
+            android:id="@+id/llPlayerTop"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="#66000000"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="10dp"
+            android:paddingEnd="12dp">
+
+            <TextView
+                android:id="@+id/tvBack"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingEnd="10dp"
+                android:text="@string/m_back"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvFav"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingStart="4dp"
+                android:paddingEnd="10dp"
+                android:text="☆ 收藏"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tvToolbarTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- 播放器底部控制条：进度 + 时间 + 暂停 + 投屏 + 全屏 -->
+        <LinearLayout
+            android:id="@+id/llCtrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="#73000000"
+            android:orientation="vertical"
+            android:paddingStart="12dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="6dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvCurTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00"
+                    android:textColor="#E6FFFFFF"
+                    android:textSize="11sp" />
+
+                <SeekBar
+                    android:id="@+id/sbInline"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="100"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp" />
+
+                <TextView
+                    android:id="@+id/tvDurTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00"
+                    android:textColor="#E6FFFFFF"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvPause"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:text="@string/m_pause"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/tvCast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:text="@string/m_cast"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvDownload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:text="@string/m_download"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvFull"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:text="@string/m_full"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <!-- ================= 下方滚动内容 ================= -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="12dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="24dp">
+
+            <!-- 详情数据加载中 -->
+            <ProgressBar
+                android:id="@+id/pbLoading"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="6dp" />
+
+            <!-- 玻璃信息卡 -->
+            <LinearLayout
+                android:id="@+id/glassInfoCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/glass_card"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <!-- 封面 + 主信息 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/ivThumb"
+                        android:layout_width="92dp"
+                        android:layout_height="130dp"
+                        android:background="@color/shell_surface_high"
+                        android:scaleType="centerCrop" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:textColor="@color/shell_text"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvSubName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:textColor="@color/shell_text_dim"
+                            android:textSize="11sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/tvMeta"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:textColor="@color/shell_text_dim"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/tvActor"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:textColor="@color/shell_text_dim"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- 四格元信息 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/m_year"
+                            android:textColor="@color/shell_text_dim"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/tvInfoYear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="—"
+                            android:textColor="@color/shell_text"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/m_type"
+                            android:textColor="@color/shell_text_dim"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/tvInfoType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="—"
+                            android:textColor="@color/shell_text"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/m_area"
+                            android:textColor="@color/shell_text_dim"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/tvInfoArea"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="—"
+                            android:textColor="@color/shell_text"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/m_status"
+                            android:textColor="@color/shell_text_dim"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/tvInfoNote"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="—"
+                            android:textColor="@color/shell_text"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- 主按钮 + 下载 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvPlay"
+                        android:layout_width="0dp"
+                        android:layout_height="46dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_play_cta"
+                        android:gravity="center"
+                        android:text="@string/m_play_now"
+                        android:textColor="@color/shell_text"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <!-- 下载（Material file_download 图标） -->
+                    <ImageView
+                        android:id="@+id/tvDownloadBig"
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:background="@drawable/bg_vod_play"
+                        android:contentDescription="下载到本地"
+                        android:padding="11dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_download"
+                        android:tint="@color/shell_text" />
+
+                    <!-- 打开下载文件夹（已下载 / 已转码的视频） -->
+                    <ImageView
+                        android:id="@+id/tvFolder"
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_vod_play"
+                        android:contentDescription="打开下载文件夹"
+                        android:padding="11dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/hm_folder"
+                        android:tint="@color/shell_text" />
+
+                    <!-- 收藏（星标，写入首页「我的收藏」） -->
+                    <ImageView
+                        android:id="@+id/tvFavBig"
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_vod_play"
+                        android:contentDescription="收藏"
+                        android:padding="11dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/hm_fav"
+                        android:tint="@color/shell_text" />
+
+                    <!-- 分享外链（在收藏右侧） -->
+                    <ImageView
+                        android:id="@+id/ivShareBig"
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_vod_play"
+                        android:contentDescription="分享外链"
+                        android:padding="11dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_share"
+                        android:tint="@color/shell_text" />
+                </LinearLayout>
+
+                <!-- 简介 -->
+                <TextView
+                    android:id="@+id/tvDes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:ellipsize="end"
+                    android:lineSpacingExtra="3dp"
+                    android:maxLines="3"
+                    android:textColor="@color/shell_text_dim"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvDesMore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/m_desc_more"
+                    android:textColor="@color/shell_primary"
+                    android:textSize="12sp" />
+
+            <!-- 线路 -->
+            <HorizontalScrollView
+                android:id="@+id/svFlags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:scrollbars="none"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/llFlags"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+
+            </HorizontalScrollView>
+
+            <!-- 选集标题 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/m_series"
+                    android:textColor="@color/shell_text"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvSeriesCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/shell_text_dim"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSeries"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:overScrollMode="never" />
+
+            <TextView
+                android:id="@+id/tvEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/m_empty_series"
+                android:textColor="@color/shell_text_dim"
+                android:textSize="13sp"
+                android:visibility="gone" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- 详情页也带底部 dock（v1.5.9） -->
+    <include layout="@layout/view_mobile_dock" />
+
+</LinearLayout>

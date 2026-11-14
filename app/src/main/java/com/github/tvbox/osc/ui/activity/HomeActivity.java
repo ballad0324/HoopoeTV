@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -38,7 +39,9 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.github.tvbox.osc.BuildConfig;
 import com.github.tvbox.osc.R;
+import com.github.tvbox.osc.setting.CommonSetting;
 import com.github.tvbox.osc.api.ApiConfig;
 import com.github.tvbox.osc.base.App;
 import com.github.tvbox.osc.base.BaseActivity;
@@ -97,6 +100,7 @@ public class HomeActivity extends BaseActivity {
     private LinearLayout contentLayout;
     private TextView tvName;
     private ImageView tvWifi;
+    private ImageView btnUiMode;
     private ImageView tvFind;
     private ImageView tvStyle;
     private ImageView tvDraw;
@@ -113,6 +117,8 @@ public class HomeActivity extends BaseActivity {
     private boolean sortChange = false;
     private int currentSelected = 0;
     private int sortFocused = 0;
+    // 上一次左栏布局应用时间：用于区分“用户在导航上选中”与“启动时自动落焦”
+    private long lastLayoutApplyTime = 0L;
     public View sortFocusView = null;
     private final Handler mHandler = new Handler();
     private long mExitTime = 0;
@@ -136,6 +142,36 @@ public class HomeActivity extends BaseActivity {
 
     boolean useCacheConfig = false;
 
+    /**
+     * 界面模式分流点：手机端模式下不加载 TV 首页布局（连 setContentView 都跳过），直接转给手机端首页。
+     * 判断读的是 CommonSetting 的运行时偏好，不读 BuildConfig，所以能在设置页里随时切换。
+     */
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        boolean mobileUi = CommonSetting.isMobileUi();
+        android.util.Log.i("HOOPOE_UI", "onCreate: uiMode=" + CommonSetting.getUiMode()
+                + " isMobileUi=" + mobileUi + " buildMobile=" + BuildConfig.UI_MOBILE);
+        if (mobileUi) {
+            // 必须赶在 BaseActivity 设置 TV 主题之前定下启动图主题
+            setTheme(R.style.Theme_MobileSplash);
+        }
+        // 关键：任何分支都要调 super.onCreate。旧实现重定向后直接 return，导致 SuperNotCalledException 闪退。
+        // BaseActivity 内部按 shouldInitContent() 决定是否加载 TV 首页布局与 init()。
+        super.onCreate(savedInstanceState);
+        if (mobileUi) {
+            if (!redirectToMobileHome()) {
+                // 手机端首页类缺失（仅 TV 变体会发生）：回退加载 TV 首页，保证不出白屏
+                setContentView(getLayoutResID());
+                init();
+            }
+        }
+    }
+
+    @Override
+    protected boolean shouldInitContent() {
+        return !CommonSetting.isMobileUi();
+    }
+
     @Override
     protected void init() {
         // takagen99: Added to allow read string
@@ -158,6 +194,21 @@ public class HomeActivity extends BaseActivity {
     // takagen99: Added to allow read string
     public static Resources getRes() {
         return res;
+    }
+
+    /**
+     * 手机端入口重定向：用 Class.forName 避免 main 源集对 mobile 源集的编译期依赖，
+     * TV 变体里该包不存在，异常即回退到 TV 首页逻辑。
+     */
+    private boolean redirectToMobileHome() {
+        try {
+            Intent intent = new Intent(this, Class.forName("com.github.tvbox.osc.mobile.ui.activity.MobileHomeActivity"));
+            startActivity(intent);
+            finish();
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
     }
 
     /**
@@ -238,10 +289,52 @@ public class HomeActivity extends BaseActivity {
             playPageTransition();
             if (navView() != null) {
                 navView().clearFocus();
+                navView().setSelectedPosition(-1);
             }
         } catch (Throwable ignored) {
             // 切换失败保持当前页
         }
+    }
+
+    /**
+     * 统一的切页入口：左栏「选中」和「单击」都走这里，保证点/选任意分类右侧立刻显示该分类内容。
+     * 不做延时、不依赖选中态回调，避免“点前几个导航不生效”。
+     */
+    private void switchToPage(final int page, final boolean animate) {
+        if (page < 0 || page >= fragments.size() || mViewPager == null) {
+            return;
+        }
+        // 已经就在这一页，只动过渡动画，不重复切
+        if (page == currentSelected && mViewPager.getCurrentItem() == page) {
+            if (animate) {
+                playPageTransition();
+            }
+            return;
+        }
+        mHandler.removeCallbacks(mDataRunnable);
+        sortFocused = page;
+        currentSelected = page;
+        // 顶栏保持显示，避免进入分类页时整页向上跳动
+        changeTop(false);
+        try {
+            mViewPager.setCurrentItem(page, false);
+        } catch (Throwable ignored) {
+            // 保持当前页
+        }
+        if (animate) {
+            playPageTransition();
+        }
+        // 视图刚切换时 page 可能被重新测量吞掉，一帧后再兜底一次
+        mViewPager.post(() -> {
+            try {
+                if (currentSelected == page && mViewPager.getAdapter() != null
+                        && mViewPager.getCurrentItem() != page) {
+                    mViewPager.setCurrentItem(page, false);
+                }
+            } catch (Throwable ignored) {
+                // 保持当前页
+            }
+        });
     }
 
     private void applyCategoryLayout(final boolean gridMode) {
@@ -262,6 +355,7 @@ public class HomeActivity extends BaseActivity {
         }
         try {
             layoutSwitching = true;
+            lastLayoutApplyTime = System.currentTimeMillis();
             final TvRecyclerView target = gridMode ? this.mGridViewLeft : this.mGridView;
             // 只切显隐：首页顶部横排导航在分类页整体隐藏，左栏竖排导航在分类页显示
             this.mGridView.setVisibility(gridMode ? View.GONE : View.VISIBLE);
@@ -274,8 +368,13 @@ public class HomeActivity extends BaseActivity {
             }
             final int pageKeep = this.sortFocused >= 0 ? this.sortFocused : 0;
             final int keep = adapterPosOfPage(pageKeep);
-            target.setSelection(keep);
-            target.setSelectedPosition(keep);
+            if (pageKeep <= 0) {
+                // 首页：左栏不标记选中项（否则第一个分类看着已选中、右侧却是首页内容）
+                target.setSelectedPosition(-1);
+            } else {
+                target.setSelection(keep);
+                target.setSelectedPosition(keep);
+            }
             // 顶部导航隐藏/左栏显示会改变 ViewPager 可用宽度，必须让它重新测量；
             // 否则页面子视图仍按旧宽度绘制，溢出到左侧导航下面（表现为左栏与卡片互相叠压）
             this.mViewPager.requestLayout();
@@ -308,8 +407,10 @@ public class HomeActivity extends BaseActivity {
                 } catch (Throwable ignored) {
                     // 焦点恢复失败不影响布局
                 }
-                target.postDelayed(() -> layoutSwitching = false, 150);
             });
+            // 无论首页还是分类页，守卫都要复位；否则 onItemSelected 一直被挡掉，
+            // 表现为“点左栏分类右侧不切页”。放在这个 post 之外，避免上面 return 把它跳过。
+            target.postDelayed(() -> layoutSwitching = false, 150);
             categoryLayoutApplied = true;
         } catch (Throwable ignored) {
             layoutSwitching = false;
@@ -399,8 +500,11 @@ public class HomeActivity extends BaseActivity {
                     }
                     HomeActivity.this.sortFocusView = view;
                     HomeActivity.this.sortFocused = position;
-                    mHandler.removeCallbacks(mDataRunnable);
-                    mHandler.postDelayed(mDataRunnable, 200);
+                    // 选中即切换：焦点落到哪个分类，右侧立刻显示该分类内容。
+                    // 启动后 350ms 内属于布局自动落焦，不触发切换，避免一进首页就跳到第一个分类。
+                    if (System.currentTimeMillis() - lastLayoutApplyTime > 350) {
+                        switchToPage(position, true);
+                    }
                 }
             }
 
@@ -410,21 +514,10 @@ public class HomeActivity extends BaseActivity {
                 if (page < 0 || page >= fragments.size()) {
                     return;
                 }
-                // 点击即切换：不依赖选中态回调与 200ms 延时，避免“点前几个导航不生效”
-                if (page != currentSelected) {
-                    mHandler.removeCallbacks(mDataRunnable);
-                    sortFocused = page;
-                    currentSelected = page;
-                    try {
-                        HomeActivity.this.mViewPager.setCurrentItem(page, false);
-                        changeTop(false);
-                        applyCategoryLayout(page != 0);
-                        playPageTransition();
-                    } catch (Throwable ignored) {
-                        // 切换失败保持当前页
-                        return;
-                    }
-                    // 单击只负责选中/切页；再点一下（同一分类）才展开底部分类条
+                // 第一次点（当前不在该分类）→ 立即切到该分类并展示它的内容
+                if (page != currentSelected || mViewPager.getCurrentItem() != page) {
+                    switchToPage(page, true);
+                    // 单击只负责切页；再点一下同一个分类才展开底部分类条
                     return;
                 }
                 if (itemView != null && currentSelected == page && page < fragments.size()) {
@@ -466,6 +559,7 @@ public class HomeActivity extends BaseActivity {
         this.topLayout = findViewById(R.id.topLayout);
         this.tvName = findViewById(R.id.tvName);
         this.tvWifi = findViewById(R.id.tvWifi);
+        this.btnUiMode = findViewById(R.id.btnUiMode);
         this.tvFind = findViewById(R.id.tvFind);
         this.tvStyle = findViewById(R.id.tvStyle);
         this.tvDraw = findViewById(R.id.tvDrawer);
@@ -494,11 +588,12 @@ public class HomeActivity extends BaseActivity {
                     if (layoutSwitching || nav.getLayoutManager() == null) {
                         return;
                     }
-                    View firstChild = nav.getLayoutManager().findViewByPosition(0);
-                    if (firstChild != null) {
-                        nav.setSelectedPosition(0);
-                        firstChild.requestFocus();
+                    // 首页（第 0 页）时左栏不高亮任何分类，避免“第一个分类看着已选中、右侧还是首页”
+                    if (currentSelected <= 0) {
+                        nav.setSelectedPosition(-1);
+                        return;
                     }
+                    nav.setSelectedPosition(adapterPosOfPage(currentSelected));
                 });
             }
         });
@@ -557,6 +652,18 @@ public class HomeActivity extends BaseActivity {
             @Override
             public boolean onLongClick(View v) {
                 return true;
+            }
+        });
+        // Button : UI Mode >> 切换到手机端
+        btnUiMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (CommonSetting.getUiMode() == CommonSetting.UI_MOBILE) return;
+                CommonSetting.putUiMode(CommonSetting.UI_MOBILE);
+                Intent intent = new Intent(HomeActivity.this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
             }
         });
         // Button : Wifi >> Go into Android Wifi Settings -------------
@@ -655,18 +762,8 @@ public class HomeActivity extends BaseActivity {
                 if (page < 0 || page >= fragments.size()) {
                     return;
                 }
-                if (page != currentSelected) {
-                    mHandler.removeCallbacks(mDataRunnable);
-                    sortFocused = page;
-                    currentSelected = page;
-                    try {
-                        mViewPager.setCurrentItem(page, false);
-                        changeTop(false);
-                        applyCategoryLayout(page != 0);
-                        playPageTransition();
-                    } catch (Throwable ignored) {
-                        return;
-                    }
+                if (page != currentSelected || mViewPager.getCurrentItem() != page) {
+                    switchToPage(page, true);
                 }
                 mViewPager.postDelayed(new Runnable() {
                     @Override
@@ -1155,6 +1252,7 @@ public class HomeActivity extends BaseActivity {
             animatorSet.setDuration(250);
             animatorSet.start();
             tvName.setFocusable(false);
+            btnUiMode.setFocusable(false);
             tvWifi.setFocusable(false);
             tvFind.setFocusable(false);            tvStyle.setFocusable(false);
             tvDraw.setFocusable(false);
@@ -1173,6 +1271,7 @@ public class HomeActivity extends BaseActivity {
             animatorSet.setDuration(250);
             animatorSet.start();
             tvName.setFocusable(true);
+            btnUiMode.setFocusable(true);
             tvWifi.setFocusable(true);
             tvFind.setFocusable(true);
             tvStyle.setFocusable(true);
@@ -1185,6 +1284,12 @@ public class HomeActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        if (CommonSetting.isMobileUi()) {
+            // 手机端 UI 下 HomeActivity 只是入口中转：重定向后立即 finish，
+            // 若这里照旧 appExit(0) 会把整个进程连 MobileHomeActivity 一起杀掉，
+            // 表现就是「点桌面图标一闪退回桌面」。此处直接交棒，不停服务、不杀进程。
+            return;
+        }
         AppManager.getInstance().appExit(0);
         ControlManager.get().stopServer();
     }

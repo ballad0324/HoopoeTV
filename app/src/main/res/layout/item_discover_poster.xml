@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 发现页海报卡（统一视频卡风格）：封面 + 角标 + 底部半透明信息条 -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="176dp">
+
+        <ImageView
+            android:id="@+id/ivPoster"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_hist_cover"
+            android:clipToOutline="true"
+            android:contentDescription="封面"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_loading_placeholder" />
+
+        <TextView
+            android:id="@+id/tvBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|top"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/bg_vod_badge"
+            android:paddingStart="5dp"
+            android:paddingTop="1dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="1dp"
+            android:textColor="#FFFFFFFF"
+            android:textSize="9sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:shadowColor="#CC000000"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="3"
+            android:textColor="#FFFFD166"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="5dp"
+            android:background="@drawable/bg_vod_info_bar"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="5dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="4dp">
+
+            <ImageView
+                android:id="@+id/ivPlay"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:background="@drawable/bg_vod_play"
+                android:contentDescription="播放"
+                android:padding="6dp"
+                android:src="@drawable/play_play" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvMeta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="#CCFFFFFF"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>

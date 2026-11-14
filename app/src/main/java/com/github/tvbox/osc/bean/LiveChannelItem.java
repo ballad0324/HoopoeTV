@@ -24,6 +24,20 @@ public class LiveChannelItem {
     public int sourceIndex = 0;
     public int sourceNum = 0;
     public boolean include_back = false;
+    /** m3u 的 catchup-source 模板（如 ?playbackbegin=${(b)yyyyMMddHHmmss}&playbackend=${(e)yyyyMMddHHmmss}），空串=不支持回看 */
+    private String catchupSource = "";
+
+    public void setCatchupSource(String catchupSource) {
+        this.catchupSource = catchupSource == null ? "" : catchupSource;
+    }
+
+    public String getCatchupSource() {
+        return catchupSource;
+    }
+
+    public boolean hasCatchup() {
+        return catchupSource != null && !catchupSource.isEmpty();
+    }
 
     public void setinclude_back(boolean include_back) {
         this.include_back = include_back;

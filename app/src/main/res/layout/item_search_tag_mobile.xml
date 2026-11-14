@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 搜索页的单个标签（历史词 / 热词） -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tvTag"
+    android:layout_width="match_parent"
+    android:layout_height="36dp"
+    android:layout_margin="4dp"
+    android:background="@drawable/shape_search_chip"
+    android:clickable="true"
+    android:ellipsize="end"
+    android:focusable="true"
+    android:gravity="center"
+    android:maxLines="1"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:textColor="@color/shell_text"
+    android:textSize="13sp"
+    tools:text="流浪地球" />

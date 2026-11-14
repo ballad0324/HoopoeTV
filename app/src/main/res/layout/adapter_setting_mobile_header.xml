@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/itemHeader"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:drawableStart="@drawable/shape_section_bar"
+    android:drawablePadding="8dp"
+    android:gravity="center_vertical"
+    android:paddingStart="16dp"
+    android:paddingTop="22dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="8dp"
+    android:textColor="@color/shell_text"
+    android:textSize="13sp"
+    android:textStyle="bold" />

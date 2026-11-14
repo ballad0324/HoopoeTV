@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Environment;
 import android.text.TextUtils;
 
@@ -40,7 +41,9 @@ public class DefaultConfig {
         List<MovieSort.SortData> data = new ArrayList<>();
         if (sourceKey != null) {
             SourceBean sb = ApiConfig.get().getSource(sourceKey);
-            ArrayList<String> categories = sb.getCategories();
+            // 接口未加载成功 / 该 sourceKey 不存在时 sb 为 null，此处按「无分类限制」处理。
+            // 旧实现直接 sb.getCategories()，导致「没配接口」的手机直启必崩。
+            ArrayList<String> categories = (sb != null && sb.getCategories() != null) ? sb.getCategories() : new ArrayList<String>();
             if (!categories.isEmpty()) {
                 for (String cate : categories) {
                     for (MovieSort.SortData sortData : list) {
@@ -60,9 +63,26 @@ public class DefaultConfig {
             }
         }
         if (withMy)
-            data.add(0, new MovieSort.SortData("my0", HomeActivity.getRes().getString(R.string.app_home)));
+            data.add(0, new MovieSort.SortData("my0", appString(R.string.app_home)));
         Collections.sort(data);
         return data;
+    }
+
+    /**
+     * 取 App 资源里的字符串。手机端模式下 TV 首页从未初始化，HomeActivity.getRes() 为 null，
+     * 直接调用会 NPE，因此兜底到 Application 的 Resources。
+     */
+    public static String appString(int resId) {
+        Resources res = null;
+        try {
+            res = HomeActivity.getRes();
+        } catch (Throwable ignored) {
+        }
+        if (res == null) {
+            App app = App.getInstance();
+            if (app != null) res = app.getResources();
+        }
+        return res != null ? res.getString(resId) : "";
     }
 
     public static int getAppVersionCode(Context mContext) {

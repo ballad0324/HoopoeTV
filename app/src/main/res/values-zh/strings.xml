@@ -230,4 +230,46 @@
         <item>首选配置地址</item>
         <item>首选设置配置</item>
     </string-array>
+
+    <!-- ===== 手机端界面文案（中文） ===== -->
+    <string name="m_back">‹ 返回</string>
+    <string name="m_play_now">立即播放</string>
+    <string name="m_desc_more">展开简介</string>
+    <string name="m_desc_less">收起简介</string>
+    <string name="m_empty_series">暂无播放列表</string>
+    <string name="m_series">选集</string>
+    <string name="m_scale">画面</string>
+    <string name="m_prev_ep">上一集</string>
+    <string name="m_next_ep">下一集</string>
+    <string name="m_pause">暂停</string>
+    <string name="m_play">播放</string>
+    <string name="m_collapse">收起</string>
+    <string name="m_prev_ch">上一台</string>
+    <string name="m_next_ch">下一台</string>
+    <string name="m_nav_movie">影视</string>
+    <string name="m_nav_live">直播</string>
+    <string name="m_nav_search">搜索</string>
+    <string name="m_nav_setting">设置</string>
+    <string name="m_nav_discover">发现</string>
+    <string name="m_live_empty">没有直播源，请先在设置里填直播源或换一个接口</string>
+    <string name="m_search_hist">搜索历史</string>
+    <string name="m_clear">清空</string>
+    <string name="m_hot_search">热门搜索</string>
+    <string name="m_ui_mode">界面模式</string>
+    <string name="m_ui_mobile">手机端</string>
+    <string name="m_ui_tv">电视端</string>
+    <string name="m_downloads">已下载</string>
+    <string name="m_refresh">刷新</string>
+    <string name="m_no_downloads">还没有下载好的视频。\n在详情页点「下载」，回到这里就能看到。</string>
+    <string name="m_delete_file_confirm">删除这个文件？</string>
+    <string name="m_cancel">取消</string>
+    <string name="m_delete">删除</string>
+    <string name="m_deleted">已删除</string>
+    <string name="m_cast">投屏</string>
+    <string name="m_download">下载</string>
+    <string name="m_full">全屏</string>
+    <string name="m_year">年份</string>
+    <string name="m_type">类型</string>
+    <string name="m_area">地区</string>
+    <string name="m_status">状态</string>
 </resources>

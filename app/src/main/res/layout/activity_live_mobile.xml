@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_glass_page"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
+
+        <TextView
+            android:id="@+id/tvBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingEnd="12dp"
+            android:text="@string/m_back"
+            android:textColor="@color/shell_text"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="直播"
+            android:textColor="@color/shell_text"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- 顶部常驻直播播放器：点下方频道直接在这里播放，右侧可进全屏 / 回看 -->
+    <FrameLayout
+        android:id="@+id/flMiniPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="6dp"
+        android:background="@android:color/black">
+
+        <com.github.tvbox.osc.player.MyVideoView
+            android:id="@+id/videoViewMini"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ProgressBar
+            android:id="@+id/pbMini"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvMiniTip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="点击下方频道开始播放"
+            android:textColor="#AAFFFFFF"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvMiniName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_margin="8dp"
+            android:background="@drawable/shape_live_mini_btn"
+            android:paddingStart="10dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="4dp"
+            android:text=""
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvMiniFav"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="8dp"
+            android:background="@drawable/shape_live_mini_btn"
+            android:gravity="center"
+            android:text="☆"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvMiniCatchup"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/shape_live_mini_btn"
+                android:gravity="center"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:text="回看"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvMiniFull"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/shape_live_mini_btn"
+                android:gravity="center"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:text="全屏"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <!-- 播放器下方一行节目信息：正在播 + 下一档，点它等同点「回看」 -->
+    <TextView
+        android:id="@+id/tvMiniEpg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="节目单未加载 · 点「回看」可加载"
+        android:textColor="@color/shell_text_dim"
+        android:textSize="11sp" />
+
+    <!-- 节目回看：选日期 + 半小时时间段，直接按时间窗口拉回看流 -->
+    <LinearLayout
+        android:id="@+id/llCatchupPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/bg_catchup_panel"
+        android:orientation="vertical"
+        android:paddingStart="10dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="6dp">
+
+        <LinearLayout
+            android:id="@+id/llCatchupHead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="节目回看"
+                android:textColor="@color/shell_text"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvCatchupTip"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="选日期和时间段，按半小时回看"
+                android:textColor="@color/shell_text_dim"
+                android:textSize="10sp" />
+
+            <!-- 节目回看开关：胶囊开关，默认关闭（面板默认收起） -->
+            <FrameLayout
+                android:id="@+id/swCatchupTrack"
+                android:layout_width="42dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/shape_switch_track_off">
+
+                <View
+                    android:id="@+id/swCatchupThumb"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginStart="2dp"
+                    android:background="@drawable/shape_switch_thumb" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llCatchupBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_marginTop="6dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/llCatchupDays"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="124dp"
+                android:layout_marginTop="6dp"
+                android:scrollbars="none">
+
+                <GridLayout
+                    android:id="@+id/glCatchupSlots"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="4" />
+            </ScrollView>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 三栏：左=节目源（分组/收藏/最近），中=频道，右=节目单 -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingStart="8dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="8dp">
+
+            <ScrollView
+                android:id="@+id/svGroup"
+                android:layout_width="62dp"
+                android:layout_height="match_parent"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/llGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+            </ScrollView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvChannel"
+                android:layout_width="96dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvEpgHint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="点中间频道看节目单"
+                    android:textColor="@color/shell_text_dim"
+                    android:textSize="10sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvEpisode"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    android:paddingBottom="12dp" />
+
+                <TextView
+                    android:id="@+id/tvEpgEmpty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingStart="8dp"
+                    android:paddingTop="18dp"
+                    android:paddingEnd="8dp"
+                    android:text="EPG 里没有这个频道的节目单"
+                    android:textColor="@color/shell_text_dim"
+                    android:textSize="11sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/tvEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="24dp"
+            android:text="@string/m_live_empty"
+            android:textColor="@color/shell_text_dim"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+    <!-- 底部 dock 栏：四页共用 -->
+    <include layout="@layout/view_mobile_dock" />
+
+</LinearLayout>

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 手机端搜索页：顶栏搜索框 + 搜索历史 + 推荐搜索 + 分类页签 + 排行浏览列表；提交关键词后切到多源结果区 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_glass_page"
+    android:orientation="vertical">
+
+    <!-- 顶部搜索栏 -->
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="2dp"
+        android:paddingEnd="10dp">
+
+        <TextView
+            android:id="@+id/tvBack"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="‹"
+            android:textColor="@color/shell_text"
+            android:textSize="28sp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_search_bar"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="10dp">
+
+            <ImageView
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:contentDescription="@null"
+                android:src="@drawable/hm_search"
+                android:tint="@color/shell_text_dim" />
+
+            <EditText
+                android:id="@+id/etSearch"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="搜索影视、动漫、短剧"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:singleLine="true"
+                android:textColor="@color/shell_text"
+                android:textColorHint="@color/shell_text_dim"
+                android:textSize="14sp"
+                tools:ignore="Autofill,LabelFor" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
+            android:text="搜索"
+            android:textColor="@color/shell_text"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#1F5B6573" />
+
+    <!-- 初始态：列表头（历史/热词/分类页签）+ 整站分类浏览列表，同一 RecyclerView 滚动 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBrowse"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
+
+    <!-- 分类浏览续页提示：加载中 / 上拉继续 / 已到底 -->
+    <TextView
+        android:id="@+id/tvBrowseMore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="12dp"
+        android:textColor="@color/shell_text_dim"
+        android:textSize="12sp"
+        android:visibility="gone"
+        tools:text="上拉继续加载 · 已 80 部" />
+
+    <!-- 结果区：关键词搜索/筛选后的多源结果 -->
+    <LinearLayout
+        android:id="@+id/resultBox"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/llFilterBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="4dp">
+
+            <HorizontalScrollView
+                android:id="@+id/svFilterSource"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:paddingStart="12dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="12dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/llFilterSource"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:id="@+id/svFilterType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:paddingStart="12dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="12dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/llFilterType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:id="@+id/svFilterYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:paddingStart="12dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="12dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/llFilterYear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:id="@+id/svFilterArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:paddingStart="12dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="12dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/llFilterArea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvResult"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingTop="6dp"
+                android:paddingBottom="16dp" />
+
+            <LinearLayout
+                android:id="@+id/llState"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ProgressBar
+                    android:id="@+id/pbLoading"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:indeterminateTint="@color/shell_primary" />
+
+                <TextView
+                    android:id="@+id/tvState"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:textColor="@color/shell_text_dim"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <!-- 底部 dock 栏：四页共用 -->
+    <include layout="@layout/view_mobile_dock" />
+
+</LinearLayout>

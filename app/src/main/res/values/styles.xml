@@ -138,4 +138,15 @@
     <style name="surfaceType_texture">
         <item name="surface_type">texture_view</item>
     </style>
+
+    <!--
+      手机端启动页主题：挂给 mobile 变体 launcher 的 theme 属性（mobile 源集资源已并入 main）。
+      targetSdk 28 仍走传统 windowBackground 启动图；mobile_startup.png 为 2160×3840。
+      两套 UI 运行时共存后，本主题只在 mobile flavor 的清单里被引用。
+    -->
+    <style name="Theme.MobileSplash" parent="AppTheme.NoActionBar">
+        <item name="android:windowBackground">@drawable/mobile_startup</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>
