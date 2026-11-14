@@ -243,7 +243,9 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
 
         if (MobileUser.isLoggedIn()) {
             tvName.setText(MobileUser.name());
-            tvState.setText("已登录 · 固定使用内置源");
+            tvState.setText(com.github.tvbox.osc.setting.CommonSetting.useBuiltinSource()
+                    ? "已登录 · 内置源"
+                    : "已登录 · 解析源");
             tvAction.setText("退出登录");
             if (ivAvatar != null) {
                 ivAvatar.setColorFilter(getResources().getColor(R.color.shell_primary));
@@ -288,16 +290,7 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
             });
         }
 
-        View rowCloud = content.findViewById(R.id.rowCloud);
-        if (rowCloud != null) {
-            rowCloud.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                    jumpActivity(MobileCloudBackupActivity.class);
-                }
-            });
-        }
+        // v1.6.41：云备份入口已迁到「管理面板」，用户面板不再提供
 
         tvAction.setOnClickListener(new View.OnClickListener() {
             @Override

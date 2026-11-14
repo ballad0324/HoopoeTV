@@ -43,6 +43,7 @@ public class MobileAdminActivity extends BaseActivity {
     private EditText etEpgUrl;
     private View llSourceConfig;
     private TextView tvSourceLoginHint;
+    private TextView tvCloudHint;
 
     @Override
     protected int getLayoutResID() {
@@ -64,6 +65,7 @@ public class MobileAdminActivity extends BaseActivity {
         etEpgUrl = findViewById(R.id.etEpgUrl);
         llSourceConfig = findViewById(R.id.llSourceConfig);
         tvSourceLoginHint = findViewById(R.id.tvSourceLoginHint);
+        tvCloudHint = findViewById(R.id.tvCloudHint);
 
         // 源模式胶囊：内置源 / 解析源
         if (tvModeBuiltin != null) {
@@ -142,6 +144,17 @@ public class MobileAdminActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     showSourcePicker();
+                }
+            });
+        }
+
+        View rowCloud = findViewById(R.id.rowCloud);
+        if (rowCloud != null) {
+            rowCloud.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new android.content.Intent(MobileAdminActivity.this,
+                            MobileCloudBackupActivity.class));
                 }
             });
         }
@@ -227,13 +240,22 @@ public class MobileAdminActivity extends BaseActivity {
         }
 
         boolean builtin = CommonSetting.useBuiltinSource();
-        String api = builtin ? ApiConfig.getDefaultApiUrl() : ApiConfig.getApiUrl();
+        // 未登录且没填过接口时，不要拿内置地址冒充「解析源」，否则标题和地址自相矛盾
+        String stored = CommonSetting.getApiUrlStored();
+        String api = builtin ? ApiConfig.getDefaultApiUrl()
+                : (TextUtils.isEmpty(stored) ? "" : stored);
         String home = "";
         SourceBean bean = ApiConfig.get().getHomeSourceBean();
         if (bean != null && !TextUtils.isEmpty(bean.getName())) home = bean.getName();
         tvSource.setText(builtin ? "内置源" : "解析源（自填）");
         if (!TextUtils.isEmpty(home)) tvSource.setText(tvSource.getText() + " · " + home);
-        tvSourceHint.setText(TextUtils.isEmpty(api) ? "还没有可用的接口地址" : api);
+        if (TextUtils.isEmpty(api)) {
+            tvSourceHint.setText(builtin
+                    ? "还没有可用的接口地址"
+                    : "还没填接口地址：可在设置页填写，或登录后使用内置源");
+        } else {
+            tvSourceHint.setText(api);
+        }
 
         applyModeUi(builtin);
 
@@ -241,6 +263,15 @@ public class MobileAdminActivity extends BaseActivity {
         if (etApiUrl != null) etApiUrl.setText(CommonSetting.getApiUrlStored());
         if (etLiveUrl != null) etLiveUrl.setText(CommonSetting.getLiveUrl());
         if (etEpgUrl != null) etEpgUrl.setText(CommonSetting.getEpgUrl());
+
+        if (tvCloudHint != null) {
+            String hint = "";
+            try {
+                hint = com.github.tvbox.osc.util.CloudBackupHelper.summary();
+            } catch (Throwable ignored) {
+            }
+            tvCloudHint.setText(TextUtils.isEmpty(hint) ? "备份到 MySQL 云端 / 从云端恢复" : hint);
+        }
 
         try {
             String ver = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;

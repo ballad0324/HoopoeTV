@@ -140,19 +140,30 @@ public class ApiConfig {
     public static String getDefaultApiUrl() {
         // 手机端模式下 TV 首页未初始化，HomeActivity.getRes() 为 null，必须回退到 Application 的 Resources，
         // 否则内置源读成空串，直接判成「源地址为空」进错误分支。
+        String s = "";
         try {
             App app = App.getInstance();
             if (app != null) {
-                return app.getString(R.string.app_source);
+                s = app.getString(R.string.app_source);
             }
         } catch (Throwable th) {
             th.printStackTrace();
         }
-        try {
-            return HomeActivity.getRes().getString(R.string.app_source);
-        } catch (Throwable th) {
-            return "";
+        if (s == null) s = "";
+        if (s.trim().isEmpty()) {
+            try {
+                s = HomeActivity.getRes().getString(R.string.app_source);
+            } catch (Throwable ignored) {
+            }
         }
+        if (s == null) s = "";
+        // v1.6.40：strings 里的 app_source 被清空过（v1.6.37 要求默认为空），
+        // 登录后切「内置源」会拿到空串 → 首页报「源地址为空」。
+        // 内置源改为回退到服务端下发的 TVBox 标准配置，保证登录用户一定有源可用。
+        if (s.trim().isEmpty()) {
+            s = com.github.tvbox.osc.setting.CommonSetting.BUILTIN_API_URL;
+        }
+        return s;
     }
 
     public static String getApiUrl() {
