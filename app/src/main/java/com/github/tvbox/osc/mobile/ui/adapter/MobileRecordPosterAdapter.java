@@ -48,6 +48,15 @@ public class MobileRecordPosterAdapter extends RecyclerView.Adapter<MobileRecord
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_record_poster, parent, false);
+        // 首页横条一屏两张：卡片宽 =（屏宽 - 左右各 8dp 内边距 - 中间 10dp 间距）/ 2
+        float density = parent.getResources().getDisplayMetrics().density;
+        int screen = parent.getResources().getDisplayMetrics().widthPixels;
+        int gap = (int) (density * 26 + 0.5f);
+        int cardWidth = (screen - gap) / 2;
+        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(
+                cardWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0, 0, (int) (density * 10 + 0.5f), 0);
+        v.setLayoutParams(lp);
         return new VH(v);
     }
 

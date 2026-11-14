@@ -324,13 +324,12 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
     @Override
     public void bindHeader(View root) {
         if (root == null) return;
-        cardFav = root.findViewById(R.id.cardFav);
         rvFav = root.findViewById(R.id.rvFav);
         tvFavEmpty = root.findViewById(R.id.tvFavEmpty);
-        cardHistory = root.findViewById(R.id.cardHistory);
         rvHistory = root.findViewById(R.id.rvHistory);
         tvHistoryEmpty = root.findViewById(R.id.tvHistoryEmpty);
         tvHistoryTitle = root.findViewById(R.id.tvHistoryTitle);
+        tvHistoryClear = root.findViewById(R.id.tvHistoryClear);
         tvSectionTitle = root.findViewById(R.id.tvSectionTitle);
         tvSectionMore = root.findViewById(R.id.tvSectionMore);
 
@@ -369,23 +368,76 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
             });
         }
 
-        View favTitle = root.findViewById(R.id.tvFavTitle);
-        if (favTitle instanceof TextView) ((TextView) favTitle).setText(tr("我的收藏", "Favorites"));
-        View favMore = root.findViewById(R.id.tvFavMore);
-        if (favMore != null) favMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                jumpRecord(MobileRecordActivity.MODE_FAV);
-            }
-        });
-        if (tvHistoryTitle != null) tvHistoryTitle.setText(tr("播放历史", "History"));
-        View historyMore = root.findViewById(R.id.tvHistoryMore);
-        if (historyMore != null) historyMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                jumpRecord(MobileRecordActivity.MODE_HISTORY);
-            }
-        });
+        // 快捷胶囊：发现 · 收藏 · 继续观看
+        View quickDiscover = root.findViewById(R.id.tvQuickDiscover);
+        if (quickDiscover != null) {
+            quickDiscover.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    jumpActivity(MobileDiscoverActivity.class, new Bundle());
+                }
+            });
+        }
+        View quickFav = root.findViewById(R.id.tvQuickFav);
+        if (quickFav != null) {
+            quickFav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    applyHomeStrip(true);
+                }
+            });
+        }
+        View quickContinue = root.findViewById(R.id.tvQuickContinue);
+        if (quickContinue != null) {
+            quickContinue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    applyHomeStrip(false);
+                }
+            });
+        }
+
+        // 分段：首页 / 收藏夹 —— 切换横条内容（继续观看 ↔ 我的收藏）
+        tvSegHome = root.findViewById(R.id.tvSegHome);
+        tvSegFav = root.findViewById(R.id.tvSegFav);
+        if (tvSegHome != null) {
+            tvSegHome.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    applyHomeStrip(false);
+                }
+            });
+        }
+        if (tvSegFav != null) {
+            tvSegFav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    applyHomeStrip(true);
+                }
+            });
+        }
+
+        // 「清空」= 清空播放历史（带二次确认）
+        if (tvHistoryClear != null) {
+            tvHistoryClear.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(MobileHomeActivity.this)
+                            .setTitle(tr("清空播放历史", "Clear history"))
+                            .setMessage(tr("确定清空全部播放记录？", "Clear all playback history?"))
+                            .setNegativeButton(tr("取消", "Cancel"), null)
+                            .setPositiveButton(tr("清空", "Clear"), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    MobilePlayHistory.clear();
+                                    refreshHistory();
+                                }
+                            })
+                            .show();
+                }
+            });
+        }
+
         // 「小编推荐」右侧「更多」：引导到发现页（专题 / 榜单 / 正在看）
         if (tvSectionMore != null) {
             tvSectionMore.setOnClickListener(new View.OnClickListener() {
@@ -399,6 +451,53 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
 
         refreshFav();
         refreshHistory();
+        applyHomeStrip(favStripMode);
+    }
+
+    /* ===================== 首页横条：继续观看 / 我的收藏 ===================== */
+
+    private TextView tvSegHome;
+    private TextView tvSegFav;
+    /** 横条当前显示的是否为「收藏夹」（false = 继续观看） */
+    private boolean favStripMode = false;
+    private boolean histHas = false;
+    private boolean favHas = false;
+
+    /** 切换首页横条：false = 继续观看（播放历史），true = 我的收藏 */
+    private void applyHomeStrip(boolean favMode) {
+        favStripMode = favMode;
+        if (tvHistoryTitle != null) {
+            tvHistoryTitle.setText(favMode ? tr("我的收藏", "Favorites") : tr("继续观看", "Continue Watching"));
+        }
+        if (tvHistoryClear != null) {
+            tvHistoryClear.setVisibility(favMode ? View.GONE : View.VISIBLE);
+            tvHistoryClear.setText(tr("清空", "Clear"));
+        }
+        styleSegment(tvSegHome, !favMode);
+        styleSegment(tvSegFav, favMode);
+        syncStripVisibility();
+    }
+
+    private void styleSegment(TextView tv, boolean on) {
+        if (tv == null) return;
+        tv.setBackgroundResource(on ? R.drawable.shape_home_segment_on : android.R.color.transparent);
+        tv.setTextColor(getResources().getColor(on ? R.color.shell_text : R.color.shell_text_dim));
+        tv.setTypeface(null, on ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL);
+    }
+
+    private void syncStripVisibility() {
+        boolean showHistory = !favStripMode && histHas;
+        boolean showFav = favStripMode && favHas;
+        if (rvHistory != null) rvHistory.setVisibility(showHistory ? View.VISIBLE : View.GONE);
+        if (rvFav != null) rvFav.setVisibility(showFav ? View.VISIBLE : View.GONE);
+        if (tvHistoryEmpty != null) {
+            tvHistoryEmpty.setText(tr("还没有播放记录", "Nothing played yet"));
+            tvHistoryEmpty.setVisibility(!favStripMode && !histHas ? View.VISIBLE : View.GONE);
+        }
+        if (tvFavEmpty != null) {
+            tvFavEmpty.setText(tr("还没有收藏", "No favorites yet"));
+            tvFavEmpty.setVisibility(favStripMode && !favHas ? View.VISIBLE : View.GONE);
+        }
     }
 
     private void applyHomeOnlyBlocks(int position) {
@@ -407,7 +506,7 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
     }
 
     private void refreshHistory() {
-        if (cardHistory == null || historyAdapter == null) return;
+        if (historyAdapter == null) return;
         List<MobileRecordAdapter.Row> rows = new ArrayList<>();
         for (MobilePlayHistory.Item it : MobilePlayHistory.load()) {
             MobileRecordAdapter.Row row = new MobileRecordAdapter.Row();
@@ -421,15 +520,12 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
             if (rows.size() >= 6) break;
         }
         historyAdapter.setNewData(rows);
-        if (tvHistoryEmpty != null) {
-            tvHistoryEmpty.setText(tr("还没有播放记录", "Nothing played yet"));
-            tvHistoryEmpty.setVisibility(rows.isEmpty() ? View.VISIBLE : View.GONE);
-        }
-        if (rvHistory != null) rvHistory.setVisibility(rows.isEmpty() ? View.GONE : View.VISIBLE);
+        histHas = !rows.isEmpty();
+        syncStripVisibility();
     }
 
     private void refreshFav() {
-        if (cardFav == null || favAdapter == null) return;
+        if (favAdapter == null) return;
         List<MobileRecordAdapter.Row> rows = new ArrayList<>();
         for (MobileFavorites.Item it : MobileFavorites.load()) {
             MobileRecordAdapter.Row row = new MobileRecordAdapter.Row();
@@ -442,11 +538,8 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
             if (rows.size() >= 6) break;
         }
         favAdapter.setNewData(rows);
-        if (tvFavEmpty != null) {
-            tvFavEmpty.setText(tr("还没有收藏", "No favorites yet"));
-            tvFavEmpty.setVisibility(rows.isEmpty() ? View.VISIBLE : View.GONE);
-        }
-        if (rvFav != null) rvFav.setVisibility(rows.isEmpty() ? View.GONE : View.VISIBLE);
+        favHas = !rows.isEmpty();
+        syncStripVisibility();
     }
 
     private void openRecord(MobileRecordAdapter.Row row) {
