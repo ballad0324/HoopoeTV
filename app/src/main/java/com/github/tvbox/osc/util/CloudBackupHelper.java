@@ -172,6 +172,46 @@ public final class CloudBackupHelper {
         return login().ok;
     }
 
+    /** 注册（v1.7）：用户名 + 密码 + 邀请码；成功后直接拿到 token，等同登录 */
+    public static Res register(String url, String user, String pass, String invite) {
+        if (TextUtils.isEmpty(url)) return Res.fail("请先填服务器地址");
+        save(url, user, pass);
+        Res r = post("register", new FormBody.Builder()
+                .add("user", user == null ? "" : user.trim())
+                .add("pass", pass == null ? "" : pass)
+                .add("invite", invite == null ? "" : invite.trim()));
+        if (r.ok) {
+            Hawk.put(K_TOKEN, r.data == null ? "" : r.data.optString("token", ""));
+        }
+        return r;
+    }
+
+    /** 登录用户把自己的 接口 / 直播 / EPG 推到云端（换手机自动带回来） */
+    public static Res saveSources(String api, String live, String epg) {
+        if (!ensureToken()) return Res.fail("登录已失效");
+        return post("save_sources", new FormBody.Builder()
+                .add("token", getToken())
+                .add("api", api == null ? "" : api.trim())
+                .add("live", live == null ? "" : live.trim())
+                .add("epg", epg == null ? "" : epg.trim()));
+    }
+
+    /** 播放记录上云 */
+    public static Res pushHistory(JSONArray items) {
+        if (!ensureToken()) return Res.fail("登录已失效");
+        return post("history_push", new FormBody.Builder()
+                .add("token", getToken())
+                .add("items", items == null ? "[]" : items.toString()));
+    }
+
+    /** 拉云端播放记录 */
+    public static Res pullHistory(int limit) {
+        if (!ensureToken()) return Res.fail("登录已失效");
+        return post("history_pull", new FormBody.Builder()
+                .add("token", getToken())
+                .add("limit", String.valueOf(limit)));
+    }
+
     /** 远端已有备份列表 */
     public static Res listRemote() {
         if (!isConfigured()) return Res.fail("还没配置云端账号");

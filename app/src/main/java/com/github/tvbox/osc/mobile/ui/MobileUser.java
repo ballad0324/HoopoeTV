@@ -89,6 +89,47 @@ public final class MobileUser {
         }).start();
     }
 
+    /** 注册：用户名 + 密码 + 邀请码；服务端校验通过后直接记 token（等同登录） */
+    public static void register(final String baseUrl, final String user, final String pass,
+                                final String invite, final LoginCallback callback) {
+        final Handler main = new Handler(Looper.getMainLooper());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final String msg;
+                final boolean ok;
+                try {
+                    CloudBackupHelper.Res res = CloudBackupHelper.register(baseUrl, user, pass, invite);
+                    if (res != null && res.ok) {
+                        String token = CloudBackupHelper.getToken();
+                        Hawk.put(K_TOKEN, token == null ? "" : token);
+                        Hawk.put(K_NAME, user == null ? "" : user.trim());
+                        ok = true;
+                        msg = "注册成功";
+                    } else {
+                        ok = false;
+                        msg = res == null ? "注册失败" : res.msg;
+                    }
+                } catch (Throwable t) {
+                    final String err = t.getMessage();
+                    main.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (callback != null) callback.onDone(false, "网络失败：" + err);
+                        }
+                    });
+                    return;
+                }
+                main.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (callback != null) callback.onDone(ok, msg);
+                    }
+                });
+            }
+        }).start();
+    }
+
     /** 退出登录：清掉 token（地址与账号密码保留，方便下次一键再登） */
     public static void logout() {
         Hawk.put(K_TOKEN, "");

@@ -23,6 +23,12 @@
 
 require __DIR__ . '/config.php';
 
+// 兼容旧 config.php：只覆盖 index.php 时也能跑（这些常量缺失就用默认值）
+if (!defined('T_INVITE')) define('T_INVITE', 'hoopoe_app_invite');
+if (!defined('T_HISTORY')) define('T_HISTORY', 'hoopoe_app_history');
+if (!defined('BUILTIN_PASS')) define('BUILTIN_PASS', 'hoopoe2026');
+if (!defined('SETUP_KEY')) define('SETUP_KEY', 'change-me-please-2026');
+
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 
@@ -173,6 +179,193 @@ switch ($action) {
         if (!$row) out(array('ok' => 0, 'msg' => '云端还没有配置内置源'));
         out(array('ok' => 1, 'api' => $row['api_url'], 'live' => $row['live_url'], 'epg' => $row['epg_url']));
 
+    case 'install':
+        // 一键建表/升级表结构（用 config.php 里的 SETUP_KEY 当口令），不需要进 phpMyAdmin
+        if (post('key') !== SETUP_KEY && (isset($_GET['key']) ? $_GET['key'] : '') !== SETUP_KEY) {
+            fail('key 不正确', 403);
+        }
+        $sqls = array(
+            "CREATE TABLE IF NOT EXISTS `" . T_USER . "` (
+              `id` int unsigned NOT NULL AUTO_INCREMENT,
+              `username` varchar(64) NOT NULL,
+              `pass_hash` varchar(255) NOT NULL,
+              `token` char(48) DEFAULT NULL,
+              `token_expire` int unsigned NOT NULL DEFAULT 0,
+              `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `uk_username` (`username`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci",
+            "CREATE TABLE IF NOT EXISTS `" . T_BACKUP . "` (
+              `id` int unsigned NOT NULL AUTO_INCREMENT,
+              `user_id` int unsigned NOT NULL,
+              `name` varchar(64) NOT NULL,
+              `size` int unsigned NOT NULL DEFAULT 0,
+              `payload` longtext NOT NULL,
+              `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `uk_user_name` (`user_id`,`name`),
+              KEY `idx_user_time` (`user_id`,`created_at`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci",
+            "CREATE TABLE IF NOT EXISTS `" . T_SOURCE . "` (
+              `id` int unsigned NOT NULL AUTO_INCREMENT,
+              `user_id` int unsigned NOT NULL,
+              `api_url` varchar(255) NOT NULL DEFAULT '',
+              `live_url` varchar(255) NOT NULL DEFAULT '',
+              `epg_url` varchar(255) NOT NULL DEFAULT '',
+              `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `uk_user` (`user_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci",
+            "CREATE TABLE IF NOT EXISTS `" . T_INVITE . "` (
+              `id` int unsigned NOT NULL AUTO_INCREMENT,
+              `code` varchar(64) NOT NULL,
+              `max_uses` int unsigned NOT NULL DEFAULT 0,
+              `used` int unsigned NOT NULL DEFAULT 0,
+              `enabled` tinyint NOT NULL DEFAULT 1,
+              `note` varchar(128) NOT NULL DEFAULT '',
+              `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `uk_code` (`code`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci",
+            "CREATE TABLE IF NOT EXISTS `" . T_HISTORY . "` (
+              `id` int unsigned NOT NULL AUTO_INCREMENT,
+              `user_id` int unsigned NOT NULL,
+              `site_key` varchar(64) NOT NULL DEFAULT '',
+              `vod_id` varchar(64) NOT NULL DEFAULT '',
+              `name` varchar(128) NOT NULL DEFAULT '',
+              `pic` varchar(512) NOT NULL DEFAULT '',
+              `flag` varchar(64) NOT NULL DEFAULT '',
+              `pos` int unsigned NOT NULL DEFAULT 0,
+              `dur` int unsigned NOT NULL DEFAULT 0,
+              `ep` int unsigned NOT NULL DEFAULT 1,
+              `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `uk_user_vod` (`user_id`,`site_key`,`vod_id`),
+              KEY `idx_user_time` (`user_id`,`updated_at`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci",
+        );
+        $done = array();
+        foreach ($sqls as $s) {
+            db()->exec($s);
+            $done[] = 'ok';
+        }
+        // 表里还没有邀请码时，种一个总码（max_uses=0 表示不限次数）
+        $st = db()->prepare('SELECT COUNT(*) AS c FROM ' . T_INVITE);
+        $st->execute();
+        $row = $st->fetch();
+        $seeded = '';
+        if ((int)$row['c'] === 0) {
+            $in = db()->prepare('INSERT INTO ' . T_INVITE . ' (code,max_uses,used,enabled,note,created_at) VALUES (?,?,?,?,?,?)');
+            $in->execute(array('98555576', 0, 0, 1, '固定邀请码', date('Y-m-d H:i:s')));
+            $seeded = '98555576';
+        }
+        out(array('ok' => 1, 'tables' => count($done), 'seeded_invite' => $seeded, 'msg' => '表结构已就绪'));
+
+    case 'register':
+        $user = trim(post('user'));
+        $pass = post('pass');
+        $invite = trim(post('invite'));
+        if ($user === '' || $pass === '' || $invite === '') fail('用户名 / 密码 / 邀请码都要填');
+        if (!preg_match('/^[0-9A-Za-z_\x{4e00}-\x{9fa5}]{2,32}$/u', $user)) fail('用户名 2-32 位，只能用中英文、数字、下划线');
+        if (strlen($pass) < 6) fail('密码至少 6 位');
+        $st = db()->prepare('SELECT * FROM ' . T_INVITE . ' WHERE code = ? AND enabled = 1 LIMIT 1');
+        $st->execute(array($invite));
+        $inv = $st->fetch();
+        if (!$inv) fail('邀请码无效', 403);
+        if ((int)$inv['max_uses'] > 0 && (int)$inv['used'] >= (int)$inv['max_uses']) {
+            fail('邀请码已用完', 403);
+        }
+        $st = db()->prepare('SELECT id FROM ' . T_USER . ' WHERE username = ? LIMIT 1');
+        $st->execute(array($user));
+        if ($st->fetch()) fail('用户名已被占用', 403);
+        $hash = password_hash($pass, PASSWORD_DEFAULT);
+        $token = bin2hex(random_bytes(24));
+        $expire = time() + 86400 * 30;
+        $in = db()->prepare('INSERT INTO ' . T_USER . ' (username,pass_hash,token,token_expire,created_at) VALUES (?,?,?,?,?)');
+        $in->execute(array($user, $hash, $token, $expire, date('Y-m-d H:i:s')));
+        $up = db()->prepare('UPDATE ' . T_INVITE . ' SET used = used + 1 WHERE id = ?');
+        $up->execute(array($inv['id']));
+        out(array('ok' => 1, 'token' => $token, 'user' => $user, 'expire' => $expire, 'msg' => '注册成功'));
+
+    case 'save_sources':
+        $u = auth();
+        $api = trim(post('api'));
+        $live = trim(post('live'));
+        $epg = trim(post('epg'));
+        $st = db()->prepare('SELECT id FROM ' . T_SOURCE . ' WHERE user_id = ? LIMIT 1');
+        $st->execute(array($u['id']));
+        if ($st->fetch()) {
+            $up = db()->prepare('UPDATE ' . T_SOURCE . ' SET api_url = ?, live_url = ?, epg_url = ? WHERE user_id = ?');
+            $up->execute(array($api, $live, $epg, $u['id']));
+        } else {
+            $in = db()->prepare('INSERT INTO ' . T_SOURCE . ' (user_id,api_url,live_url,epg_url) VALUES (?,?,?,?)');
+            $in->execute(array($u['id'], $api, $live, $epg));
+        }
+        out(array('ok' => 1, 'api' => $api, 'live' => $live, 'epg' => $epg));
+
+    case 'history_push':
+        // 播放记录上云：items = JSON 数组，单条 {site,vod_id,name,pic,flag,pos,dur,ep}
+        $u = auth();
+        $raw = post('items');
+        $items = json_decode($raw, true);
+        if (!is_array($items)) fail('items 不是合法 JSON');
+        $cnt = 0;
+        $now = date('Y-m-d H:i:s');
+        foreach ($items as $it) {
+            if (!is_array($it)) continue;
+            $vod = isset($it['vod_id']) ? (string)$it['vod_id'] : '';
+            if ($vod === '') continue;
+            $site = isset($it['site']) ? (string)$it['site'] : '';
+            $name = mb_substr(isset($it['name']) ? (string)$it['name'] : '', 0, 60);
+            $pic = mb_substr(isset($it['pic']) ? (string)$it['pic'] : '', 0, 500);
+            $flag = mb_substr(isset($it['flag']) ? (string)$it['flag'] : '', 0, 60);
+            $pos = isset($it['pos']) ? (int)$it['pos'] : 0;
+            $dur = isset($it['dur']) ? (int)$it['dur'] : 0;
+            $ep = isset($it['ep']) ? (int)$it['ep'] : 1;
+            $st = db()->prepare('SELECT id FROM ' . T_HISTORY . ' WHERE user_id = ? AND site_key = ? AND vod_id = ? LIMIT 1');
+            $st->execute(array($u['id'], $site, $vod));
+            if ($st->fetch()) {
+                $up = db()->prepare('UPDATE ' . T_HISTORY . ' SET name = ?, pic = ?, flag = ?, pos = ?, dur = ?, ep = ?, updated_at = ? WHERE user_id = ? AND site_key = ? AND vod_id = ?');
+                $up->execute(array($name, $pic, $flag, $pos, $dur, $ep, $now, $u['id'], $site, $vod));
+            } else {
+                $in = db()->prepare('INSERT INTO ' . T_HISTORY . ' (user_id,site_key,vod_id,name,pic,flag,pos,dur,ep,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?)');
+                $in->execute(array($u['id'], $site, $vod, $name, $pic, $flag, $pos, $dur, $ep, $now));
+            }
+            $cnt++;
+        }
+        // 每个账号只保留最近 200 条
+        $q = db()->prepare('SELECT id FROM ' . T_HISTORY . ' WHERE user_id = ? ORDER BY updated_at DESC');
+        $q->execute(array($u['id']));
+        $ids = $q->fetchAll();
+        if (count($ids) > 200) {
+            $del = db()->prepare('DELETE FROM ' . T_HISTORY . ' WHERE id = ?');
+            foreach (array_slice($ids, 200) as $d) $del->execute(array($d['id']));
+        }
+        out(array('ok' => 1, 'count' => $cnt));
+
+    case 'history_pull':
+        $u = auth();
+        $limit = (int)post('limit', '100');
+        if ($limit <= 0 || $limit > 200) $limit = 100;
+        $st = db()->prepare('SELECT site_key,vod_id,name,pic,flag,pos,dur,ep,updated_at FROM ' . T_HISTORY . ' WHERE user_id = ? ORDER BY updated_at DESC LIMIT ' . $limit);
+        $st->execute(array($u['id']));
+        $items = array();
+        foreach ($st->fetchAll() as $r) {
+            $items[] = array(
+                'site' => $r['site_key'],
+                'vod_id' => $r['vod_id'],
+                'name' => $r['name'],
+                'pic' => $r['pic'],
+                'flag' => $r['flag'],
+                'pos' => (int)$r['pos'],
+                'dur' => (int)$r['dur'],
+                'ep' => (int)$r['ep'],
+                'time' => $r['updated_at'],
+            );
+        }
+        out(array('ok' => 1, 'items' => $items, 'count' => count($items)));
+
     default:
         fail('未知 action');
 }
+

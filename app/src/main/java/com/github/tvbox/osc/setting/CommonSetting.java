@@ -256,14 +256,34 @@ public class CommonSetting {
     /** 首页/搜索等取源时统一走这里：内置源 or 用户自填的解析源 */
     public static boolean useBuiltinSource() {
         int mode = getSourceModeIndex();
-        if (mode == 0) return true;
+        if (mode == 0) return isBuiltinUnlocked();
         if (mode == 1) return false;
         // 没手动切过：登录用户走内置源，未登录走自填源（v1.6.36 的默认规则）
         try {
-            return com.github.tvbox.osc.mobile.ui.MobileUser.isLoggedIn();
+            return com.github.tvbox.osc.mobile.ui.MobileUser.isLoggedIn() && isBuiltinUnlocked();
         } catch (Throwable th) {
             return false;
         }
+    }
+
+    /* ===================== 出厂内置源需要口令解锁（v1.7） ===================== */
+
+    /** 出厂内置源的解锁口令；改了这里就等于换密码 */
+    public static final String BUILTIN_PASS = "hoopoe2026";
+
+    private static final String KEY_BUILTIN_UNLOCK = "mobile_builtin_unlock";
+
+    public static boolean isBuiltinUnlocked() {
+        try {
+            Boolean v = Hawk.get(KEY_BUILTIN_UNLOCK, Boolean.FALSE);
+            return v != null && v;
+        } catch (Throwable th) {
+            return false;
+        }
+    }
+
+    public static void putBuiltinUnlocked(boolean unlocked) {
+        Hawk.put(KEY_BUILTIN_UNLOCK, unlocked);
     }
 
     /* ===================== 内置源（已改为云端下发） ===================== */

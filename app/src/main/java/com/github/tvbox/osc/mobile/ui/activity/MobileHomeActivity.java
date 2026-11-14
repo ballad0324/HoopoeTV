@@ -114,6 +114,8 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
     private String lastHomeKey;
     /** 是否因为设置页改了接口地址而正在重载配置（用于给出「已重新加载」反馈） */
     private boolean cfgReloading;
+    /** 本次打开 App 是否已从云端拉过播放记录（避免每次 onResume 都请求） */
+    private boolean cloudHistoryPulled;
 
     @Override
     protected int getLayoutResID() {
@@ -319,6 +321,7 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         final EditText etServer = content.findViewById(R.id.etServer);
         final EditText etUser = content.findViewById(R.id.etUser);
         final EditText etPass = content.findViewById(R.id.etPass);
+        final EditText etInvite = content.findViewById(R.id.etInvite);
         final TextView tvLoginTip = content.findViewById(R.id.tvLoginTip);
 
         etServer.setText(CloudBackupHelper.getBaseUrl());
@@ -329,6 +332,39 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+            }
+        });
+
+        // 注册（v1.7）：用户名 + 密码 + 邀请码，邀请码不对注册不了
+        content.findViewById(R.id.tvRegister).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String server = etServer.getText() == null ? "" : etServer.getText().toString().trim();
+                String user = etUser.getText() == null ? "" : etUser.getText().toString().trim();
+                String pass = etPass.getText() == null ? "" : etPass.getText().toString();
+                String invite = etInvite.getText() == null ? "" : etInvite.getText().toString().trim();
+                if (TextUtils.isEmpty(server) || TextUtils.isEmpty(user)
+                        || TextUtils.isEmpty(pass) || TextUtils.isEmpty(invite)) {
+                    Toast.makeText(MobileHomeActivity.this, "服务器、用户名、密码、邀请码都要填",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                tvLoginTip.setVisibility(View.VISIBLE);
+                tvLoginTip.setText("正在注册…");
+                MobileUser.register(server, user, pass, invite, new MobileUser.LoginCallback() {
+                    @Override
+                    public void onDone(boolean ok, String msg) {
+                        if (ok) {
+                            Toast.makeText(MobileHomeActivity.this, "注册成功，已自动登录",
+                                    Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                            reloadAfterAccountChange();
+                        } else {
+                            tvLoginTip.setVisibility(View.VISIBLE);
+                            tvLoginTip.setText("注册失败：" + msg);
+                        }
+                    }
+                });
             }
         });
         content.findViewById(R.id.tvLogin).setOnClickListener(new View.OnClickListener() {
@@ -390,6 +426,11 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
     protected void onResume() {
         super.onResume();
         applyDisplaySettings();
+        // 登录用户：把云端播放记录拉回来合并（换设备也能看到「继续观看」）
+        if (!cloudHistoryPulled) {
+            cloudHistoryPulled = true;
+            MobilePlayHistory.pullFromCloud();
+        }
         refreshHistory();
         // 从详情页收藏/取消收藏返回时，必须重读本机收藏，否则首页「我的收藏」永远停在旧数据
         refreshFav();

@@ -44,6 +44,7 @@ public class MobileAdminActivity extends BaseActivity {
     private View llSourceConfig;
     private TextView tvSourceLoginHint;
     private TextView tvCloudHint;
+    private boolean pulledOnce = false;
 
     @Override
     protected int getLayoutResID() {
@@ -72,7 +73,7 @@ public class MobileAdminActivity extends BaseActivity {
             tvModeBuiltin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    switchSourceMode(0);
+                    askBuiltinPassword();
                 }
             });
         }
@@ -96,6 +97,7 @@ public class MobileAdminActivity extends BaseActivity {
                 }
                 CommonSetting.putApiUrl(url);
                 CommonSetting.markConfigDirty();
+                syncSourcesToCloud();
                 toast("接口地址已保存，返回首页自动重载");
                 refresh();
             }
@@ -104,6 +106,7 @@ public class MobileAdminActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 CommonSetting.putLiveUrl(textOf(etLiveUrl));
+                syncSourcesToCloud();
                 toast(TextUtils.isEmpty(textOf(etLiveUrl)) ? "直播源已清空" : "直播源已保存");
                 refresh();
             }
@@ -112,6 +115,7 @@ public class MobileAdminActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 CommonSetting.putEpgUrl(textOf(etEpgUrl));
+                syncSourcesToCloud();
                 toast(TextUtils.isEmpty(textOf(etEpgUrl)) ? "EPG 地址已清空" : "EPG 地址已保存");
                 refresh();
             }
@@ -219,6 +223,12 @@ public class MobileAdminActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         refresh();
+        // 登录用户本地还没填过地址时，从云端取一次（新设备登录即可用）
+        if (!pulledOnce && MobileUser.isLoggedIn()
+                && TextUtils.isEmpty(CommonSetting.getApiUrlStored())) {
+            pulledOnce = true;
+            pullSourcesFromCloud();
+        }
     }
 
     private void refresh() {
@@ -299,10 +309,92 @@ public class MobileAdminActivity extends BaseActivity {
                     : android.graphics.Typeface.BOLD);
         }
         if (tvModeHint != null) {
-            tvModeHint.setText(builtin
-                    ? "当前用内置源（App 自带）；切到「解析源」后使用下面填的接口地址"
-                    : "当前用解析源（你自己填的接口）；切回「内置源」后用 App 自带源");
+            if (!CommonSetting.isBuiltinUnlocked()) {
+                tvModeHint.setText("内置源需口令解锁：点「内置源」输口令；不开则用下面你自己填的接口");
+            } else {
+                tvModeHint.setText(builtin
+                        ? "当前用内置源（App 自带）；切到「解析源」后使用下面填的接口地址"
+                        : "当前用解析源（你自己填的接口）；切回「内置源」后用 App 自带源");
+            }
         }
+    }
+
+    /** 内置源要口令：已解锁就直接切；没解锁先要密码，输对才启用，输错继续用自填源 */
+    private void askBuiltinPassword() {
+        if (CommonSetting.isBuiltinUnlocked()) {
+            switchSourceMode(0);
+            return;
+        }
+        final EditText et = new EditText(this);
+        et.setHint("内置源口令");
+        et.setSingleLine(true);
+        et.setInputType(android.text.InputType.TYPE_CLASS_TEXT
+                | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        int pad = (int) (16 * getResources().getDisplayMetrics().density);
+        et.setPadding(pad, pad / 2, pad, pad / 2);
+        new AlertDialog.Builder(this)
+                .setTitle("启用内置源")
+                .setMessage("内置源是 App 自带的片库，需要口令才能开启；不输入口令则继续用你自己填的解析源。")
+                .setView(et)
+                .setNegativeButton("取消", null)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String pass = et.getText() == null ? "" : et.getText().toString().trim();
+                        if (CommonSetting.BUILTIN_PASS.equals(pass)) {
+                            CommonSetting.putBuiltinUnlocked(true);
+                            switchSourceMode(0);
+                        } else {
+                            toast("口令不对，仍使用你自己填的解析源");
+                        }
+                    }
+                })
+                .show();
+    }
+
+    /** 登录用户的三个地址改完就推到云端（换设备登录能带回来）；未登录只存本地 */
+    private void syncSourcesToCloud() {
+        if (!MobileUser.isLoggedIn()) return;
+        final String api = CommonSetting.getApiUrlStored();
+        final String live = CommonSetting.getLiveUrl();
+        final String epg = CommonSetting.getEpgUrl();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    com.github.tvbox.osc.util.CloudBackupHelper.saveSources(api, live, epg);
+                } catch (Throwable ignored) {
+                }
+            }
+        }).start();
+    }
+
+    /** 登录时把云端那套地址拉回来回填本地（新机器登录即用） */
+    private void pullSourcesFromCloud() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    com.github.tvbox.osc.util.CloudBackupHelper.Res r =
+                            com.github.tvbox.osc.util.CloudBackupHelper.fetchSources();
+                    if (r == null || !r.ok || r.data == null) return;
+                    String api = r.data.optString("api", "");
+                    String live = r.data.optString("live", "");
+                    String epg = r.data.optString("epg", "");
+                    if (!TextUtils.isEmpty(api)) CommonSetting.putApiUrl(api.trim());
+                    if (!TextUtils.isEmpty(live)) CommonSetting.putLiveUrl(live.trim());
+                    if (!TextUtils.isEmpty(epg)) CommonSetting.putEpgUrl(epg.trim());
+                    CommonSetting.markConfigDirty();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refresh();
+                        }
+                    });
+                } catch (Throwable ignored) {
+                }
+            }
+        }).start();
     }
 
     /** 胶囊切换：写入源模式后立即刷新生效源，返回首页时会重载分类 */

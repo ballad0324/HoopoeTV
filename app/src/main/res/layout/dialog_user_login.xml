@@ -95,6 +95,29 @@
         android:textSize="13sp" />
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="邀请码（注册用，登录可留空）"
+        android:textColor="@color/shell_text_dim"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/etInvite"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/shape_setting_card"
+        android:hint="邀请码"
+        android:inputType="text"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:singleLine="true"
+        android:textColor="@color/shell_text"
+        android:textColorHint="@color/shell_text_dim"
+        android:textSize="13sp" />
+
+    <TextView
         android:id="@+id/tvLoginTip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -118,6 +141,18 @@
             android:gravity="center"
             android:text="取消"
             android:textColor="@color/shell_text_dim"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tvRegister"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_setting_card"
+            android:gravity="center"
+            android:text="注册"
+            android:textColor="@color/shell_text"
             android:textSize="15sp" />
 
         <TextView

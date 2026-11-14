@@ -95,6 +95,7 @@ public class MobilePlayHistory {
             list.remove(list.size() - 1);
         }
         save(list);
+        pushToCloud();
     }
 
     /** 删除一条记录（首页/历史页长按删除用） */
@@ -140,5 +141,86 @@ public class MobilePlayHistory {
             Hawk.put(KEY, arr.toString());
         } catch (Throwable ignored) {
         }
+    }
+
+    /* ===================== 云端同步（v1.7） ===================== */
+
+    /** 本地记录推到 MySQL（登录才推，静默失败，不阻塞播放） */
+    public static void pushToCloud() {
+        if (!com.github.tvbox.osc.mobile.ui.MobileUser.isLoggedIn()) return;
+        final JSONArray arr = new JSONArray();
+        for (Item it : load()) {
+            try {
+                JSONObject o = new JSONObject();
+                o.put("site", it.sourceKey == null ? "" : it.sourceKey);
+                o.put("vod_id", it.vodId);
+                o.put("name", it.name == null ? "" : it.name);
+                o.put("pic", it.pic == null ? "" : it.pic);
+                o.put("flag", it.flag == null ? "" : it.flag);
+                o.put("pos", it.progress);
+                o.put("dur", it.duration);
+                o.put("ep", it.playIndex);
+                arr.put(o);
+            } catch (Throwable ignored) {
+            }
+        }
+        if (arr.length() == 0) return;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    com.github.tvbox.osc.util.CloudBackupHelper.pushHistory(arr);
+                } catch (Throwable ignored) {
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 从云端拉回并以「时间新的优先」合并进本地（换设备登录后首页就能看到继续观看）。
+     * 只在登录态执行，静默失败。
+     */
+    public static void pullFromCloud() {
+        if (!com.github.tvbox.osc.mobile.ui.MobileUser.isLoggedIn()) return;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    com.github.tvbox.osc.util.CloudBackupHelper.Res r =
+                            com.github.tvbox.osc.util.CloudBackupHelper.pullHistory(100);
+                    if (r == null || !r.ok || r.data == null) return;
+                    JSONArray items = r.data.optJSONArray("items");
+                    if (items == null || items.length() == 0) return;
+                    List<Item> local = load();
+                    java.util.Map<String, Long> localTime = new java.util.HashMap<>();
+                    for (Item it : local) localTime.put(it.sourceKey + "/" + it.vodId, it.time);
+                    List<Item> merged = new ArrayList<>(local);
+                    for (int i = 0; i < items.length(); i++) {
+                        JSONObject o = items.optJSONObject(i);
+                        if (o == null) continue;
+                        String vod = o.optString("vod_id", "");
+                        if (vod.length() == 0) continue;
+                        String site = o.optString("site", "");
+                        String key = site + "/" + vod;
+                        Long lt = localTime.get(key);
+                        if (lt != null && lt > 0) continue; // 本地已有，交给 push 覆盖云端
+                        Item it = new Item();
+                        it.vodId = vod;
+                        it.sourceKey = site;
+                        it.name = o.optString("name", "");
+                        it.pic = o.optString("pic", "");
+                        it.flag = o.optString("flag", "");
+                        it.playIndex = o.optInt("ep", 0);
+                        it.progress = o.optLong("pos", 0);
+                        it.duration = o.optLong("dur", 0);
+                        it.time = System.currentTimeMillis();
+                        merged.add(it);
+                    }
+                    while (merged.size() > 50) merged.remove(merged.size() - 1);
+                    save(merged);
+                } catch (Throwable ignored) {
+                }
+            }
+        }).start();
     }
 }
