@@ -183,7 +183,7 @@ public class MobileDetailActivity extends BaseActivity {
     protected void init() {
         try {
             stage = "dock";
-            MobileDockHelper.bind(this, MobileDockHelper.TAB_VOD);
+            com.github.tvbox.osc.mobile.ui.compose.MobileHomeDock.bindDockOnly(this, findViewById(R.id.cvDock), com.github.tvbox.osc.mobile.ui.compose.MobileHomeDock.TAB_VOD);
             stage = "bindViews";
             bindViews();
             stage = "glassCard";

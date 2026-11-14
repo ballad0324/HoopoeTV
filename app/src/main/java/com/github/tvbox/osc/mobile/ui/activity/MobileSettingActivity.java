@@ -78,7 +78,7 @@ public class MobileSettingActivity extends BaseActivity {
     @Override
     protected void init() {
         // 设置页不属于 dock 任何一项（设置入口已移到各页右上角），传 TAB_NONE 让四项都不点亮
-        MobileDockHelper.bind(this, MobileDockHelper.TAB_NONE);
+        com.github.tvbox.osc.mobile.ui.compose.MobileHomeDock.bindDockOnly(this, findViewById(R.id.cvDock), com.github.tvbox.osc.mobile.ui.compose.MobileHomeDock.TAB_NONE);
         findViewById(R.id.btnBack).setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(android.view.View v) {

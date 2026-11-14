@@ -223,7 +223,9 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         refreshHistory();
         // 从详情页收藏/取消收藏返回时，必须重读本机收藏，否则首页「我的收藏」永远停在旧数据
         refreshFav();
-        // 从直播页/设置页返回时，底部导航选中态复位到「影视」
+        // 从直播页/设置页返回时，底部导航选中态复位到「影视」，并恢复分类段
+        // （直播/搜索/发现/详情等页会把分类段藏起来，只留四个入口）
+        HomeDockState.updateCategoriesVisible(true);
         HomeDockState.updateSelectedDock(0);
         // 设置页改过「接口地址」：这里就地重载配置并重建首页，不再要求用户杀进程重启
         if (CommonSetting.consumeConfigDirty()) {

@@ -150,7 +150,7 @@ public class MobileLiveActivity extends BaseActivity {
     @Override
     protected void init() {
         prefs = getSharedPreferences("hoopoe_live", MODE_PRIVATE);
-        MobileDockHelper.bind(this, MobileDockHelper.TAB_LIVE);
+        com.github.tvbox.osc.mobile.ui.compose.MobileHomeDock.bindDockOnly(this, findViewById(R.id.cvDock), com.github.tvbox.osc.mobile.ui.compose.MobileHomeDock.TAB_LIVE);
         findViewById(R.id.tvBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

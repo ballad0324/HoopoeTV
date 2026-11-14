@@ -197,6 +197,6 @@
             android:textSize="12sp" />
     </FrameLayout>
 
-    <include layout="@layout/view_mobile_dock" />
+    <androidx.compose.ui.platform.ComposeView android:id="@+id/cvDock" android:layout_width="match_parent" android:layout_height="wrap_content" />
 
 </LinearLayout>

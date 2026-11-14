@@ -551,6 +551,6 @@
     </androidx.core.widget.NestedScrollView>
 
     <!-- 详情页也带底部 dock（v1.5.9） -->
-    <include layout="@layout/view_mobile_dock" />
+    <androidx.compose.ui.platform.ComposeView android:id="@+id/cvDock" android:layout_width="match_parent" android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -44,7 +44,7 @@ public class MobileRecordActivity extends BaseActivity implements RecordHost {
 
     @Override
     protected void init() {
-        MobileDockHelper.bind(this, MobileDockHelper.TAB_VOD);
+        com.github.tvbox.osc.mobile.ui.compose.MobileHomeDock.bindDockOnly(this, findViewById(R.id.cvDock), com.github.tvbox.osc.mobile.ui.compose.MobileHomeDock.TAB_VOD);
         mode = getIntent() == null ? MODE_HISTORY : getIntent().getStringExtra("mode");
         if (mode == null) mode = MODE_HISTORY;
 

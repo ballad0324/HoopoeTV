@@ -173,7 +173,7 @@ public class MobileSearchActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        MobileDockHelper.bind(this, MobileDockHelper.TAB_SEARCH);
+        com.github.tvbox.osc.mobile.ui.compose.MobileHomeDock.bindDockOnly(this, findViewById(R.id.cvDock), com.github.tvbox.osc.mobile.ui.compose.MobileHomeDock.TAB_SEARCH);
         bindViews();
         sourceViewModel = new ViewModelProvider(this).get(SourceViewModel.class);
         EventBus.getDefault().register(this);

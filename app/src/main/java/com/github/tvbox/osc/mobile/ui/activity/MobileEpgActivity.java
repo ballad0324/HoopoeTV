@@ -75,7 +75,7 @@ public class MobileEpgActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        MobileDockHelper.bind(this, MobileDockHelper.TAB_LIVE);
+        com.github.tvbox.osc.mobile.ui.compose.MobileHomeDock.bindDockOnly(this, findViewById(R.id.cvDock), com.github.tvbox.osc.mobile.ui.compose.MobileHomeDock.TAB_LIVE);
         llSource = findViewById(R.id.llSource);
         rvChannel = findViewById(R.id.rvEpgChannel);
         rvProgram = findViewById(R.id.rvEpgProgram);

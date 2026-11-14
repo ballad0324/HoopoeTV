@@ -105,7 +105,7 @@ public class MobileDiscoverActivity extends BaseActivity {
         llRankPeriod = findViewById(R.id.llRankPeriod);
         tvEmpty = findViewById(R.id.tvDiscoverEmpty);
 
-        MobileDockHelper.bind(this, MobileDockHelper.TAB_DISCOVER);
+        com.github.tvbox.osc.mobile.ui.compose.MobileHomeDock.bindDockOnly(this, findViewById(R.id.cvDock), com.github.tvbox.osc.mobile.ui.compose.MobileHomeDock.TAB_DISCOVER);
 
         tabShowtime.setOnClickListener(new View.OnClickListener() {
             @Override
