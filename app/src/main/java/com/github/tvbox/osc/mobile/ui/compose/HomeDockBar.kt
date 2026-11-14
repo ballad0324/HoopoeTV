@@ -120,7 +120,7 @@ interface HomeDockHost {
     /** 点了第 index 个分类（对应 ViewPager 页） */
     fun onCategorySelected(index: Int)
 
-    /** 点了 dock 图标：0 影视 / 1 直播 / 2 搜索 / 3 发现 */
+    /** 点了 dock 图标：0 首页 / 1 直播 / 2 搜索 / 3 发现 */
     fun onDockClick(tab: Int)
 }
 
@@ -217,7 +217,7 @@ private fun NavBar(onCategorySelect: (Int) -> Unit, onDockClick: (Int) -> Unit, 
     val showSearch = HomeDockState.showSearch
     val showLabels = HomeDockState.showLabels
     val categoriesVisible = HomeDockState.categoriesVisible
-    // 「影视」就是首页那页，分类列表的第 0 项（首页）不再重复出现
+    // 「首页」就是影视分类的第 0 页（带我的收藏 / 播放历史），分类段里不再重复出现这项
     val categories = if (categoriesVisible) HomeDockState.categories.drop(1) else emptyList()
 
     val fill = colorResource(R.color.shell_card_fill)
@@ -228,14 +228,14 @@ private fun NavBar(onCategorySelect: (Int) -> Unit, onDockClick: (Int) -> Unit, 
 
     val entries = if (showSearch) {
         listOf(
-            DockEntry(TAB_VOD, "影视", R.drawable.icon_home),
+            DockEntry(TAB_VOD, "首页", R.drawable.icon_home),
             DockEntry(TAB_LIVE, "直播", R.drawable.hm_live),
             DockEntry(TAB_SEARCH, "搜索", R.drawable.hm_search),
             DockEntry(TAB_DISCOVER, "发现", R.drawable.ic_nav_discover)
         )
     } else {
         listOf(
-            DockEntry(TAB_VOD, "影视", R.drawable.icon_home),
+            DockEntry(TAB_VOD, "首页", R.drawable.icon_home),
             DockEntry(TAB_LIVE, "直播", R.drawable.hm_live),
             DockEntry(TAB_DISCOVER, "发现", R.drawable.ic_nav_discover)
         )

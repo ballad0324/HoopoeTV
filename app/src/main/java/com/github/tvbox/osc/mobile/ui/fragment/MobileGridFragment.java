@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -47,9 +48,17 @@ public class MobileGridFragment extends BaseLazyFragment {
     private RecyclerView rvVod;
     private ProgressBar pbLoading;
     private TextView tvEmpty;
-    private TextView tvFilterToggle;
+    /** 顶部左侧：当前分类名 */
+    private TextView tvCatName;
+    /** 顶部右侧：筛选胶囊开关（轨道 + 圆钮 + 文案） */
+    private LinearLayout llFilterSwitch;
+    private FrameLayout swTrack;
+    private View swThumb;
+    private TextView tvFilterLabel;
     private TextView tvSortInfo;
     private LinearLayout llFilterBar;
+    /** 筛选开关当前是否打开（默认关闭） */
+    private boolean filterSwitchOn = false;
 
     private MobileVodAdapter adapter;
     private SourceViewModel sourceViewModel;
@@ -86,7 +95,11 @@ public class MobileGridFragment extends BaseLazyFragment {
         rvVod = findViewById(R.id.rvVod);
         pbLoading = findViewById(R.id.pbLoading);
         tvEmpty = findViewById(R.id.tvEmpty);
-        tvFilterToggle = findViewById(R.id.tvFilterToggle);
+        tvCatName = findViewById(R.id.tvCatName);
+        llFilterSwitch = findViewById(R.id.llFilterSwitch);
+        swTrack = findViewById(R.id.swTrack);
+        swThumb = findViewById(R.id.swThumb);
+        tvFilterLabel = findViewById(R.id.tvFilterLabel);
         tvSortInfo = findViewById(R.id.tvSortInfo);
         llFilterBar = findViewById(R.id.llFilterBar);
 
@@ -94,13 +107,24 @@ public class MobileGridFragment extends BaseLazyFragment {
             sortData = (MovieSort.SortData) getArguments().getSerializable("sortData");
         }
 
-        tvFilterToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean expanded = llFilterBar.getVisibility() == View.VISIBLE;
-                llFilterBar.setVisibility(expanded ? View.GONE : View.VISIBLE);
-            }
-        });
+        // 左上角写当前分类名：首页那页 sortData 为 null，统一显示「首页」
+        if (tvCatName != null) {
+            String name = (sortData == null || sortData.name == null || sortData.name.isEmpty())
+                    ? "首页" : sortData.name;
+            tvCatName.setText(name);
+        }
+
+        if (llFilterSwitch != null) {
+            llFilterSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    filterSwitchOn = !filterSwitchOn;
+                    applyFilterSwitch(filterSwitchOn, true);
+                    llFilterBar.setVisibility(filterSwitchOn ? View.VISIBLE : View.GONE);
+                }
+            });
+            applyFilterSwitch(false, false);
+        }
 
         buildFilterBar();
 
@@ -278,16 +302,37 @@ public class MobileGridFragment extends BaseLazyFragment {
 
     /* ===================== 筛选条 ===================== */
 
+    /** 筛选胶囊开关的外观：轨道背景 + 圆钮位移 + 文案颜色，明暗主题都走主题色 */
+    private void applyFilterSwitch(boolean on, boolean animate) {
+        if (swTrack == null || swThumb == null) return;
+        swTrack.setBackgroundResource(on
+                ? R.drawable.shape_switch_track_on
+                : R.drawable.shape_switch_track_off);
+        // 轨道 34dp - 圆钮 14dp - 左右各 2dp 内边距
+        float onX = dp(18);
+        if (animate) {
+            swThumb.animate().translationX(on ? onX : 0f).setDuration(160).start();
+        } else {
+            swThumb.setTranslationX(on ? onX : 0f);
+        }
+        if (tvFilterLabel != null) {
+            tvFilterLabel.setTextColor(mContext.getResources().getColor(
+                    on ? R.color.shell_primary : R.color.shell_text_dim));
+        }
+    }
+
     private void buildFilterBar() {
         if (llFilterBar == null) return;
         llFilterBar.removeAllViews();
         if (sortData == null || sortData.filters == null || sortData.filters.isEmpty()) {
-            tvFilterToggle.setVisibility(View.GONE);
+            if (llFilterSwitch != null) llFilterSwitch.setVisibility(View.GONE);
             llFilterBar.setVisibility(View.GONE);
+            filterSwitchOn = false;
+            applyFilterSwitch(false, false);
             updateSortInfo();
             return;
         }
-        tvFilterToggle.setVisibility(View.VISIBLE);
+        if (llFilterSwitch != null) llFilterSwitch.setVisibility(View.VISIBLE);
 
         for (MovieSort.SortFilter filter : sortData.filters) {
             LinearLayout row = new LinearLayout(mContext);
