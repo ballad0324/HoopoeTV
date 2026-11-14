@@ -718,6 +718,25 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
             }
         }
         applyHomeOnlyBlocks(0);
+        applyPendingPageIndex();
+    }
+
+    /**
+     * 别的页面点导航栏分类时，会给首页带一个 mobile_page_index；
+     * 分类建好后按它定位一次，定位完就把 extra 清掉，避免下次进首页又跳。
+     */
+    private void applyPendingPageIndex() {
+        try {
+            int wanted = getIntent() == null ? 0 : getIntent().getIntExtra("mobile_page_index", 0);
+            if (wanted > 0 && wanted < fragments.size()) {
+                pager.setCurrentItem(wanted, false);
+                com.github.tvbox.osc.mobile.ui.compose.HomeDockState.updateSelectedCategory(wanted);
+                updateSectionTitle(wanted);
+                applyHomeOnlyBlocks(wanted);
+            }
+            if (wanted != 0) getIntent().removeExtra("mobile_page_index");
+        } catch (Throwable ignored) {
+        }
     }
 
     private String currentKey() {

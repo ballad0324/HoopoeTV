@@ -13,8 +13,8 @@ android {
     defaultConfig {
         applicationId 'com.hoopoetv.tvbox'
         targetSdkVersion 28
-        versionCode 10083
-        versionName "v1.6.32"
+        versionCode 10084
+        versionName "v1.6.33"
         multiDexEnabled true
         // UI 身份开关：false = TV 端 UI，true = 手机端 UI（由 mobile flavor 覆盖）
         buildConfigField "boolean", "UI_MOBILE", "false"

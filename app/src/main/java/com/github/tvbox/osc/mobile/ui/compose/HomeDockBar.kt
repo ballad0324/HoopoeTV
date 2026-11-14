@@ -138,6 +138,7 @@ fun bindHomeDock(view: ComposeView, host: HomeDockHost) {
     view.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
     view.setContent {
         NavBar(
+            highlightCategory = true,
             onCategorySelect = { index ->
                 HomeDockState.updateSelectedCategory(index)
                 HomeDockState.updateSelectedDock(TAB_VOD)
@@ -153,17 +154,19 @@ fun bindHomeDock(view: ComposeView, host: HomeDockHost) {
 
 /**
  * 子页面（直播 / 搜索 / 发现 / 详情 / 记录 / 设置等）侧入口：
- * 只留四个图标入口（隐藏分类段），点击跳转由这里自己完成，取代原 MobileDockHelper。
+ * v1.6.33 起所有页面都显示同一条完整导航栏（四项 + 分类段），
+ * 点分类会跳回影视首页并定位到该分类；点四项自己完成跳转。
  */
 fun bindDockOnly(activity: Activity?, view: android.view.View?, currentTab: Int) {
     if (activity == null || view !is ComposeView) return
     val composeView: ComposeView = view
-    HomeDockState.updateCategoriesVisible(false)
+    HomeDockState.updateCategoriesVisible(true)
     HomeDockState.updateSelectedDock(currentTab)
     composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
     composeView.setContent {
         NavBar(
-            onCategorySelect = {},
+            highlightCategory = false,
+            onCategorySelect = { index -> openHomeAtCategory(activity, index) },
             onDockClick = { tab ->
                 if (tab != currentTab) {
                     HomeDockState.updateSelectedDock(tab)
@@ -171,6 +174,21 @@ fun bindDockOnly(activity: Activity?, view: android.view.View?, currentTab: Int)
                 }
             }
         )
+    }
+}
+
+/** 子页面点了分类：直接回到影视首页，并让首页按 extra 定位到那一页 */
+private fun openHomeAtCategory(activity: Activity, index: Int) {
+    if (activity is MobileHomeActivity) {
+        // 首页自己点分类走的是 onCategorySelected，不会进到这里
+        return
+    }
+    try {
+        val intent = Intent(activity, MobileHomeActivity::class.java)
+        intent.putExtra("mobile_page_index", index)
+        activity.startActivity(intent)
+        activity.finish()
+    } catch (t: Throwable) {
     }
 }
 
@@ -193,7 +211,7 @@ private fun openTab(activity: Activity, tab: Int) {
 
 /** 一条玻璃胶囊导航栏：左边四个图标入口，右边分类 tab（整条可横滑） */
 @Composable
-private fun NavBar(onCategorySelect: (Int) -> Unit, onDockClick: (Int) -> Unit) {
+private fun NavBar(onCategorySelect: (Int) -> Unit, onDockClick: (Int) -> Unit, highlightCategory: Boolean) {
     val selectedDock = HomeDockState.selectedDock
     val selectedCategory = HomeDockState.selectedCategory
     val showSearch = HomeDockState.showSearch
@@ -290,7 +308,7 @@ private fun NavBar(onCategorySelect: (Int) -> Unit, onDockClick: (Int) -> Unit) 
                             modifier = Modifier.width(itemWidth).fillMaxHeight(),
                             iconRes = iconForCategory(categories[index]),
                             label = categories[index],
-                            selected = selectedCategory == realIndex && selectedDock == TAB_VOD,
+                            selected = highlightCategory && selectedCategory == realIndex && selectedDock == TAB_VOD,
                             primary = primary,
                             dim = dim,
                             showLabel = showLabels,
