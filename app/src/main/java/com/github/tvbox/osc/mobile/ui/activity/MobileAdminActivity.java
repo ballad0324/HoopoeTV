@@ -3,6 +3,7 @@ package com.github.tvbox.osc.mobile.ui.activity;
 import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.mobile.ui.MobileFavorites;
 import com.github.tvbox.osc.mobile.ui.MobilePlayHistory;
 import com.github.tvbox.osc.mobile.ui.MobileUser;
+import com.github.tvbox.osc.setting.CommonSetting;
 import com.github.tvbox.osc.util.FileUtils;
 
 import java.io.File;
@@ -22,7 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 管理面板（v1.6.36）：账号状态、数据源切换、本地数据清理、版本信息。
+ * 管理面板（v1.6.38）：账号、源模式胶囊（内置源/解析源）、站点切换、
+ * 接口地址 / 直播源 / EPG 三项（默认留空）、本地数据清理、版本信息。
  * 入口在首页右上角头像 → 用户面板里的「管理面板」。
  */
 public class MobileAdminActivity extends BaseActivity {
@@ -32,6 +35,12 @@ public class MobileAdminActivity extends BaseActivity {
     private TextView tvSource;
     private TextView tvSourceHint;
     private TextView tvVersion;
+    private TextView tvModeBuiltin;
+    private TextView tvModeCustom;
+    private TextView tvModeHint;
+    private EditText etApiUrl;
+    private EditText etLiveUrl;
+    private EditText etEpgUrl;
 
     @Override
     protected int getLayoutResID() {
@@ -45,6 +54,62 @@ public class MobileAdminActivity extends BaseActivity {
         tvSource = findViewById(R.id.tvSource);
         tvSourceHint = findViewById(R.id.tvSourceHint);
         tvVersion = findViewById(R.id.tvVersion);
+        tvModeBuiltin = findViewById(R.id.tvModeBuiltin);
+        tvModeCustom = findViewById(R.id.tvModeCustom);
+        tvModeHint = findViewById(R.id.tvModeHint);
+        etApiUrl = findViewById(R.id.etApiUrl);
+        etLiveUrl = findViewById(R.id.etLiveUrl);
+        etEpgUrl = findViewById(R.id.etEpgUrl);
+
+        // 源模式胶囊：内置源 / 解析源
+        if (tvModeBuiltin != null) {
+            tvModeBuiltin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switchSourceMode(0);
+                }
+            });
+        }
+        if (tvModeCustom != null) {
+            tvModeCustom.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switchSourceMode(1);
+                }
+            });
+        }
+
+        // 三个地址块：默认留空，保存即生效
+        findViewById(R.id.tvSaveApi).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = textOf(etApiUrl);
+                if (TextUtils.isEmpty(url)) {
+                    toast("接口地址为空，未保存");
+                    return;
+                }
+                CommonSetting.putApiUrl(url);
+                CommonSetting.markConfigDirty();
+                toast("接口地址已保存，返回首页自动重载");
+                refresh();
+            }
+        });
+        findViewById(R.id.tvSaveLive).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommonSetting.putLiveUrl(textOf(etLiveUrl));
+                toast(TextUtils.isEmpty(textOf(etLiveUrl)) ? "直播源已清空" : "直播源已保存");
+                refresh();
+            }
+        });
+        findViewById(R.id.tvSaveEpg).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommonSetting.putEpgUrl(textOf(etEpgUrl));
+                toast(TextUtils.isEmpty(textOf(etEpgUrl)) ? "EPG 地址已清空" : "EPG 地址已保存");
+                refresh();
+            }
+        });
 
         findViewById(R.id.tvBack).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,19 +207,27 @@ public class MobileAdminActivity extends BaseActivity {
     private void refresh() {
         if (MobileUser.isLoggedIn()) {
             tvAccount.setText("已登录：" + MobileUser.name());
-            tvAccountHint.setText("当前固定使用内置源，点击可退出登录");
+            tvAccountHint.setText("点击可退出登录；登录后默认走内置源");
         } else {
             tvAccount.setText("未登录");
-            tvAccountHint.setText("当前使用你自己填写的接口；登录后切到内置源");
+            tvAccountHint.setText("当前使用你自己填写的接口；登录后默认切到内置源");
         }
 
-        boolean logged = MobileUser.isLoggedIn();
-        String api = ApiConfig.getApiUrl();
+        boolean builtin = CommonSetting.useBuiltinSource();
+        String api = builtin ? ApiConfig.getDefaultApiUrl() : ApiConfig.getApiUrl();
         String home = "";
         SourceBean bean = ApiConfig.get().getHomeSourceBean();
         if (bean != null && !TextUtils.isEmpty(bean.getName())) home = bean.getName();
-        tvSource.setText((logged ? "内置源" : "自填源") + (TextUtils.isEmpty(home) ? "" : " · " + home));
+        tvSource.setText(builtin ? "内置源" : "解析源（自填）");
+        if (!TextUtils.isEmpty(home)) tvSource.setText(tvSource.getText() + " · " + home);
         tvSourceHint.setText(TextUtils.isEmpty(api) ? "还没有可用的接口地址" : api);
+
+        applyModeUi(builtin);
+
+        // 三个地址块回填当前值（没填过就是空）
+        if (etApiUrl != null) etApiUrl.setText(CommonSetting.getApiUrlStored());
+        if (etLiveUrl != null) etLiveUrl.setText(CommonSetting.getLiveUrl());
+        if (etEpgUrl != null) etEpgUrl.setText(CommonSetting.getEpgUrl());
 
         try {
             String ver = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
@@ -163,6 +236,47 @@ public class MobileAdminActivity extends BaseActivity {
         } catch (Throwable ignored) {
             tvVersion.setText("");
         }
+    }
+
+    /** 胶囊选中态：选中的那侧白底 + primary 文字，另一侧透明 + dim 文字 */
+    private void applyModeUi(boolean builtin) {
+        int onText = getResources().getColor(R.color.shell_primary);
+        int offText = getResources().getColor(R.color.shell_text_dim);
+        if (tvModeBuiltin != null) {
+            tvModeBuiltin.setBackgroundResource(builtin ? R.drawable.shape_home_segment_on : 0);
+            tvModeBuiltin.setTextColor(builtin ? onText : offText);
+            tvModeBuiltin.setTypeface(null, builtin ? android.graphics.Typeface.BOLD
+                    : android.graphics.Typeface.NORMAL);
+        }
+        if (tvModeCustom != null) {
+            tvModeCustom.setBackgroundResource(builtin ? 0 : R.drawable.shape_home_segment_on);
+            tvModeCustom.setTextColor(builtin ? offText : onText);
+            tvModeCustom.setTypeface(null, builtin ? android.graphics.Typeface.NORMAL
+                    : android.graphics.Typeface.BOLD);
+        }
+        if (tvModeHint != null) {
+            tvModeHint.setText(builtin
+                    ? "当前用内置源（App 自带）；切到「解析源」后使用下面填的接口地址"
+                    : "当前用解析源（你自己填的接口）；切回「内置源」后用 App 自带源");
+        }
+    }
+
+    /** 胶囊切换：写入源模式后立即刷新生效源，返回首页时会重载分类 */
+    private void switchSourceMode(int mode) {
+        CommonSetting.putSourceModeIndex(mode);
+        if (mode == 1) {
+            String stored = CommonSetting.getApiUrlStored();
+            if (TextUtils.isEmpty(stored)) {
+                toast("解析源还没填接口地址，先在下面「接口地址」里填一个");
+            }
+        }
+        CommonSetting.markConfigDirty();
+        toast(mode == 0 ? "已切到内置源" : "已切到解析源");
+        refresh();
+    }
+
+    private String textOf(EditText et) {
+        return et == null || et.getText() == null ? "" : et.getText().toString().trim();
     }
 
     private void confirm(String title, String msg, final Runnable action) {
@@ -183,7 +297,7 @@ public class MobileAdminActivity extends BaseActivity {
     private void confirmLogout() {
         new AlertDialog.Builder(this)
                 .setTitle("退出登录")
-                .setMessage("退出后将改回使用你自己填的接口，确定退出？")
+                .setMessage("退出后默认改用你自己填的解析源，确定退出？")
                 .setNegativeButton("取消", null)
                 .setPositiveButton("退出", new DialogInterface.OnClickListener() {
                     @Override
@@ -198,8 +312,8 @@ public class MobileAdminActivity extends BaseActivity {
 
     /** 切换点播站点（与设置页同一逻辑：写入 HOME_API 后回首页自动重载） */
     private void showSourcePicker() {
-        if (MobileUser.isLoggedIn()) {
-            toast("已登录固定使用内置源，退出登录后才能切换站点");
+        if (CommonSetting.useBuiltinSource()) {
+            toast("当前是内置源，切到「解析源」后可选站点");
             return;
         }
         List<SourceBean> all = ApiConfig.get().getSourceBeanList();

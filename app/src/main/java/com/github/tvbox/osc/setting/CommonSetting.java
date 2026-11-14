@@ -214,6 +214,12 @@ public class CommonSetting {
         Hawk.put(HawkConfig.API_URL, url);
     }
 
+    /** 用户自填的接口地址原文（不含内置源兜底），给「接口地址」输入框回填用 */
+    public static String getApiUrlStored() {
+        String s = Hawk.get(HawkConfig.API_URL, "");
+        return s == null ? "" : s;
+    }
+
     public static String getLiveUrl() {
         return Hawk.get(HawkConfig.LIVE_URL, "");
     }
@@ -228,6 +234,36 @@ public class CommonSetting {
 
     public static void putEpgUrl(String url) {
         Hawk.put(HawkConfig.EPG_URL, url);
+    }
+
+    /* ===================== 源模式（v1.6.38） ===================== */
+
+    /** 源模式存储键：0 = 内置源，1 = 解析源（用户自填接口），未设置时按登录态推断 */
+    private static final String KEY_SOURCE_MODE = "mobile_source_mode";
+
+    public static int getSourceModeIndex() {
+        try {
+            return Hawk.get(KEY_SOURCE_MODE, -1);
+        } catch (Throwable th) {
+            return -1;
+        }
+    }
+
+    public static void putSourceModeIndex(int index) {
+        Hawk.put(KEY_SOURCE_MODE, index);
+    }
+
+    /** 首页/搜索等取源时统一走这里：内置源 or 用户自填的解析源 */
+    public static boolean useBuiltinSource() {
+        int mode = getSourceModeIndex();
+        if (mode == 0) return true;
+        if (mode == 1) return false;
+        // 没手动切过：登录用户走内置源，未登录走自填源（v1.6.36 的默认规则）
+        try {
+            return com.github.tvbox.osc.mobile.ui.MobileUser.isLoggedIn();
+        } catch (Throwable th) {
+            return false;
+        }
     }
 
     /* ===================== 内置源（已改为云端下发） ===================== */

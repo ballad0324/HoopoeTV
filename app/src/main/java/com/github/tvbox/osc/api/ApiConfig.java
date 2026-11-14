@@ -158,10 +158,10 @@ public class ApiConfig {
     public static String getApiUrl() {
         String def = getDefaultApiUrl();
         if (def == null) def = "";
-        // 账号规则（v1.6.36）：已登录用户固定使用内置源，用户自填的接口一律不参与；
-        // 未登录才允许走 Hawk 里自己填的接口（没填同样回退内置源）。
+        // 源模式（v1.6.38）：管理面板的胶囊开关优先 —— 内置源 or 解析源（用户自填接口）。
+        // 没手动切过时按登录态推断（已登录 = 内置源，未登录 = 自填源），与 v1.6.36 一致。
         try {
-            if (com.github.tvbox.osc.mobile.ui.MobileUser.isLoggedIn()) {
+            if (com.github.tvbox.osc.setting.CommonSetting.useBuiltinSource()) {
                 return def.trim();
             }
         } catch (Throwable ignored) {

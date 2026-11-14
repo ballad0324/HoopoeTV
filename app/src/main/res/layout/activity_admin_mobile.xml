@@ -126,6 +126,212 @@
                     android:textSize="11sp" />
             </LinearLayout>
 
+            <!-- 源模式胶囊：内置源 / 解析源（自填接口），决定首页实际走哪条源 -->
+            <LinearLayout
+                android:id="@+id/llSourceMode"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/shape_home_segment_track"
+                android:orientation="horizontal"
+                android:padding="3dp">
+
+                <TextView
+                    android:id="@+id/tvModeBuiltin"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="内置源"
+                    android:textColor="@color/shell_text_dim"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tvModeCustom"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="解析源"
+                    android:textColor="@color/shell_text_dim"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvModeHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:textColor="@color/shell_text_dim"
+                android:textSize="11sp" />
+
+            <!-- 接口地址 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/shape_setting_card"
+                android:orientation="vertical"
+                android:paddingStart="14dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="接口地址"
+                        android:textColor="@color/shell_text"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tvSaveApi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="2dp"
+                        android:paddingBottom="4dp"
+                        android:text="保存"
+                        android:textColor="@color/shell_primary"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/etApiUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/shape_filter_chip"
+                    android:hint="填 TVBox 标准 json 接口地址"
+                    android:inputType="textUri"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:singleLine="true"
+                    android:textColor="@color/shell_text"
+                    android:textColorHint="@color/shell_text_dim"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- 直播源 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/shape_setting_card"
+                android:orientation="vertical"
+                android:paddingStart="14dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="直播源"
+                        android:textColor="@color/shell_text"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tvSaveLive"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="2dp"
+                        android:paddingBottom="4dp"
+                        android:text="保存"
+                        android:textColor="@color/shell_primary"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/etLiveUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/shape_filter_chip"
+                    android:hint="m3u / txt 直播源地址"
+                    android:inputType="textUri"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:singleLine="true"
+                    android:textColor="@color/shell_text"
+                    android:textColorHint="@color/shell_text_dim"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- EPG 地址 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/shape_setting_card"
+                android:orientation="vertical"
+                android:paddingStart="14dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="EPG 地址"
+                        android:textColor="@color/shell_text"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tvSaveEpg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="2dp"
+                        android:paddingBottom="4dp"
+                        android:text="保存"
+                        android:textColor="@color/shell_primary"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/etEpgUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/shape_filter_chip"
+                    android:hint="EPG 地址（可留空）"
+                    android:inputType="textUri"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:singleLine="true"
+                    android:textColor="@color/shell_text"
+                    android:textColorHint="@color/shell_text_dim"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
