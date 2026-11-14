@@ -20,6 +20,7 @@ import com.github.tvbox.osc.base.BaseActivity;
 import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.mobile.setting.MobileSetting;
 import com.github.tvbox.osc.mobile.ui.view.MobileDockHelper;
+import com.github.tvbox.osc.mobile.ui.compose.SettingsHost;
 import com.github.tvbox.osc.mobile.ui.adapter.MobileSettingAdapter;
 import com.github.tvbox.osc.setting.CommonSetting;
 import com.github.tvbox.osc.setting.TvSetting;
@@ -47,10 +48,8 @@ import xyz.doikki.videoplayer.player.VideoView;
  * - 「手机端专有」的显示开关已固定为开启，不再在本页展示（见 {@link MobileSetting}）；
  * - TV 端专有项（T 型双栏、拨轮位置、焦点防抖等）不在此页出现，见 {@link TvSetting}。
  */
-public class MobileSettingActivity extends BaseActivity {
+public class MobileSettingActivity extends BaseActivity implements SettingsHost {
 
-    private RecyclerView rvSetting;
-    private MobileSettingAdapter adapter;
     /** 缓存占用文案，异步算完后回填（缓存目录可能很大，不能卡主线程） */
     private String cacheSizeText = "计算中…";
 
@@ -86,17 +85,12 @@ public class MobileSettingActivity extends BaseActivity {
             }
         });
 
-        rvSetting = findViewById(R.id.rvSetting);
         getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        rvSetting.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MobileSettingAdapter();
-        adapter.setOnItemClick(new MobileSettingAdapter.OnItemClick() {
-            @Override
-            public void onItemClick(MobileSettingAdapter.Row row) {
-                if (row != null && row.action != null) row.action.run();
-            }
-        });
-        rvSetting.setAdapter(adapter);
+        // 设置列表本体由 Compose 渲染（SettingsScreen.kt），这里只把 Row 数据喂给它
+        androidx.compose.ui.platform.ComposeView cv = findViewById(R.id.cvSettings);
+        if (cv != null) {
+            com.github.tvbox.osc.mobile.ui.compose.MobileSettings.bindSettings(cv, this);
+        }
         refreshRows();
         refreshCacheSizeAsync();
 
@@ -353,16 +347,17 @@ public class MobileSettingActivity extends BaseActivity {
         // 手机端专有的三个显示开关（搜索入口 / 底部导航文字 / 分类下划线）按需求固定为开启，
         // 不再在设置页暴露开关，MobileSetting 里的默认值即生效值。
 
-        adapter.setRows(rows);
+        adapterSetRows(rows);
+    }
 
-        // 输入行带 EditText：进页面别自动抢焦点弹键盘，让列表先拿到焦点
-        rvSetting.post(new Runnable() {
-            @Override
-            public void run() {
-                rvSetting.setFocusableInTouchMode(true);
-                rvSetting.requestFocus();
-            }
-        });
+    /** 把重建好的行数据推给 Compose 层（Compose 只负责画，行为仍挂在这些 Row 上） */
+    private void adapterSetRows(List<MobileSettingAdapter.Row> rows) {
+        com.github.tvbox.osc.mobile.ui.compose.MobileSettings.updateRows(rows);
+    }
+
+    @Override
+    public void onRowClick(MobileSettingAdapter.Row row) {
+        if (row != null && row.action != null) row.action.run();
     }
 
     /* ===================== 选项文案 ===================== */

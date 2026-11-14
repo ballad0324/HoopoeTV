@@ -12,6 +12,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -307,24 +308,30 @@ private fun Cover(pic: String, modifier: Modifier = Modifier) {
 
 @Composable
 private fun ProgressBar(percent: Int, modifier: Modifier = Modifier) {
-    val pct = percent.coerceIn(2, 100)
+    // 低进度（1%）时按百分比算只有一两个像素，看着像颗蓝点：
+    // 这里给填充条兜一个 10dp 的最小宽度，保证任何进度都能看出是一条进度条
+    val pct = percent.coerceIn(0, 100)
     Box(
         modifier.fillMaxWidth().height(4.dp)
             .clip(RoundedCornerShape(3.dp))
             .background(Color(0x1A000000))
     ) {
-        Box(
-            Modifier.fillMaxWidth(pct / 100f).fillMaxHeight()
-                .background(Color(0xFF1A6DFF))
-        )
+        BoxWithConstraints(Modifier.fillMaxSize()) {
+            val barWidth = maxWidth * (pct / 100f)
+            val fixedWidth = if (barWidth < 10.dp) 10.dp else barWidth
+            Box(
+                Modifier.width(fixedWidth).fillMaxHeight()
+                    .background(Color(0xFF1A6DFF))
+            )
+        }
     }
 }
 
 @Composable
 private fun DeleteButton(onDelete: () -> Unit, modifier: Modifier = Modifier) {
     Box(
-        modifier.size(28.dp)
-            .clip(RoundedCornerShape(14.dp))
+        modifier.size(32.dp)
+            .clip(RoundedCornerShape(16.dp))
             .background(Color(0xCCE5484D))
             .clickable { onDelete() },
         contentAlignment = Alignment.Center
@@ -332,7 +339,7 @@ private fun DeleteButton(onDelete: () -> Unit, modifier: Modifier = Modifier) {
         Image(
             painter = painterResource(R.drawable.icon_delete),
             contentDescription = "删除",
-            modifier = Modifier.size(16.dp)
+            modifier = Modifier.size(20.dp)
         )
     }
 }
