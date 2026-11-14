@@ -13,7 +13,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -47,7 +46,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -236,13 +234,16 @@ private fun NavBar(onCategorySelect: (Int) -> Unit, onDockClick: (Int) -> Unit) 
                 .background(fill)
                 .border(1.dp, stroke, shape)
         ) {
+            // 四项与分类统一成同一套「图标 + 文字」单元，等宽等间距
+            val itemWidth = if (showLabels) 70.dp else 42.dp
             if (categories.isEmpty()) {
                 // 子页面：只留四个图标入口，平分整条栏
                 Row(Modifier.fillMaxWidth().fillMaxHeight()) {
                     entries.forEach { entry ->
-                        DockEntryItem(
+                        NavItem(
                             modifier = Modifier.weight(1f).fillMaxHeight(),
-                            entry = entry,
+                            iconRes = entry.iconRes,
+                            label = entry.label,
                             selected = selectedDock == entry.tab,
                             primary = primary,
                             dim = dim,
@@ -252,10 +253,10 @@ private fun NavBar(onCategorySelect: (Int) -> Unit, onDockClick: (Int) -> Unit) 
                     }
                 }
             } else {
-                // 首页：四个入口 + 竖分隔线 + 分类 tab，整条可左右横滑
+                // 首页：四个入口 + 全部分类（每项都带图标），整条可左右横滑；不再插竖分隔线
                 LaunchedEffect(selectedCategory, categories.size) {
-                    val target = entries.size + 1 + (selectedCategory - 1)
-                    if (selectedCategory >= 1 && target <= entries.size + 1 + categories.size) {
+                    val target = entries.size + (selectedCategory - 1)
+                    if (selectedCategory >= 1 && target < entries.size + categories.size) {
                         try {
                             listState.animateScrollToItem(target)
                         } catch (t: Throwable) {
@@ -265,15 +266,16 @@ private fun NavBar(onCategorySelect: (Int) -> Unit, onDockClick: (Int) -> Unit) 
                 LazyRow(
                     state = listState,
                     modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-                    contentPadding = PaddingValues(horizontal = 8.dp),
+                    contentPadding = PaddingValues(horizontal = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     items(entries.size) { index ->
                         val entry = entries[index]
-                        DockEntryItem(
-                            modifier = Modifier,
-                            entry = entry,
+                        NavItem(
+                            modifier = Modifier.width(itemWidth).fillMaxHeight(),
+                            iconRes = entry.iconRes,
+                            label = entry.label,
                             selected = selectedDock == entry.tab,
                             primary = primary,
                             dim = dim,
@@ -281,15 +283,17 @@ private fun NavBar(onCategorySelect: (Int) -> Unit, onDockClick: (Int) -> Unit) 
                             onClick = { onDockClick(entry.tab) }
                         )
                     }
-                    item { VDivider(stroke) }
                     items(categories.size) { index ->
                         // 分类下标要补回被跳过的第 0 项
                         val realIndex = index + 1
-                        CategoryItem(
-                            name = categories[index],
+                        NavItem(
+                            modifier = Modifier.width(itemWidth).fillMaxHeight(),
+                            iconRes = iconForCategory(categories[index]),
+                            label = categories[index],
                             selected = selectedCategory == realIndex && selectedDock == TAB_VOD,
                             primary = primary,
                             dim = dim,
+                            showLabel = showLabels,
                             onClick = { onCategorySelect(realIndex) }
                         )
                     }
@@ -301,28 +305,50 @@ private fun NavBar(onCategorySelect: (Int) -> Unit, onDockClick: (Int) -> Unit) 
 
 private data class DockEntry(val tab: Int, val label: String, val iconRes: Int)
 
-@Composable
-private fun VDivider(stroke: Color) {
-    Box(
-        Modifier
-            .padding(horizontal = 6.dp)
-            .width(1.dp)
-            .height(22.dp)
-            .background(stroke)
-    )
+/**
+ * 分类名 → 图标。数据源里的分类名千变万化（电影 / 影片 / Movie / 4K电影……），
+ * 这里按关键字兜底匹配，认不出的一律给「四宫格」通用图标，不会漏图标也不会崩。
+ */
+private fun iconForCategory(name: String): Int {
+    val n = name ?: ""
+    return when {
+        // 「短剧」必须排在「剧集」前面，否则会被剧集先吃掉
+        n.contains("短剧") || n.contains("短劇") || n.contains("Short", ignoreCase = true) ->
+            R.drawable.ic_cat_short
+        n.contains("综艺") || n.contains("綜藝") ||
+            n.contains("Variety", ignoreCase = true) || n.contains("Show", ignoreCase = true) ->
+            R.drawable.ic_cat_variety
+        n.contains("动漫") || n.contains("動漫") || n.contains("动画") || n.contains("動畫") ||
+            n.contains("Anime", ignoreCase = true) || n.contains("Animation", ignoreCase = true) ->
+            R.drawable.ic_cat_anime
+        n.contains("纪录") || n.contains("紀錄") || n.contains("Doc", ignoreCase = true) ->
+            R.drawable.ic_cat_doc
+        n.contains("体育") || n.contains("體育") || n.contains("球") || n.contains("赛事") ||
+            n.contains("Sport", ignoreCase = true) ->
+            R.drawable.ic_cat_sport
+        n.contains("剧集") || n.contains("劇集") || n.contains("连续剧") || n.contains("电视剧") ||
+            n.contains("TV", ignoreCase = true) || n.contains("Series", ignoreCase = true) ->
+            R.drawable.ic_cat_tv
+        n.contains("电影") || n.contains("電影") || n.contains("影") || n.contains("片") ||
+            n.contains("Movie", ignoreCase = true) || n.contains("Film", ignoreCase = true) ->
+            R.drawable.ic_cat_movie
+        else -> R.drawable.ic_cat_other
+    }
 }
 
-/** 图标 + 文字入口（选中时垫一层淡蓝胶囊底） */
+/** 导航栏的原子单元：图标 + 文字（前四项与分类 tab 共用，保证像素级一致的间距与选中态） */
 @Composable
-private fun DockEntryItem(
+private fun NavItem(
     modifier: Modifier,
-    entry: DockEntry,
+    iconRes: Int,
+    label: String,
     selected: Boolean,
     primary: Color,
     dim: Color,
     showLabel: Boolean,
     onClick: () -> Unit
 ) {
+    // 图标与文字都用主题色染色：亮色主题是深灰/蓝，暗色主题是浅灰/亮蓝，自己跟着换
     val tint = if (selected) primary else dim
     Box(
         modifier = modifier.clickable { onClick() },
@@ -332,19 +358,19 @@ private fun DockEntryItem(
             modifier = Modifier
                 .clip(RoundedCornerShape(14.dp))
                 .background(if (selected) primary.copy(alpha = 0.12f) else Color.Transparent)
-                .padding(horizontal = 10.dp, vertical = 6.dp),
+                .padding(horizontal = 6.dp, vertical = 6.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(entry.iconRes),
-                contentDescription = entry.label,
-                modifier = Modifier.size(18.dp),
+                painter = painterResource(iconRes),
+                contentDescription = label,
+                modifier = Modifier.size(16.dp),
                 colorFilter = ColorFilter.tint(tint)
             )
             if (showLabel) {
-                Spacer(Modifier.width(5.dp))
+                Spacer(Modifier.width(4.dp))
                 BasicText(
-                    text = entry.label,
+                    text = label,
                     style = TextStyle(
                         color = tint,
                         fontSize = 12.sp,
@@ -358,32 +384,6 @@ private fun DockEntryItem(
     }
 }
 
-@Composable
-private fun CategoryItem(name: String, selected: Boolean, primary: Color, dim: Color, onClick: () -> Unit) {
-    Column(
-        modifier = Modifier.clickable { onClick() },
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        BasicText(
-            text = name,
-            style = TextStyle(
-                color = if (selected) primary else dim,
-                fontSize = 14.sp,
-                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-                textAlign = TextAlign.Center
-            ),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-        Box(
-            Modifier
-                .padding(top = 4.dp)
-                .width(16.dp)
-                .height(3.dp)
-                .clip(RoundedCornerShape(2.dp))
-                .background(if (selected) primary else Color.Transparent)
-        )
-    }
-}
+// 说明：原「分类条 + 四图标 dock 两行」已合并为单条 NavBar（v1.6.30）；
+// v1.6.32 起四项与分类统一为等宽的 NavItem，全部带主题自适应图标，并去掉了中间的竖分隔线。
 
-// 说明：原「分类条 + 四图标 dock 两行」的结构已合并为上面的单条 NavBar（v1.6.30）。
