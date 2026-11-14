@@ -13,8 +13,8 @@ android {
     defaultConfig {
         applicationId 'com.hoopoetv.tvbox'
         targetSdkVersion 28
-        versionCode 10078
-        versionName "v1.6.27"
+        versionCode 10079
+        versionName "v1.6.28"
         multiDexEnabled true
         // UI 身份开关：false = TV 端 UI，true = 手机端 UI（由 mobile flavor 覆盖）
         buildConfigField "boolean", "UI_MOBILE", "false"
@@ -104,6 +104,17 @@ android {
     buildFeatures {
         dataBinding = true
         buildConfig = true
+        // Compose 试点：只用于历史/收藏夹页（MobileRecordActivity），其余页面仍是 XML + View
+        compose = true
+    }
+
+    // Kotlin 1.9.25 对应的 Compose 编译器版本，两者必须严格一致，否则编译期直接报版本不匹配
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.5.15'
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 
     sourceSets {
@@ -129,6 +140,12 @@ dependencies {
         }
     }
     api fileTree(dir: "libs", include: ['*.jar', '*.aar'])
+    // Compose 试点依赖：只要 ui / graphics / foundation，不引 material3（省体积、避免顶掉现有主题色）
+    implementation platform('androidx.compose:compose-bom:2024.02.00')
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-graphics'
+    implementation 'androidx.compose.foundation:foundation'
+    implementation 'androidx.compose.runtime:runtime'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     // for WebDAV
     implementation('com.github.thegrizzlylabs:sardine-android:0.8') {

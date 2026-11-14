@@ -1,111 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 历史 / 收藏夹：整页内容由 Jetpack Compose 绘制（试点页）。
+     XML 只保留页面玻璃底 + 底部 dock，返回键 / 分段胶囊 / 分区标题 / 两列卡片全部在 Compose 里。 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_glass_page"
     android:orientation="vertical">
 
-    <!-- 顶部：返回 + 居中「历史 / 收藏夹」分段胶囊 -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp">
-
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginStart="6dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="返回"
-            android:padding="8dp"
-            android:src="@drawable/v_back" />
-
-        <LinearLayout
-            android:layout_width="200dp"
-            android:layout_height="42dp"
-            android:layout_gravity="center"
-            android:background="@drawable/shape_tab_track"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="4dp">
-
-            <TextView
-                android:id="@+id/tvTabHistory"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="历史"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvTabFav"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="收藏夹"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </FrameLayout>
-
-    <!-- 分区标题 + 清空 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="24dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="24dp"
-        android:paddingBottom="4dp">
-
-        <TextView
-            android:id="@+id/tvSection"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="继续观看"
-            android:textColor="@color/shell_text"
-            android:textSize="19sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvClear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="6dp"
-            android:text="清空"
-            android:textColor="@color/shell_text_dim"
-            android:textSize="13sp" />
-    </LinearLayout>
-
-    <!-- 两列居中网格 -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvRecord"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/cvRecord"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:overScrollMode="never"
-        android:paddingStart="26dp"
-        android:paddingTop="4dp"
-        android:paddingEnd="26dp"
-        android:paddingBottom="10dp" />
-
-    <TextView
-        android:id="@+id/tvEmpty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="36dp"
-        android:text="还没有内容"
-        android:textColor="@color/shell_text_dim"
-        android:textSize="13sp"
-        android:visibility="gone" />
+        android:layout_weight="1" />
 
     <include layout="@layout/view_mobile_dock" />
 
