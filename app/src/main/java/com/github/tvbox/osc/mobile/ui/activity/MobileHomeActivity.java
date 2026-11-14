@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.compose.ui.platform.ComposeView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -48,7 +49,9 @@ import com.github.tvbox.osc.ui.activity.HomeActivity;
 import com.github.tvbox.osc.ui.activity.LivePlayActivity;
 import com.github.tvbox.osc.ui.adapter.SortAdapter;
 import com.github.tvbox.osc.mobile.ui.fragment.MobileGridFragment;
-import com.github.tvbox.osc.mobile.ui.view.MobileDockHelper;
+import com.github.tvbox.osc.mobile.ui.compose.HomeDockHost;
+import com.github.tvbox.osc.mobile.ui.compose.HomeDockState;
+import com.github.tvbox.osc.mobile.ui.compose.MobileHomeDock;
 import com.github.tvbox.osc.util.DefaultConfig;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
 
@@ -59,17 +62,14 @@ import java.util.List;
  * 手机端首页：与 TV 端 HomeActivity 共用同一套内核（ApiConfig / SourceViewModel / GridFragment），
  * 只换外壳（toolbar + 横向分类 tab + 底部导航），不复用 TV 的左侧拨轮与横屏布局。
  */
-public class MobileHomeActivity extends BaseActivity implements MobileGridFragment.HeaderBinder {
+public class MobileHomeActivity extends BaseActivity implements MobileGridFragment.HeaderBinder, HomeDockHost {
 
-    private RecyclerView rvType;
     private ViewPager pager;
     private ImageView btnTheme;
     private ImageView btnUiMode;
     private ImageView btnSetting;
-    private LinearLayout navVod;
-    private LinearLayout navLive;
-    private LinearLayout navSearch;
-    private LinearLayout navDiscover;
+    /** 底部导航栏（Compose 绘制：分类 tab + 四图标 dock） */
+    private ComposeView cvDock;
 
     /** 首页顶部「继续观看」模块 */
     private LinearLayout cardHistory;
@@ -133,15 +133,11 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
     }
 
     private void initView() {
-        rvType = findViewById(R.id.rvType);
         pager = findViewById(R.id.pager);
         btnTheme = findViewById(R.id.btnTheme);
         btnUiMode = findViewById(R.id.btnUiMode);
         btnSetting = findViewById(R.id.btnSetting);
-        navVod = findViewById(R.id.navVod);
-        navLive = findViewById(R.id.navLive);
-        navSearch = findViewById(R.id.navSearch);
-        navDiscover = findViewById(R.id.navDiscover);
+        cvDock = findViewById(R.id.cvDock);
 
         // 收藏/历史/小编推荐标题已移进列表首项（item_home_header），这里只留容器
         panelContent = findViewById(R.id.panelContent);
@@ -149,7 +145,6 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
 
         // 液态玻璃（代码 new；XML 自定义标签会崩）
         UiSkin.card(findViewById(R.id.toolbar));
-        UiSkin.card(rvType);
         UiSkin.card(panelContent);
 
         // 顶部 logo / 标题点击 = 数据源切换
@@ -164,23 +159,22 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         if (logo != null) logo.setOnClickListener(sourceClick);
         if (title != null) title.setOnClickListener(sourceClick);
 
+        // 分类数据仍由 MobileTypeAdapter 持有（不再挂 RecyclerView，纯数据容器），
+        // 渲染交给底部 Compose 分类条
         typeAdapter = new MobileTypeAdapter();
-        rvType.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        rvType.setAdapter(typeAdapter);
 
         pagerAdapter = new MobileHomePagerAdapter(getSupportFragmentManager(), fragments);
         pager.setAdapter(pagerAdapter);
 
+        // 底部导航栏：Compose 重写版（分类 tab + 四图标 dock）
+        if (cvDock != null) MobileHomeDock.bindHomeDock(cvDock, this);
+
         applyDisplaySettings();
 
-        // Liquid Glass 动效：顶栏/底栏液态按压 + 顶栏玻璃周期性扫光
+        // Liquid Glass 动效：顶栏液态按压 + 顶栏玻璃周期性扫光（底部改为 Compose 自带按压反馈）
         LiquidMotion.bindPress(btnTheme, 0.88f);
         LiquidMotion.bindPress(btnUiMode, 0.88f);
         LiquidMotion.bindPress(btnSetting, 0.88f);
-        LiquidMotion.bindPress(navVod, 0.93f);
-        LiquidMotion.bindPress(navLive, 0.93f);
-        LiquidMotion.bindPress(navSearch, 0.93f);
-        LiquidMotion.bindPress(navDiscover, 0.93f);
         // toolbar：顶 6dp / 高 56dp / 左右 10dp / 圆角 22dp，与 glass_card 完全对齐
         LiquidMotion.attachHeaderSheen(this, 6f, 56f, 10f, 22f);
     }
@@ -188,22 +182,9 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
     /** 应用手机端专有显示开关（设置页改完返回首页即生效） */
     private void applyDisplaySettings() {
         refreshThemeButton();
-        // 顶部搜索栏已取消，设置页的「搜索入口」开关改为控制底部导航「搜索」项显隐
-        if (navSearch != null) {
-            navSearch.setVisibility(MobileSetting.isShowSearchBar() ? View.VISIBLE : View.GONE);
-        }
-        int labelVisibility = MobileSetting.isShowNavLabel() ? View.VISIBLE : View.GONE;
-        setNavLabelVisibility(navVod, labelVisibility);
-        setNavLabelVisibility(navLive, labelVisibility);
-        setNavLabelVisibility(navSearch, labelVisibility);
-        setNavLabelVisibility(navDiscover, labelVisibility);
-        if (typeAdapter != null) typeAdapter.notifyDataSetChanged();
-    }
-
-    private void setNavLabelVisibility(LinearLayout item, int visibility) {
-        if (item == null) return;
-        TextView label = (TextView) item.getChildAt(1);
-        if (label != null) label.setVisibility(visibility);
+        // 「搜索入口」开关控制底栏第三个图标显隐；「显示导航文字」控制图标下方文字
+        HomeDockState.updateShowSearch(MobileSetting.isShowSearchBar());
+        HomeDockState.updateShowLabels(MobileSetting.isShowNavLabel());
     }
 
     /** 顶栏明暗切换：深色 ↔ 明亮，立即生效（AppCompatDelegate 会重建界面） */
@@ -243,7 +224,7 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         // 从详情页收藏/取消收藏返回时，必须重读本机收藏，否则首页「我的收藏」永远停在旧数据
         refreshFav();
         // 从直播页/设置页返回时，底部导航选中态复位到「影视」
-        selectNav(navVod);
+        HomeDockState.updateSelectedDock(0);
         // 设置页改过「接口地址」：这里就地重载配置并重建首页，不再要求用户杀进程重启
         if (CommonSetting.consumeConfigDirty()) {
             lastHomeKey = null;
@@ -281,37 +262,6 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
                 toggleNightMode();
             }
         });
-        navVod.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (pager.getCurrentItem() != 0) pager.setCurrentItem(0, false);
-                selectNav(navVod);
-            }
-        });
-        navLive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 点击即有高亮反馈，返回首页时 onResume 复位到「影视」
-                selectNav(navLive);
-                jumpActivity(MobileLiveActivity.class);
-            }
-        });
-        navSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 搜索入口：底部导航第三位（直播与发现之间），进手机端竖屏搜索页
-                selectNav(navSearch);
-                jumpActivity(MobileSearchActivity.class);
-            }
-        });
-        navDiscover.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 原「设置」位已改为「发现」：上映表 / 专题 / 排行榜
-                selectNav(navDiscover);
-                jumpActivity(MobileDiscoverActivity.class);
-            }
-        });
         btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -320,29 +270,46 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
             }
         });
 
-        typeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (position >= 0 && position < fragments.size()) {
-                    pager.setCurrentItem(position, false);
-                    selectNav(navVod);
-                }
-            }
-        });
-
         pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                typeAdapter.setSelected(position);
-                if (position >= 0) rvType.smoothScrollToPosition(position);
+                // 分类条的选中态与自动滚进可视区都在 Compose 侧（HomeDockBar.kt）
+                HomeDockState.updateSelectedCategory(position);
+                HomeDockState.updateSelectedDock(0);
                 updateSectionTitle(position);
                 // 「本周推荐 / 历史播放」只属于首页那页，切到其它分类页要给回原来的纯列表
                 applyHomeOnlyBlocks(position);
             }
         });
+    }
 
-        // dock 栏上左右滑动也能切到相邻模块（点击仍走上面的 nav 逻辑）
-        MobileDockHelper.bindSwipe(this, findViewById(R.id.navBar), MobileDockHelper.TAB_VOD);
+    /** Compose 底栏回调：点了第 index 个分类 */
+    @Override
+    public void onCategorySelected(int index) {
+        if (index >= 0 && index < fragments.size() && pager != null) {
+            pager.setCurrentItem(index, false);
+        }
+    }
+
+    /** Compose 底栏回调：点了 dock 图标（0 影视 / 1 直播 / 2 搜索 / 3 发现） */
+    @Override
+    public void onDockClick(int tab) {
+        switch (tab) {
+            case 0:
+                if (pager != null && pager.getCurrentItem() != 0) pager.setCurrentItem(0, false);
+                break;
+            case 1:
+                jumpActivity(MobileLiveActivity.class);
+                break;
+            case 2:
+                jumpActivity(MobileSearchActivity.class);
+                break;
+            case 3:
+                jumpActivity(MobileDiscoverActivity.class, new Bundle());
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -713,6 +680,18 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         }
 
         typeAdapter.setNewData(shown);
+        // 分类名灌进 Compose 底栏：底部那排可滑分类 tab 就是它
+        List<String> names = new ArrayList<>();
+        for (MovieSort.SortData data : shown) {
+            String name = (data == null) ? null : data.name;
+            names.add(TextUtils.isEmpty(name) ? "" : name);
+        }
+        if (names.isEmpty()) {
+            names.add(tr("首页", "Home"));
+        }
+        HomeDockState.updateCategories(names);
+        HomeDockState.updateSelectedCategory(0);
+        HomeDockState.updateSelectedDock(0);
         fragments.clear();
         if (shown.isEmpty()) {
             // 没有分类时给一页空态，避免 pager 空适配器
@@ -727,7 +706,6 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
             ((MobileGridFragment) fragments.get(0)).setHeaderBinder(this);
         }
         pagerAdapter.notifyDataSetChanged();
-        typeAdapter.setSelected(0);
         pager.setCurrentItem(0, false);
         updateSectionTitle(0);
         // 首页那页的列表面板是收起的，fragment 拿不到首屏数据，这里自己拉一次首页第一页喂「本周推荐」
@@ -738,7 +716,6 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
             }
         }
         applyHomeOnlyBlocks(0);
-        selectNav(navVod);
     }
 
     private String currentKey() {
@@ -746,32 +723,6 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
             return ApiConfig.get().getHomeSourceBean().getKey();
         }
         return "";
-    }
-
-    private void selectNav(LinearLayout target) {
-        setNavState(navVod, target == navVod);
-        setNavState(navLive, target == navLive);
-        setNavState(navSearch, target == navSearch);
-        setNavState(navDiscover, target == navDiscover);
-    }
-
-    private void setNavState(LinearLayout item, boolean on) {
-        if (item == null) return;
-        boolean wasOn = item.isSelected();
-        TextView label = (TextView) item.getChildAt(1);
-        ImageView icon = (ImageView) item.getChildAt(0);
-        if (label != null) {
-            label.setTextColor(on ? getResources().getColor(R.color.shell_primary)
-                    : getResources().getColor(R.color.shell_text_dim));
-        }
-        if (icon != null) {
-            icon.setSelected(on);
-            // 底部图标是纯白矢量，浅色主题下会与 shell_surface 同色而看不见，这里统一着色
-            icon.setColorFilter(getResources().getColor(on ? R.color.shell_primary : R.color.shell_text_dim));
-        }
-        item.setSelected(on);
-        // 仅在真正切换选中时弹一下图标，避免每次回首页都抖
-        if (on && !wasOn) LiquidMotion.popIcon(icon);
     }
 
     /** 中英双语（手机端界面文案） */

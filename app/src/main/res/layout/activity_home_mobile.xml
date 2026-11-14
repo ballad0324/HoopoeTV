@@ -87,20 +87,8 @@
 
     </LinearLayout>
 
-    <!-- 分类 tab：提到顶部工具栏下方，横向可滑 -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvType"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/glass_card"
-        android:clipToPadding="false"
-        android:overScrollMode="never"
-        android:paddingStart="8dp"
-        android:paddingEnd="10dp"
-        tools:listitem="@layout/adapter_type" />
+    <!-- 分类 tab 已从顶部移到底部（v1.6.29 起由 Compose 绘制，见 HomeDockBar.kt）：
+         顶部只留 toolbar，内容区直接顶上来 -->
 
     <!-- 内容区：一张大玻璃卡。收藏/历史/小编推荐标题已移进列表首项（item_home_header），
          因此这里只剩 ViewPager，整块内容随列表自然滚动，不再靠改容器高度裁剪 -->
@@ -143,7 +131,12 @@
         android:layout_height="1dp"
         android:background="@color/shell_outline" />
 
-    <!-- 底部 dock 栏：公共布局，直播/搜索/设置页共用同一份 -->
-    <include layout="@layout/view_mobile_dock" />
+    <!-- 底部导航栏（Compose 重写）：上行分类 tab（原顶部那排挪下来）+ 下行四图标 dock。
+         整块由 mobile/ui/compose/HomeDockBar.kt 绘制，高度 wrap_content。 -->
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/cvDock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 
 </LinearLayout>
