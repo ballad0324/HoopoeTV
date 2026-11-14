@@ -41,6 +41,8 @@ public class MobileAdminActivity extends BaseActivity {
     private EditText etApiUrl;
     private EditText etLiveUrl;
     private EditText etEpgUrl;
+    private View llSourceConfig;
+    private TextView tvSourceLoginHint;
 
     @Override
     protected int getLayoutResID() {
@@ -60,6 +62,8 @@ public class MobileAdminActivity extends BaseActivity {
         etApiUrl = findViewById(R.id.etApiUrl);
         etLiveUrl = findViewById(R.id.etLiveUrl);
         etEpgUrl = findViewById(R.id.etEpgUrl);
+        llSourceConfig = findViewById(R.id.llSourceConfig);
+        tvSourceLoginHint = findViewById(R.id.tvSourceLoginHint);
 
         // 源模式胶囊：内置源 / 解析源
         if (tvModeBuiltin != null) {
@@ -205,12 +209,21 @@ public class MobileAdminActivity extends BaseActivity {
     }
 
     private void refresh() {
+        boolean logged = MobileUser.isLoggedIn();
         if (MobileUser.isLoggedIn()) {
             tvAccount.setText("已登录：" + MobileUser.name());
             tvAccountHint.setText("点击可退出登录；登录后默认走内置源");
         } else {
             tvAccount.setText("未登录");
             tvAccountHint.setText("当前使用你自己填写的接口；登录后默认切到内置源");
+        }
+
+        // 未登录：整块（胶囊 + 接口/直播/EPG）先隐藏，只留一行提示；设置页那三行给未登录用户用
+        if (llSourceConfig != null) {
+            llSourceConfig.setVisibility(logged ? View.VISIBLE : View.GONE);
+        }
+        if (tvSourceLoginHint != null) {
+            tvSourceLoginHint.setVisibility(logged ? View.GONE : View.VISIBLE);
         }
 
         boolean builtin = CommonSetting.useBuiltinSource();

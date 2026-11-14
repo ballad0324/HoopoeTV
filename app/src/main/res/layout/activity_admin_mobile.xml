@@ -126,6 +126,30 @@
                     android:textSize="11sp" />
             </LinearLayout>
 
+            <!-- 未登录时的提示：这一整块（胶囊 + 三个地址）在未登录时隐藏 -->
+            <TextView
+                android:id="@+id/tvSourceLoginHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/shape_setting_card"
+                android:paddingStart="14dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="12dp"
+                android:text="未登录：先在设置页填接口地址使用；登录后可在这里切换内置源 / 解析源，并配置接口、直播、EPG"
+                android:textColor="@color/shell_text_dim"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <!-- 登录后才显示：源模式胶囊 + 接口地址 / 直播源 / EPG -->
+            <LinearLayout
+                android:id="@+id/llSourceConfig"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
             <!-- 源模式胶囊：内置源 / 解析源（自填接口），决定首页实际走哪条源 -->
             <LinearLayout
                 android:id="@+id/llSourceMode"
@@ -330,6 +354,8 @@
                     android:textColor="@color/shell_text"
                     android:textColorHint="@color/shell_text_dim"
                     android:textSize="12sp" />
+            </LinearLayout>
+
             </LinearLayout>
 
             <TextView
