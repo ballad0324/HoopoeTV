@@ -174,7 +174,8 @@ public class MobileEpgXml {
         } catch (Throwable th) {
             return;
         }
-        final String template = TextUtils.isEmpty(epgUrl) ? CommonSetting.BUILTIN_EPG_URL : epgUrl;
+        // v1.6.37：EPG 默认留空，用户没填就完全不发请求（不再拿内置 playback.xml 兜底）
+        final String template = epgUrl;
         if (TextUtils.isEmpty(template)) return;
         // 带 {name} 的模板必须知道频道才能请求，预取交给第一次点「回看」
         if (template.contains("{name}") || template.contains("{channel}") || template.contains("{date}")) return;
@@ -227,17 +228,14 @@ public class MobileEpgXml {
             callback.onFail("EPG 地址读取失败");
             return;
         }
-        // 设置里没填 EPG 时的取值顺序：
-        // ① 云服务器 MacCMS 的 epg.php?ch={name}（部署好之后任何网络都能用）
-        // ② 内置源 playback.xml（2.96MB 全量，最慢，只在自建接口不可达时兜底）
-        String useUrl = TextUtils.isEmpty(epgUrl) ? CLOUD_EPG_TEMPLATE : epgUrl;
+        // v1.6.37：EPG 默认空 —— 设置里没填直接给出提示，不偷偷回退到内置 playback.xml
+        String useUrl = epgUrl;
         if (TextUtils.isEmpty(useUrl) || channelName == null || channelName.isEmpty()) {
-            callback.onFail("没有配置 EPG 地址");
+            callback.onFail(TextUtils.isEmpty(useUrl) ? "没有配置 EPG 地址" : "频道名为空");
             return;
         }
         final String[] candidates = new String[]{
-                resolveUrl(useUrl, channelName),
-                resolveUrl(CommonSetting.BUILTIN_EPG_URL, channelName)
+                resolveUrl(useUrl, channelName)
         };
         final String finalUrl = candidates[0];
         if (!finalUrl.equals(cachedUrl)) {

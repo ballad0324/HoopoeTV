@@ -288,6 +288,17 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
             });
         }
 
+        View rowCloud = content.findViewById(R.id.rowCloud);
+        if (rowCloud != null) {
+            rowCloud.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    jumpActivity(MobileCloudBackupActivity.class);
+                }
+            });
+        }
+
         tvAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

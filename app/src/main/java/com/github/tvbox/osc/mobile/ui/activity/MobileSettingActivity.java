@@ -209,25 +209,21 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                     }
                 }));
         // 更换背景图：明亮 / 深色两档，同样填地址即生效（也保留点选本地图的方式）
-        rows.add(MobileSettingAdapter.Row.input(tr("明亮主题背景","Light wallpaper"),
-                tr("填图片直链或本机路径，≤1MB、1080×1920 以上；留空即回到内置图",
-                        "Image URL or local path, ≤1MB; empty = built-in"),
-                "https://example.com/bg.jpg",
-                bgPath(false), tr("立即更改","Apply"),
-                new MobileSettingAdapter.OnInput() {
+        // 更换背景图（v1.6.37）：两档都改成点选式 —— 相册本地图 / 网络图片链接 / 恢复内置图
+        rows.add(MobileSettingAdapter.Row.item(tr("明亮主题背景","Light wallpaper"),
+                bgState(false) + "\n" + tr("点击：选本地图片或填网络链接","Tap: local image or image URL"),
+                new Runnable() {
                     @Override
-                    public void onInput(MobileSettingAdapter.Row row, String text) {
-                        applyBg(false, text);
+                    public void run() {
+                        showBgDialog(false);
                     }
                 }));
-        rows.add(MobileSettingAdapter.Row.input(tr("深色主题背景","Dark wallpaper"),
-                tr("同上，只影响深色模式下的背景", "Same rules, dark theme only"),
-                "https://example.com/bg.jpg",
-                bgPath(true), tr("立即更改","Apply"),
-                new MobileSettingAdapter.OnInput() {
+        rows.add(MobileSettingAdapter.Row.item(tr("深色主题背景","Dark wallpaper"),
+                bgState(true) + "\n" + tr("点击：选本地图片或填网络链接","Tap: local image or image URL"),
+                new Runnable() {
                     @Override
-                    public void onInput(MobileSettingAdapter.Row row, String text) {
-                        applyBg(true, text);
+                    public void run() {
+                        showBgDialog(true);
                     }
                 }));
         rows.add(MobileSettingAdapter.Row.item(tr("背景图规格","Wallpaper spec"),
@@ -330,13 +326,7 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                 showBackupDialog();
             }
         }));
-        rows.add(MobileSettingAdapter.Row.item(tr("云端备份（MySQL）","Cloud backup (MySQL)"),
-                CloudBackupHelper.summary(), new Runnable() {
-            @Override
-            public void run() {
-                showCloudBackupDialog();
-            }
-        }));
+        // 云端备份（MySQL）已移到首页右上角用户面板（v1.6.37），设置页不再重复这一行
         rows.add(MobileSettingAdapter.Row.item(tr("关于","About"), versionText(), new Runnable() {
             @Override
             public void run() {
@@ -1043,24 +1033,60 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
     }
 
     private void showBgDialog(final boolean night) {
+        final String[] items = new String[]{
+                "从手机相册选图片",
+                "用网络图片链接",
+                "恢复内置背景图"
+        };
         new AlertDialog.Builder(this)
                 .setTitle(night ? "深色主题背景图" : "明亮主题背景图")
-                .setMessage("当前：" + bgState(night) + "\n规格要求：" + CommonSetting.BG_SPEC_HINT)
-                .setPositiveButton("选择图片", new DialogInterface.OnClickListener() {
+                .setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        GlassBgHelper.pick(MobileSettingActivity.this, night);
-                    }
-                })
-                .setNeutralButton("恢复默认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        GlassBgHelper.reset(MobileSettingActivity.this, night);
-                        refreshRows();
+                        if (which == 0) {
+                            GlassBgHelper.pick(MobileSettingActivity.this, night);
+                        } else if (which == 1) {
+                            askBgUrl(night);
+                        } else {
+                            GlassBgHelper.reset(MobileSettingActivity.this, night);
+                            GlassBgHelper.apply(MobileSettingActivity.this);
+                            toast(tr("已恢复内置背景", "Back to built-in wallpaper"));
+                            refreshRows();
+                        }
                     }
                 })
                 .setNegativeButton("取消", null)
                 .show();
+    }
+
+    /** 网络图片：输入图片直链，下载后落到本地再应用（与相册选图走同一条流程） */
+    private void askBgUrl(final boolean night) {
+        final EditText input = new EditText(this);
+        input.setSingleLine(true);
+        input.setHint("https://example.com/bg.jpg");
+        input.setText(bgPath(night));
+        input.setPadding(dp(14), dp(10), dp(14), dp(10));
+        new AlertDialog.Builder(this)
+                .setTitle(night ? "深色主题背景图 · 网络链接" : "明亮主题背景图 · 网络链接")
+                .setMessage("规格：" + CommonSetting.BG_SPEC_HINT)
+                .setView(input)
+                .setPositiveButton("应用", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String url = input.getText() == null ? "" : input.getText().toString().trim();
+                        if (TextUtils.isEmpty(url)) {
+                            toast("链接不能为空");
+                            return;
+                        }
+                        applyBg(night, url);
+                    }
+                })
+                .setNegativeButton("取消", null)
+                .show();
+    }
+
+    private int dp(int v) {
+        return (int) (getResources().getDisplayMetrics().density * v);
     }
 
     @Override
