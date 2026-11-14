@@ -30,6 +30,9 @@ import com.github.tvbox.osc.bean.VodInfo;
 import com.github.tvbox.osc.cache.CacheManager;
 import com.github.tvbox.osc.mobile.setting.MobileUiTuning;
 import com.github.tvbox.osc.mobile.play.MobileParseHelper;
+import com.github.tvbox.osc.mobile.ui.MobileCastHelper;
+import com.github.tvbox.osc.mobile.ui.MobileDownloadHelper;
+import com.github.tvbox.osc.mobile.ui.MobileFavorites;
 import com.github.tvbox.osc.mobile.ui.adapter.MobileSeriesAdapter;
 import com.github.tvbox.osc.player.MyVideoView;
 import com.github.tvbox.osc.ui.activity.PlayActivity;
@@ -70,7 +73,13 @@ public class MobilePlayActivity extends BaseActivity {
     private TextView tvPrev;
     private TextView tvNext;
     private TextView tvScale;
+    private TextView tvFavPlay;
+    private TextView tvDownload;
+    private TextView tvCastPlay;
     private SeekBar sbProgress;
+    /** 当前真正在播的地址与请求头（投屏 / 下载要用），解析出来的也得记着 */
+    private String lastPlayUrl = "";
+    private HashMap<String, String> lastPlayHeaders = null;
 
     /* ---------- C3 选集抽屉 ---------- */
     private View seriesRoot;
@@ -154,6 +163,9 @@ public class MobilePlayActivity extends BaseActivity {
         tvNext = findViewById(R.id.tvNext);
         tvScale = findViewById(R.id.tvScale);
         sbProgress = findViewById(R.id.sbProgress);
+        tvFavPlay = findViewById(R.id.tvFavPlay);
+        tvDownload = findViewById(R.id.tvDownload);
+        tvCastPlay = findViewById(R.id.tvCastPlay);
         touchLayer = findViewById(R.id.touchLayer);
         tvGestureHint = findViewById(R.id.tvGestureHint);
 
@@ -295,6 +307,38 @@ public class MobilePlayActivity extends BaseActivity {
                 tvScale.setText(PlayerHelper.getScaleName(scaleType));
             }
         });
+        // v1.7.1：顶栏收藏 / 底部下载 / 底部投屏
+        if (tvFavPlay != null) {
+            tvFavPlay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toggleFavorite();
+                }
+            });
+            updateFavLabel();
+        }
+        if (tvDownload != null) {
+            tvDownload.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    downloadCurrent();
+                }
+            });
+        }
+        if (tvCastPlay != null) {
+            tvCastPlay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (TextUtils.isEmpty(lastPlayUrl)) {
+                        Toast.makeText(MobilePlayActivity.this,
+                                "还没有拿到播放地址，等画面出来再投屏", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    String t = vodInfo != null && !TextUtils.isEmpty(vodInfo.name) ? vodInfo.name : "";
+                    MobileCastHelper.cast(MobilePlayActivity.this, t, lastPlayUrl);
+                }
+            });
+        }
         touchLayer.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -424,9 +468,50 @@ public class MobilePlayActivity extends BaseActivity {
             pbLoading.setVisibility(View.GONE);
             return;
         }
+        // v1.7.1 兜底：解析后/进页时把地址也记下来，投屏与下载都靠它
+        lastPlayUrl = url;
+        lastPlayHeaders = headers;
         videoView.release();
         videoView.setUrl(url, headers);
         videoView.start();
+    }
+
+    /** 顶栏收藏：与详情页 / 首页收藏夹共用 MobileFavorites 这一份数据 */
+    private void toggleFavorite() {
+        if (vodInfo == null) return;
+        MobileFavorites.Item it = new MobileFavorites.Item();
+        it.vodId = vodInfo.id == null ? "" : vodInfo.id;
+        it.sourceKey = sourceKey == null ? "" : sourceKey;
+        it.name = vodInfo.name == null ? "" : vodInfo.name;
+        it.pic = vodInfo.pic == null ? "" : vodInfo.pic;
+        it.time = System.currentTimeMillis();
+        VodInfo.VodSeries series = currentSeries();
+        if (series != null && series.name != null) it.note = series.name;
+        boolean added = MobileFavorites.toggle(it);
+        updateFavLabel();
+        Toast.makeText(this, added ? "已加入收藏，首页收藏夹可见" : "已取消收藏", Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateFavLabel() {
+        if (tvFavPlay == null || vodInfo == null) return;
+        boolean has = MobileFavorites.has(vodInfo.id == null ? "" : vodInfo.id,
+                sourceKey == null ? "" : sourceKey);
+        tvFavPlay.setText(has ? "★ 已收藏" : "☆ 收藏");
+        tvFavPlay.setAlpha(has ? 1f : 0.85f);
+    }
+
+    /** 下载当前集：与直播录制同一个落盘目录，完成后可在「下载管理」查看 */
+    private void downloadCurrent() {
+        if (TextUtils.isEmpty(lastPlayUrl)) {
+            Toast.makeText(this, "还没有拿到播放地址，先等画面出来再下载", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String name = vodInfo == null ? "video" : (vodInfo.name == null ? "video" : vodInfo.name);
+        VodInfo.VodSeries series = currentSeries();
+        if (series != null && series.name != null && series.name.length() > 0) {
+            name = name + " " + series.name;
+        }
+        MobileDownloadHelper.start(this, name, lastPlayUrl, lastPlayHeaders);
     }
 
     private VodInfo.VodSeries currentSeries() {

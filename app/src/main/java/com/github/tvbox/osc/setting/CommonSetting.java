@@ -269,7 +269,7 @@ public class CommonSetting {
     /* ===================== 出厂内置源需要口令解锁（v1.7） ===================== */
 
     /** 出厂内置源的解锁口令；改了这里就等于换密码 */
-    public static final String BUILTIN_PASS = "hoopoe2026";
+    public static final String BUILTIN_PASS = "98555576";
 
     private static final String KEY_BUILTIN_UNLOCK = "mobile_builtin_unlock";
 

@@ -18,6 +18,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <!-- 手势层（v1.7.2）：单击显隐控制条 / 左右滑调进度 / 左侧上下亮度 / 右侧上下音量 -->
+        <View
+            android:id="@+id/touchLayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- 手势操作时的浮动提示 -->
+        <TextView
+            android:id="@+id/tvGestureHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="64dp"
+            android:background="#CC000000"
+            android:paddingStart="14dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="14dp"
+            android:paddingBottom="6dp"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
         <ProgressBar
             android:id="@+id/pbPlayerLoading"
             android:layout_width="wrap_content"
@@ -35,16 +57,16 @@
             android:src="@drawable/play_play"
             android:tint="#FFFFFF" />
 
-        <!-- 播放器顶部：返回 + 标题 -->
+        <!-- 播放器顶部（对齐直播页）：‹ 返回 + 标题 + 右侧工具（收藏 / 投屏 / 画中画 / 全屏） -->
         <LinearLayout
             android:id="@+id/llPlayerTop"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="52dp"
             android:background="#66000000"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingStart="10dp"
-            android:paddingEnd="12dp">
+            android:paddingEnd="8dp">
 
             <TextView
                 android:id="@+id/tvBack"
@@ -52,20 +74,9 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:paddingEnd="10dp"
-                android:text="@string/m_back"
+                android:text="‹ 返回"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tvFav"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:paddingStart="4dp"
-                android:paddingEnd="10dp"
-                android:text="☆ 收藏"
-                android:textColor="#FFFFFF"
-                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tvToolbarTitle"
@@ -76,6 +87,50 @@
                 android:singleLine="true"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvFav"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:text="☆ 收藏"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
+
+            <!-- 投屏（图标，替代原底部「投屏」文字） -->
+            <ImageView
+                android:id="@+id/ivCastTop"
+                android:layout_width="34dp"
+                android:layout_height="match_parent"
+                android:contentDescription="投屏"
+                android:padding="7dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_cast"
+                android:tint="#FFFFFF" />
+
+            <!-- 画中画：缩小成悬浮小窗继续播 -->
+            <ImageView
+                android:id="@+id/ivPipTop"
+                android:layout_width="34dp"
+                android:layout_height="match_parent"
+                android:contentDescription="画中画"
+                android:padding="7dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_pip"
+                android:tint="#FFFFFF" />
+
+            <!-- 全屏（图标，替代原底部「全屏」文字） -->
+            <ImageView
+                android:id="@+id/ivFullTop"
+                android:layout_width="34dp"
+                android:layout_height="match_parent"
+                android:contentDescription="全屏"
+                android:padding="7dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_fullscreen"
+                android:tint="#FFFFFF" />
         </LinearLayout>
 
         <!-- 播放器底部控制条：进度 + 时间 + 暂停 + 投屏 + 全屏 -->
@@ -123,61 +178,97 @@
                     android:textSize="11sp" />
             </LinearLayout>
 
-            <LinearLayout
+            <!-- 控制行（v1.7.2）：快退 / 播放暂停 / 快进 / 上一集 / 下一集 / 画面比例 / 倍速
+                 投屏·全屏·画中画已移到播放器右上角，下载走「立即播放」右侧的圆形按钮 -->
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="34dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:scrollbars="none">
 
-                <TextView
-                    android:id="@+id/tvPause"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:gravity="center"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:text="@string/m_pause"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp" />
+                    android:layout_height="34dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
+                    <TextView
+                        android:id="@+id/tvRewind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:text="-10s"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
 
-                <TextView
-                    android:id="@+id/tvCast"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:gravity="center"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:text="@string/m_cast"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/tvPause"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/m_pause"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
 
-                <TextView
-                    android:id="@+id/tvDownload"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:gravity="center"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:text="@string/m_download"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/tvForward"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:text="+10s"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
 
-                <TextView
-                    android:id="@+id/tvFull"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:gravity="center"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:text="@string/m_full"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp" />
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvPrevEp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="上一集"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tvNextEp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="下一集"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tvScaleInline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="比例"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tvSpeed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="8dp"
+                        android:text="1.0x"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </HorizontalScrollView>
         </LinearLayout>
 
     </FrameLayout>
@@ -448,17 +539,17 @@
                         android:src="@drawable/hm_fav"
                         android:tint="@color/shell_text" />
 
-                    <!-- 分享外链（在收藏右侧） -->
+                    <!-- 画中画：缩小成悬浮小窗继续播（原「分享外链」位置，分享已取消） -->
                     <ImageView
-                        android:id="@+id/ivShareBig"
+                        android:id="@+id/ivPipBig"
                         android:layout_width="46dp"
                         android:layout_height="46dp"
                         android:layout_marginStart="8dp"
                         android:background="@drawable/bg_vod_play"
-                        android:contentDescription="分享外链"
+                        android:contentDescription="画中画"
                         android:padding="11dp"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/ic_share"
+                        android:src="@drawable/ic_pip"
                         android:tint="@color/shell_text" />
                 </LinearLayout>
 

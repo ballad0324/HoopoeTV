@@ -203,11 +203,15 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         refreshThemeButton();
     }
 
-    /** 深色模式下图标金色高亮、明亮模式下灰色，让当前状态一眼可辨 */
+    /** 深色模式下图标金色高亮、明亮模式下灰色，让当前状态一眼可辨；
+     *  v1.7.1：图标随状态切换——明亮模式显示月亮（点了变暗），深色模式显示太阳（点了变亮） */
     private void refreshThemeButton() {
         int color = getResources().getColor(
                 CommonSetting.isNightUi() ? R.color.shell_gold : R.color.shell_text_dim);
-        if (btnTheme != null) btnTheme.setColorFilter(color);
+        if (btnTheme != null) {
+            btnTheme.setImageResource(CommonSetting.isNightUi() ? R.drawable.play_brightness : R.drawable.ic_moon);
+            btnTheme.setColorFilter(color);
+        }
         if (btnUiMode != null) btnUiMode.setColorFilter(color);
         if (btnUser != null) btnUser.setColorFilter(color);
     }
@@ -754,6 +758,14 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
 
     private void openRecord(MobileRecordAdapter.Row row) {
         if (row == null || TextUtils.isEmpty(row.vodId)) return;
+        // v1.7.1：直播频道收藏（sourceKey=live）点开要直接进直播播放页，不能当点播详情打开
+        if (MobileLivePlayerActivity.LIVE_SOURCE_KEY.equals(row.sourceKey)) {
+            Bundle live = new Bundle();
+            live.putString("directUrl", row.vodId);
+            live.putString("directTitle", row.name);
+            jumpActivity(MobileLivePlayerActivity.class, live);
+            return;
+        }
         Bundle bundle = new Bundle();
         bundle.putString("id", row.vodId);
         bundle.putString("sourceKey", row.sourceKey);

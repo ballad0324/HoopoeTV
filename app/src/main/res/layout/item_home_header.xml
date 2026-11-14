@@ -82,7 +82,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/shape_home_segment_on"
             android:gravity="center"
-            android:text="首页"
+            android:text="播放历史"
             android:textColor="@color/shell_text"
             android:textSize="15sp"
             android:textStyle="bold" />

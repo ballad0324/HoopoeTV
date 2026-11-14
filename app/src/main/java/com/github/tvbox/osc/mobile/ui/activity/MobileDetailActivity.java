@@ -2,6 +2,7 @@ package com.github.tvbox.osc.mobile.ui.activity;
 
 import com.github.tvbox.osc.mobile.ui.drawable.UiSkin;
 import android.graphics.Bitmap;
+import android.media.AudioManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -83,8 +84,19 @@ public class MobileDetailActivity extends BaseActivity {
     private TextView tvCurTime;
     private TextView tvDurTime;
     private TextView tvPause;
-    private TextView tvCast;
-    private TextView tvDownload;
+    private TextView tvRewind;
+    private TextView tvForward;
+    private TextView tvPrevEp;
+    private TextView tvNextEp;
+    private TextView tvScaleInline;
+    private TextView tvSpeed;
+    private TextView tvGestureHint;
+    private ImageView ivCastTop;
+    private ImageView ivPipTop;
+    private ImageView ivFullTop;
+    private ImageView ivPipBig;
+    private View touchLayer;
+    private View llCtrl;
     private ProgressBar pbLoading;
     private ProgressBar pbPlayerLoading;
     private LinearLayout llFlags;
@@ -112,6 +124,19 @@ public class MobileDetailActivity extends BaseActivity {
     private long lastSavedPos = 0;
     /** 播放内核自动降级次数（参考原移动端 FongMiTV 的引擎切换，最多 2 次） */
     private int engineRetry = 0;
+
+    /** 画面比例与倍速循环用的下标（v1.7.2） */
+    private int scaleIndex = 0;
+    private int speedIndex = 2;
+    private static final float[] SPEED_VALUES = {0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f};
+
+    /** 手势状态：0 未定 / 1 进度 / 2 亮度 / 3 音量 */
+    private float gDownX, gDownY;
+    private int gMode = 0;
+    private boolean gSeeking = false;
+    private long gStartPos = 0;
+    private float gStartBrightness = 0.5f;
+    private int gStartVolume = 0;
 
     /** 从首页「继续观看」进入时的续播参数 */
     private boolean autoPlayFromHistory = false;
@@ -325,14 +350,14 @@ public class MobileDetailActivity extends BaseActivity {
                 toggleFavorite();
             }
         });
-        // 收藏右侧「分享外链」（v1.6.25）
-        View shareBig = findViewById(R.id.ivShareBig);
-        if (shareBig != null) {
-            UiSkin.circle(shareBig);
-            shareBig.setOnClickListener(new View.OnClickListener() {
+        // 收藏右侧改为「画中画」按钮（原分享外链已按需求取消）
+        View pipBig = findViewById(R.id.ivPipBig);
+        if (pipBig != null) {
+            UiSkin.circle(pipBig);
+            pipBig.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    shareVod();
+                    enterPipMode();
                 }
             });
         }
@@ -344,8 +369,19 @@ public class MobileDetailActivity extends BaseActivity {
         tvCurTime = findViewById(R.id.tvCurTime);
         tvDurTime = findViewById(R.id.tvDurTime);
         tvPause = findViewById(R.id.tvPause);
-        tvCast = findViewById(R.id.tvCast);
-        tvDownload = findViewById(R.id.tvDownload);
+        tvRewind = findViewById(R.id.tvRewind);
+        tvForward = findViewById(R.id.tvForward);
+        tvPrevEp = findViewById(R.id.tvPrevEp);
+        tvNextEp = findViewById(R.id.tvNextEp);
+        tvScaleInline = findViewById(R.id.tvScaleInline);
+        tvSpeed = findViewById(R.id.tvSpeed);
+        tvGestureHint = findViewById(R.id.tvGestureHint);
+        ivCastTop = findViewById(R.id.ivCastTop);
+        ivPipTop = findViewById(R.id.ivPipTop);
+        ivFullTop = findViewById(R.id.ivFullTop);
+        ivPipBig = findViewById(R.id.ivPipBig);
+        touchLayer = findViewById(R.id.touchLayer);
+        llCtrl = findViewById(R.id.llCtrl);
         pbLoading = findViewById(R.id.pbLoading);
         pbPlayerLoading = findViewById(R.id.pbPlayerLoading);
         llFlags = findViewById(R.id.llFlags);
@@ -477,23 +513,73 @@ public class MobileDetailActivity extends BaseActivity {
                 }
             }
         });
-        findViewById(R.id.tvFull).setOnClickListener(new View.OnClickListener() {
+        // 快退 / 快进（-10s / +10s）
+        tvRewind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                seekBy(-10000);
+            }
+        });
+        tvForward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                seekBy(10000);
+            }
+        });
+        // 上一集 / 下一集
+        tvPrevEp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchEpisode(-1);
+            }
+        });
+        tvNextEp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchEpisode(1);
+            }
+        });
+        // 画面比例
+        tvScaleInline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cycleScale();
+            }
+        });
+        // 倍速（含慢速 0.5x）
+        tvSpeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cycleSpeed();
+            }
+        });
+        // 右上角三个工具
+        ivFullTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openFullScreen();
             }
         });
-        tvCast.setOnClickListener(new View.OnClickListener() {
+        ivCastTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String title = tvName.getText().toString();
-                MobileCastHelper.cast(MobileDetailActivity.this, title, currentPlayUrl);
+                if (currentPlayUrl == null) {
+                    Toast.makeText(MobileDetailActivity.this, "还没拿到播放地址，先点播放", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                MobileCastHelper.cast(MobileDetailActivity.this, tvName.getText().toString(), currentPlayUrl);
             }
         });
-        tvDownload.setOnClickListener(new View.OnClickListener() {
+        ivPipTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadCurrent();
+                enterPipMode();
+            }
+        });
+        touchLayer.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, android.view.MotionEvent e) {
+                return onPlayerTouch(e);
             }
         });
         sbInline.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -517,6 +603,242 @@ public class MobileDetailActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    /** 相对当前位置跳转（快退/快进按钮用） */
+    private void seekBy(long deltaMs) {
+        if (!playingStarted || currentPlayUrl == null) {
+            startPlay();
+            return;
+        }
+        long duration = videoView.getDuration();
+        long target = videoView.getCurrentPosition() + deltaMs;
+        if (target < 0) target = 0;
+        if (duration > 0 && target > duration - 1000) target = duration - 1000;
+        videoView.seekTo(target);
+        saveProgress(target);
+    }
+
+    /** 上一集 / 下一集：delta = -1 / +1，边界处给提示 */
+    private void switchEpisode(int delta) {
+        if (vodInfo == null) return;
+        List<VodInfo.VodSeries> list = vodInfo.seriesMap == null ? null : vodInfo.seriesMap.get(vodInfo.playFlag);
+        if (list == null || list.isEmpty()) return;
+        int index = vodInfo.getplayIndex() + delta;
+        if (index < 0) {
+            Toast.makeText(this, "已经是第一集", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (index >= list.size()) {
+            Toast.makeText(this, "已经是最后一集", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        vodInfo.playIndex = index;
+        markSeriesSelected(index);
+        startPlay();
+        if (rvSeries != null) {
+            try {
+                rvSeries.scrollToPosition(index);
+            } catch (Throwable ignored) {
+            }
+        }
+    }
+
+    /** 画面比例循环：自适应 → 16:9 → 4:3 → 铺满 */
+    private void cycleScale() {
+        scaleIndex = (scaleIndex + 1) % 4;
+        int scaleType = scaleIndex == 0 ? VideoView.SCREEN_SCALE_DEFAULT
+                : scaleIndex == 1 ? VideoView.SCREEN_SCALE_16_9
+                : scaleIndex == 2 ? VideoView.SCREEN_SCALE_4_3
+                : VideoView.SCREEN_SCALE_MATCH_PARENT;
+        videoView.setScreenScaleType(scaleType);
+        tvScaleInline.setText(PlayerHelper.getScaleName(scaleType));
+    }
+
+    /** 倍速循环：0.5 / 0.75 / 1.0 / 1.25 / 1.5 / 2.0 */
+    private void cycleSpeed() {
+        speedIndex = (speedIndex + 1) % SPEED_VALUES.length;
+        float speed = SPEED_VALUES[speedIndex];
+        try {
+            videoView.getMediaPlayer().setSpeed(speed);
+        } catch (Throwable th) {
+            Toast.makeText(this, "当前内核不支持改倍速", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        tvSpeed.setText(formatSpeed(speed));
+    }
+
+    private String formatSpeed(float speed) {
+        return new java.text.DecimalFormat("0.##").format(speed) + "x";
+    }
+
+    /**
+     * 播放器手势（详情页内嵌播放器）：单击显隐控制条、横滑调进度、
+     * 左半屏上下滑调亮度、右半屏上下滑调音量。
+     */
+    private boolean onPlayerTouch(android.view.MotionEvent e) {
+        switch (e.getAction()) {
+            case android.view.MotionEvent.ACTION_DOWN:
+                gDownX = e.getX();
+                gDownY = e.getY();
+                gMode = 0;
+                gSeeking = false;
+                gStartPos = videoView.getCurrentPosition();
+                gStartBrightness = curBrightness();
+                gStartVolume = curVolume();
+                return true;
+            case android.view.MotionEvent.ACTION_MOVE: {
+                float dx = e.getX() - gDownX;
+                float dy = e.getY() - gDownY;
+                if (gMode == 0) {
+                    if (Math.abs(dx) > 24 && Math.abs(dx) > Math.abs(dy)) {
+                        gMode = 1; // 进度
+                    } else if (Math.abs(dy) > 24) {
+                        gMode = (gDownX < playerWrap.getWidth() / 2f) ? 2 : 3; // 2 亮度 / 3 音量
+                    }
+                    return true;
+                }
+                if (gMode == 1) {
+                    gSeeking = true;
+                    float ratio = dx / playerWrap.getWidth();
+                    long duration = videoView.getDuration();
+                    long target = (long) (gStartPos + ratio * Math.max(1, duration));
+                    if (target < 0) target = 0;
+                    if (duration > 0 && target > duration) target = duration;
+                    showGestureHint(timeText(target) + " / " + timeText(duration));
+                } else if (gMode == 2 || gMode == 3) {
+                    float delta = -dy / (playerWrap.getHeight() * 1.2f);
+                    if (gMode == 2) {
+                        float v = clamp01(gStartBrightness + delta);
+                        setBrightness(v);
+                        showGestureHint("亮度 " + Math.round(v * 100) + "%");
+                    } else {
+                        int max = audioManager().getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                        int target = Math.round(gStartVolume + delta * max);
+                        if (target < 0) target = 0;
+                        if (target > max) target = max;
+                        audioManager().setStreamVolume(AudioManager.STREAM_MUSIC, target, 0);
+                        showGestureHint("音量 " + Math.round(target * 100f / Math.max(1, max)) + "%");
+                    }
+                }
+                return true;
+            }
+            case android.view.MotionEvent.ACTION_UP:
+            case android.view.MotionEvent.ACTION_CANCEL: {
+                if (gMode == 1) {
+                    float dx = e.getX() - gDownX;
+                    float ratio = dx / playerWrap.getWidth();
+                    long duration = videoView.getDuration();
+                    long target = (long) (gStartPos + ratio * Math.max(1, duration));
+                    if (target < 0) target = 0;
+                    if (duration > 0 && target > duration) target = duration;
+                    videoView.seekTo(target);
+                    saveProgress(target);
+                    gSeeking = false;
+                    hideGestureHintSoon();
+                } else if (gMode == 0) {
+                    // 单击：显隐控制条
+                    boolean visible = llCtrl.getVisibility() == View.VISIBLE;
+                    llCtrl.setVisibility(visible ? View.GONE : View.VISIBLE);
+                    View top = findViewById(R.id.llPlayerTop);
+                    if (top != null) top.setVisibility(visible ? View.GONE : View.VISIBLE);
+                    ivBigPlay.setVisibility(visible && playingStarted ? View.GONE : (playingStarted ? View.GONE : View.VISIBLE));
+                } else {
+                    hideGestureHintSoon();
+                }
+                gMode = 0;
+                return true;
+            }
+            default:
+                return false;
+        }
+    }
+
+    private float curBrightness() {
+        try {
+            float v = getWindow().getAttributes().screenBrightness;
+            if (v < 0) {
+                v = android.provider.Settings.System.getInt(getContentResolver(),
+                        android.provider.Settings.System.SCREEN_BRIGHTNESS, 128) / 255f;
+            }
+            return clamp01(v);
+        } catch (Throwable th) {
+            return 0.5f;
+        }
+    }
+
+    private void setBrightness(float v) {
+        try {
+            android.view.WindowManager.LayoutParams lp = getWindow().getAttributes();
+            lp.screenBrightness = clamp01(v);
+            getWindow().setAttributes(lp);
+        } catch (Throwable ignored) {
+        }
+    }
+
+    private float clamp01(float v) {
+        return v < 0 ? 0 : (v > 1 ? 1 : v);
+    }
+
+    private AudioManager audioManager() {
+        return (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+    }
+
+    private int curVolume() {
+        try {
+            return audioManager().getStreamVolume(AudioManager.STREAM_MUSIC);
+        } catch (Throwable th) {
+            return 0;
+        }
+    }
+
+    private void showGestureHint(String text) {
+        if (tvGestureHint == null) return;
+        tvGestureHint.setText(text);
+        tvGestureHint.setVisibility(View.VISIBLE);
+        uiHandler.removeCallbacks(hideHintTask);
+        uiHandler.postDelayed(hideHintTask, 900);
+    }
+
+    private void hideGestureHintSoon() {
+        uiHandler.removeCallbacks(hideHintTask);
+        uiHandler.postDelayed(hideHintTask, 600);
+    }
+
+    private final Runnable hideHintTask = new Runnable() {
+        @Override
+        public void run() {
+            if (tvGestureHint != null) tvGestureHint.setVisibility(View.GONE);
+        }
+    };
+
+    private String timeText(long ms) {
+        if (ms < 0) ms = 0;
+        long total = ms / 1000;
+        long h = total / 3600;
+        long m = (total % 3600) / 60;
+        long s = total % 60;
+        if (h > 0) return String.format(Locale.CHINA, "%d:%02d:%02d", h, m, s);
+        return String.format(Locale.CHINA, "%02d:%02d", m, s);
+    }
+
+    /** 画中画：缩小成悬浮小窗继续播（Android 8.0+，清单里已声明 supportsPictureInPicture） */
+    private void enterPipMode() {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
+            Toast.makeText(this, "当前系统不支持画中画（需 Android 8.0 及以上）", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+            if (!playingStarted || currentPlayUrl == null) {
+                Toast.makeText(this, "先播放再小窗", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            android.app.PictureInPictureParams.Builder b = new android.app.PictureInPictureParams.Builder();
+            // 本页是竖屏锁定的，不强行指定 16:9 窗口比例（指定了会被系统拒绝）
+            enterPictureInPictureMode(b.build());
+        } catch (Throwable th) {
+            Toast.makeText(this, "进入画中画失败：" + th, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initViewModel() {
@@ -959,40 +1281,6 @@ public class MobileDetailActivity extends BaseActivity {
         }
         if (videoView != null) videoView.release();
         super.onDestroy();
-    }
-
-    /** 分享外链：把「片名 + 当前播放地址」交给系统分享面板 */
-    private void shareVod() {
-        String name = vodInfo != null && !TextUtils.isEmpty(vodInfo.name)
-                ? vodInfo.name : tvName.getText().toString();
-        if (TextUtils.isEmpty(name)) name = "HoopoeTV 影片";
-        String link = currentPlayUrl == null ? "" : currentPlayUrl.trim();
-        StringBuilder sb = new StringBuilder();
-        sb.append("《").append(name).append("》");
-        if (!TextUtils.isEmpty(link)) {
-            sb.append("\n").append(link);
-        } else if (!TextUtils.isEmpty(vodId)) {
-            sb.append("\n源：").append(sourceKey == null ? "" : sourceKey)
-              .append(" / ID：").append(vodId);
-        }
-        final String text = sb.toString();
-        // 先复制到剪贴板：模拟器/精简系统没有分享目标时，用户仍能粘贴出去
-        try {
-            android.content.ClipboardManager cm = (android.content.ClipboardManager)
-                    getSystemService(Context.CLIPBOARD_SERVICE);
-            if (cm != null) cm.setPrimaryClip(android.content.ClipData.newPlainText("HoopoeTV", text));
-            Toast.makeText(this, "外链已复制到剪贴板", Toast.LENGTH_SHORT).show();
-        } catch (Throwable ignored) {
-        }
-        Intent send = new Intent(Intent.ACTION_SEND);
-        send.setType("text/plain");
-        send.putExtra(Intent.EXTRA_SUBJECT, name);
-        send.putExtra(Intent.EXTRA_TEXT, text);
-        try {
-            startActivity(Intent.createChooser(send, "分享外链"));
-        } catch (Throwable th) {
-            Toast.makeText(this, "没有可用的分享应用，已复制到剪贴板", Toast.LENGTH_SHORT).show();
-        }
     }
 
     /** 收藏 / 取消收藏当前影片，并同步刷新顶栏与按钮行的星标 */

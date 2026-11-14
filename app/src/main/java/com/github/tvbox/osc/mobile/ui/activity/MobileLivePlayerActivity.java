@@ -15,7 +15,9 @@ import com.github.tvbox.osc.bean.LiveChannelGroup;
 import com.github.tvbox.osc.bean.LiveChannelItem;
 import com.github.tvbox.osc.bean.LivePlayerManager;
 import com.github.tvbox.osc.player.MyVideoView;
+import com.github.tvbox.osc.mobile.ui.MobileCastHelper;
 import com.github.tvbox.osc.mobile.ui.MobileDownloadHelper;
+import com.github.tvbox.osc.mobile.ui.MobileFavorites;
 import com.github.tvbox.osc.util.PlayerHelper;
 
 import org.json.JSONArray;
@@ -42,7 +44,11 @@ public class MobileLivePlayerActivity extends BaseActivity {
     private TextView tvScale;
     private ImageView ivFavLive;
     private ImageView ivDlLive;
+    private ImageView liveBackdrop;
+    private TextView tvCastLive;
     private static final int LIVE_RECORD_SECONDS = 60;
+    /** 直播频道在全局收藏里的 sourceKey 标记（首页收藏夹据此跳直播播放页） */
+    public static final String LIVE_SOURCE_KEY = "live";
 
     private final LivePlayerManager livePlayerManager = new LivePlayerManager();
     private List<LiveChannelItem> channels = new ArrayList<>();
@@ -80,6 +86,8 @@ public class MobileLivePlayerActivity extends BaseActivity {
         tvScale = findViewById(R.id.tvScale);
         ivFavLive = findViewById(R.id.ivFavLive);
         ivDlLive = findViewById(R.id.ivDlLive);
+        liveBackdrop = findViewById(R.id.liveBackdrop);
+        tvCastLive = findViewById(R.id.tvCastLive);
 
         Bundle bundle = getIntent() != null ? getIntent().getExtras() : null;
         int groupIndex = bundle != null ? bundle.getInt("groupIndex", 0) : 0;
@@ -163,6 +171,21 @@ public class MobileLivePlayerActivity extends BaseActivity {
                 tvScale.setText(PlayerHelper.getScaleName(scaleType));
             }
         });
+        // v1.7.1：右下角「投屏」，把当前频道地址推给同网 DLNA 电视
+        if (tvCastLive != null) {
+            tvCastLive.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String url = currentChannelUrl();
+                    if (TextUtils.isEmpty(url)) {
+                        Toast.makeText(MobileLivePlayerActivity.this,
+                                "还没有拿到频道地址，等画面出来再投屏", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    MobileCastHelper.cast(MobileLivePlayerActivity.this, currentChannelName(), url);
+                }
+            });
+        }
 
         livePlayerManager.init(videoView);
         // 直播不需要进度管理（TV 端同样置空），否则会干扰内核的 seek/prepare 流程
@@ -179,14 +202,17 @@ public class MobileLivePlayerActivity extends BaseActivity {
                     case VideoView.STATE_PREPARING:
                     case VideoView.STATE_BUFFERING:
                         pbLoading.setVisibility(View.VISIBLE);
+                        setBackdropVisible(true);
                         break;
                     case VideoView.STATE_BUFFERED:
                     case VideoView.STATE_PLAYING:
                         pbLoading.setVisibility(View.GONE);
+                        setBackdropVisible(false);
                         retried = false;
                         break;
                     case VideoView.STATE_ERROR:
                         pbLoading.setVisibility(View.GONE);
+                        setBackdropVisible(true);
                         onLiveError();
                         break;
                     default:
@@ -211,6 +237,12 @@ public class MobileLivePlayerActivity extends BaseActivity {
     }
 
     // ---------------------------------------------------------------- 收藏 / 下载（v1.6.25）
+
+    /** 待播底图显隐：出画面就藏起来，加载/出错时露出来 */
+    private void setBackdropVisible(boolean visible) {
+        if (liveBackdrop == null) return;
+        liveBackdrop.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
 
     /** 频道唯一键，与 MobileLiveActivity 完全一致：名称 + \u0001 + 地址 */
     private String channelKey() {
@@ -237,8 +269,7 @@ public class MobileLivePlayerActivity extends BaseActivity {
         return "";
     }
 
-    private List<String> readLiveKeys(String name) {
-        List<String> out = new ArrayList<>();
+    private List<String> readLiveKeys(String name) {        List<String> out = new ArrayList<>();
         try {
             String raw = getSharedPreferences("hoopoe_live", MODE_PRIVATE).getString(name, "[]");
             org.json.JSONArray arr = new org.json.JSONArray(raw == null ? "[]" : raw);
@@ -268,8 +299,11 @@ public class MobileLivePlayerActivity extends BaseActivity {
             Toast.makeText(this, "还没有拿到频道地址", Toast.LENGTH_SHORT).show();
             return;
         }
+        String name = currentChannelName();
+        String url = currentChannelUrl();
         List<String> fav = readLiveKeys("fav");
-        if (fav.contains(key)) {
+        boolean has = fav.contains(key);
+        if (has) {
             fav.remove(key);
             Toast.makeText(this, "已取消收藏", Toast.LENGTH_SHORT).show();
         } else {
@@ -277,6 +311,17 @@ public class MobileLivePlayerActivity extends BaseActivity {
             Toast.makeText(this, "已加入收藏", Toast.LENGTH_SHORT).show();
         }
         writeLiveKeys("fav", fav);
+        // v1.7.1：同一步写进全局收藏（sourceKey=live），首页「收藏夹」才看得到直播频道
+        MobileFavorites.Item it = new MobileFavorites.Item();
+        it.vodId = url;
+        it.sourceKey = LIVE_SOURCE_KEY;
+        it.name = name;
+        it.note = "直播频道";
+        if (has) {
+            MobileFavorites.remove(url, LIVE_SOURCE_KEY);
+        } else {
+            MobileFavorites.toggle(it);
+        }
         updateFavMark();
     }
 

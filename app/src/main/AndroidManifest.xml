@@ -91,6 +91,7 @@
             android:name=".mobile.ui.activity.MobileDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:supportsPictureInPicture="true"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity

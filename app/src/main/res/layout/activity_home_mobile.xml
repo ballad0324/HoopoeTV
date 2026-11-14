@@ -57,7 +57,7 @@
             android:src="@drawable/ic_ui_tv"
             android:tint="@color/shell_text_dim" />
 
-        <!-- 明暗模式切换（原来顶部搜索框的位置，图标用公共库里的亮度图标） -->
+        <!-- 明暗模式切换（v1.7.1：图标改成月亮，明亮模式显示月亮、深色模式显示太阳） -->
         <ImageView
             android:id="@+id/btnTheme"
             android:layout_width="42dp"
@@ -68,7 +68,7 @@
             android:focusable="true"
             android:padding="11dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/play_brightness"
+            android:src="@drawable/ic_moon"
             android:tint="@color/shell_text_dim" />
 
         <!-- 用户入口（v1.6.36）：原这里是齿轮设置，改为用户头像，

@@ -9,6 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <!-- 待播 / 加载 / 出错时的配套底图（v1.7.1）：盖在 videoView 之上，
+         一旦真正出画面（PLAYING/BUFFERED）就隐藏，避免挡住画面 -->
+    <ImageView
+        android:id="@+id/liveBackdrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="待播底图"
+        android:scaleType="centerCrop"
+        android:src="@drawable/live_backdrop" />
+
     <ProgressBar
         android:id="@+id/pbLoading"
         android:layout_width="wrap_content"
@@ -133,6 +143,18 @@
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
             android:text="@string/m_scale"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+        <!-- 投屏（v1.7.1）：挨着「画面比例」放在右下角，把当前频道地址推给同网 DLNA 电视 -->
+        <TextView
+            android:id="@+id/tvCastLive"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="4dp"
+            android:text="投屏"
             android:textColor="#FFFFFF"
             android:textSize="13sp" />
 
