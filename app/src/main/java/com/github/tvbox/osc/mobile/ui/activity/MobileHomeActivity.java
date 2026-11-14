@@ -7,6 +7,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,6 +39,8 @@ import com.github.tvbox.osc.mobile.setting.MobileSetting;
 import com.github.tvbox.osc.mobile.ui.LiquidMotion;
 import com.github.tvbox.osc.mobile.ui.MobileFavorites;
 import com.github.tvbox.osc.mobile.ui.MobilePlayHistory;
+import com.github.tvbox.osc.mobile.ui.MobileUser;
+import com.github.tvbox.osc.util.CloudBackupHelper;
 import com.github.tvbox.osc.mobile.ui.activity.MobileDiscoverActivity;
 import com.github.tvbox.osc.mobile.ui.adapter.MobileHistoryAdapter;
 import com.github.tvbox.osc.mobile.ui.adapter.MobileRecordAdapter;
@@ -67,7 +71,7 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
     private ViewPager pager;
     private ImageView btnTheme;
     private ImageView btnUiMode;
-    private ImageView btnSetting;
+    private ImageView btnUser;
     /** 底部导航栏（Compose 绘制：分类 tab + 四图标 dock） */
     private ComposeView cvDock;
 
@@ -136,7 +140,7 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         pager = findViewById(R.id.pager);
         btnTheme = findViewById(R.id.btnTheme);
         btnUiMode = findViewById(R.id.btnUiMode);
-        btnSetting = findViewById(R.id.btnSetting);
+        btnUser = findViewById(R.id.btnUser);
         cvDock = findViewById(R.id.cvDock);
 
         // 收藏/历史/小编推荐标题已移进列表首项（item_home_header），这里只留容器
@@ -174,7 +178,7 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         // Liquid Glass 动效：顶栏液态按压 + 顶栏玻璃周期性扫光（底部改为 Compose 自带按压反馈）
         LiquidMotion.bindPress(btnTheme, 0.88f);
         LiquidMotion.bindPress(btnUiMode, 0.88f);
-        LiquidMotion.bindPress(btnSetting, 0.88f);
+        LiquidMotion.bindPress(btnUser, 0.88f);
         // toolbar：顶 6dp / 高 56dp / 左右 10dp / 圆角 22dp，与 glass_card 完全对齐
         LiquidMotion.attachHeaderSheen(this, 6f, 56f, 10f, 22f);
     }
@@ -203,7 +207,7 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
                 CommonSetting.isNightUi() ? R.color.shell_gold : R.color.shell_text_dim);
         if (btnTheme != null) btnTheme.setColorFilter(color);
         if (btnUiMode != null) btnUiMode.setColorFilter(color);
-        if (btnSetting != null) btnSetting.setColorFilter(color);
+        if (btnUser != null) btnUser.setColorFilter(color);
     }
 
     /** 右上角一键切到电视端：写 ui_mode 后清栈重启，由 HomeActivity 分流到 TV 首页 */
@@ -214,6 +218,168 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
+    }
+
+    /* ===================== 用户面板（v1.6.36） ===================== */
+
+    /**
+     * 头像点开的用户面板：账号状态 + 设置 / 管理面板 / 下载管理，底部登录或退出登录。
+     * 布局先自己 inflate 再 setView，避免 Dialog.create() 之后 findViewById 拿不到控件的老坑。
+     */
+    private void showUserPanel() {
+        View content = getLayoutInflater().inflate(R.layout.dialog_user_panel, null);
+        final AlertDialog dialog = new AlertDialog.Builder(this).setView(content).create();
+        dialog.show();
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setBackgroundDrawableResource(R.drawable.glass_card);
+            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+
+        ImageView ivAvatar = content.findViewById(R.id.ivAvatar);
+        TextView tvName = content.findViewById(R.id.tvUserName);
+        TextView tvState = content.findViewById(R.id.tvUserState);
+        final TextView tvAction = content.findViewById(R.id.tvUserAction);
+
+        if (MobileUser.isLoggedIn()) {
+            tvName.setText(MobileUser.name());
+            tvState.setText("已登录 · 固定使用内置源");
+            tvAction.setText("退出登录");
+            if (ivAvatar != null) {
+                ivAvatar.setColorFilter(getResources().getColor(R.color.shell_primary));
+            }
+        } else {
+            tvName.setText("未登录");
+            tvState.setText("当前使用自填源 · 登录后切内置源");
+            tvAction.setText("登录");
+            if (ivAvatar != null) {
+                ivAvatar.setColorFilter(getResources().getColor(R.color.shell_text_dim));
+            }
+        }
+
+        View rowSetting = content.findViewById(R.id.rowSetting);
+        if (rowSetting != null) {
+            rowSetting.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    jumpActivity(MobileSettingActivity.class);
+                }
+            });
+        }
+        View rowAdmin = content.findViewById(R.id.rowAdmin);
+        if (rowAdmin != null) {
+            rowAdmin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    jumpActivity(MobileAdminActivity.class);
+                }
+            });
+        }
+        View rowDownload = content.findViewById(R.id.rowDownload);
+        if (rowDownload != null) {
+            rowDownload.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    jumpActivity(MobileDownloadsActivity.class);
+                }
+            });
+        }
+
+        tvAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                if (MobileUser.isLoggedIn()) {
+                    confirmLogout();
+                } else {
+                    showLoginDialog();
+                }
+            }
+        });
+    }
+
+    /** 登录弹窗：复用云端备份那套 PHP 账号（地址 / 用户名 / 密码） */
+    private void showLoginDialog() {
+        View content = getLayoutInflater().inflate(R.layout.dialog_user_login, null);
+        final AlertDialog dialog = new AlertDialog.Builder(this).setView(content).create();
+        dialog.show();
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setBackgroundDrawableResource(R.drawable.glass_card);
+            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+
+        final EditText etServer = content.findViewById(R.id.etServer);
+        final EditText etUser = content.findViewById(R.id.etUser);
+        final EditText etPass = content.findViewById(R.id.etPass);
+        final TextView tvLoginTip = content.findViewById(R.id.tvLoginTip);
+
+        etServer.setText(CloudBackupHelper.getBaseUrl());
+        etUser.setText(CloudBackupHelper.getUser());
+        etPass.setText(CloudBackupHelper.getPass());
+
+        content.findViewById(R.id.tvCancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        content.findViewById(R.id.tvLogin).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String server = etServer.getText() == null ? "" : etServer.getText().toString().trim();
+                String user = etUser.getText() == null ? "" : etUser.getText().toString().trim();
+                String pass = etPass.getText() == null ? "" : etPass.getText().toString();
+                if (TextUtils.isEmpty(server) || TextUtils.isEmpty(user) || TextUtils.isEmpty(pass)) {
+                    Toast.makeText(MobileHomeActivity.this, "服务器地址、用户名、密码都要填",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                tvLoginTip.setVisibility(View.VISIBLE);
+                tvLoginTip.setText("正在登录…");
+                MobileUser.login(server, user, pass, new MobileUser.LoginCallback() {
+                    @Override
+                    public void onDone(boolean ok, String msg) {
+                        if (ok) {
+                            Toast.makeText(MobileHomeActivity.this, "登录成功，已切到内置源",
+                                    Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                            reloadAfterAccountChange();
+                        } else {
+                            tvLoginTip.setVisibility(View.VISIBLE);
+                            tvLoginTip.setText("登录失败：" + msg);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void confirmLogout() {
+        new AlertDialog.Builder(this)
+                .setTitle("退出登录")
+                .setMessage("退出后将改回使用你自己填的接口，确定退出？")
+                .setNegativeButton("取消", null)
+                .setPositiveButton("退出", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        MobileUser.logout();
+                        Toast.makeText(MobileHomeActivity.this, "已退出登录，已切回自填源",
+                                Toast.LENGTH_SHORT).show();
+                        reloadAfterAccountChange();
+                    }
+                })
+                .show();
+    }
+
+    /** 登录态变化会改变生效源（内置 ↔ 自填），必须重建首页分类 */
+    private void reloadAfterAccountChange() {
+        lastHomeKey = null;
+        cfgReloading = true;
+        loadConfig(false);
     }
 
     @Override
@@ -264,11 +430,10 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
                 toggleNightMode();
             }
         });
-        btnSetting.setOnClickListener(new View.OnClickListener() {
+        btnUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 设置入口已移到右上角（明暗切换右侧）：公共项 → CommonSetting，手机专有项 → MobileSetting
-                jumpActivity(MobileSettingActivity.class);
+                showUserPanel();
             }
         });
 

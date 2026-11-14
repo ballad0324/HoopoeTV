@@ -158,6 +158,14 @@ public class ApiConfig {
     public static String getApiUrl() {
         String def = getDefaultApiUrl();
         if (def == null) def = "";
+        // 账号规则（v1.6.36）：已登录用户固定使用内置源，用户自填的接口一律不参与；
+        // 未登录才允许走 Hawk 里自己填的接口（没填同样回退内置源）。
+        try {
+            if (com.github.tvbox.osc.mobile.ui.MobileUser.isLoggedIn()) {
+                return def.trim();
+            }
+        } catch (Throwable ignored) {
+        }
         String stored = Hawk.get(HawkConfig.API_URL, "");
         if (stored == null) stored = "";
         // 内置源已清空：默认走空壳，但允许用户在设置里手动填源

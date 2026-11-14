@@ -71,18 +71,19 @@
             android:src="@drawable/play_brightness"
             android:tint="@color/shell_text_dim" />
 
-        <!-- 设置入口：原来在底部 dock 第四位，v1.5.6 起移到右上角、明暗切换右侧 -->
+        <!-- 用户入口（v1.6.36）：原这里是齿轮设置，改为用户头像，
+             点开弹用户面板：设置 / 管理面板 / 下载管理 -->
         <ImageView
-            android:id="@+id/btnSetting"
+            android:id="@+id/btnUser"
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="设置"
+            android:contentDescription="用户"
             android:focusable="true"
             android:padding="11dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/hm_settings"
+            android:src="@drawable/ic_user_avatar"
             android:tint="@color/shell_text_dim" />
 
     </LinearLayout>
