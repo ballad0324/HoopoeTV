@@ -86,13 +86,7 @@ public class CommonSetting {
         Hawk.put(HawkConfig.DOH_URL, doh);
     }
 
-    public static String getProxyServer() {
-        return Hawk.get(HawkConfig.PROXY_SERVER, "");
-    }
-
-    public static void putProxyServer(String proxy) {
-        Hawk.put(HawkConfig.PROXY_SERVER, proxy);
-    }
+    /* 代理服务器设置已移除：EXO 的"失败换代理重试"逻辑一并删掉，见 ExoMediaPlayer */
 
     /* ===================== 字幕（两端共用） ===================== */
 

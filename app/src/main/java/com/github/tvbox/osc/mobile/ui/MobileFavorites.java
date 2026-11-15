@@ -1,20 +1,17 @@
 package com.github.tvbox.osc.mobile.ui;
 
-import com.orhanobut.hawk.Hawk;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.github.tvbox.osc.cache.FavRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 我的收藏：本机 Hawk 存储，同源同 id 去重，最新收藏置顶，最多 100 条。
+ * 手机端收藏的兼容外壳。
+ *
+ * 实际存储在 Room 表 vodCollect（见 {@link FavRepository}），与电视端共用同一份数据，
+ * 同一台设备切换界面模式时收藏立即互通。这里保留原方法签名，避免改动各页面的调用点。
  */
 public class MobileFavorites {
-
-    private static final String KEY = "mobile_favorites";
-    private static final int MAX = 100;
 
     public static class Item {
         public String vodId = "";
@@ -27,103 +24,52 @@ public class MobileFavorites {
 
     public static List<Item> load() {
         List<Item> list = new ArrayList<>();
-        String raw = null;
-        try {
-            raw = Hawk.get(KEY, "");
-        } catch (Throwable ignored) {
-        }
-        if (raw == null || raw.length() == 0) return list;
-        try {
-            JSONArray arr = new JSONArray(raw);
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject o = arr.optJSONObject(i);
-                if (o == null) continue;
-                Item it = new Item();
-                it.vodId = o.optString("vodId", "");
-                it.sourceKey = o.optString("sourceKey", "");
-                it.name = o.optString("name", "");
-                it.pic = o.optString("pic", "");
-                it.note = o.optString("note", "");
-                it.time = o.optLong("time", 0);
-                if (it.vodId.length() == 0) continue;
-                list.add(it);
-            }
-        } catch (Throwable ignored) {
+        // 手机端要显示直播频道收藏，所以取全量；电视端在 CollectActivity 里自行过滤 live 条目
+        for (FavRepository.Item src : FavRepository.load()) {
+            list.add(convert(src));
         }
         return list;
     }
 
     public static boolean has(String vodId, String sourceKey) {
-        for (Item it : load()) {
-            if (it.vodId.equals(vodId) && it.sourceKey.equals(sourceKey)) return true;
-        }
-        return false;
+        return FavRepository.has(vodId, sourceKey);
     }
 
     /** 收藏 / 取消收藏，返回操作后是否为已收藏状态 */
     public static boolean toggle(Item item) {
-        if (item == null || item.vodId == null || item.vodId.length() == 0) return false;
-        List<Item> list = load();
-        for (int i = 0; i < list.size(); i++) {
-            Item it = list.get(i);
-            if (item.vodId.equals(it.vodId) && item.sourceKey.equals(it.sourceKey)) {
-                list.remove(i);
-                save(list);
-                return false;
-            }
-        }
-        item.time = System.currentTimeMillis();
-        list.add(0, item);
-        while (list.size() > MAX) {
-            list.remove(list.size() - 1);
-        }
-        save(list);
-        return true;
+        if (item == null) return false;
+        return FavRepository.toggle(toRepo(item));
     }
 
-    /** 跨端同步用：本机没有才追加，规则与 toggle 一致（置顶、上限 100） */
+    /** 跨端同步用：本机没有才追加 */
     public static boolean add(Item item) {
-        if (item == null || item.vodId == null || item.vodId.length() == 0) return false;
-        if (has(item.vodId, item.sourceKey)) return false;
-        List<Item> list = load();
-        if (item.time <= 0) item.time = System.currentTimeMillis();
-        list.add(0, item);
-        while (list.size() > MAX) {
-            list.remove(list.size() - 1);
-        }
-        save(list);
-        return true;
+        if (item == null) return false;
+        return FavRepository.add(toRepo(item));
     }
 
     public static void remove(String vodId, String sourceKey) {
-        List<Item> list = load();
-        for (int i = list.size() - 1; i >= 0; i--) {
-            Item it = list.get(i);
-            if (it.vodId.equals(vodId) && it.sourceKey.equals(sourceKey)) {
-                list.remove(i);
-            }
-        }
-        save(list);
+        FavRepository.remove(vodId, sourceKey);
     }
 
-    private static void save(List<Item> list) {
-        JSONArray arr = new JSONArray();
-        for (Item it : list) {
-            try {
-                JSONObject o = new JSONObject();
-                o.put("vodId", it.vodId);
-                o.put("sourceKey", it.sourceKey);
-                o.put("name", it.name == null ? "" : it.name);
-                o.put("pic", it.pic == null ? "" : it.pic);
-                o.put("note", it.note == null ? "" : it.note);
-                o.put("time", it.time);
-                arr.put(o);
-            } catch (Throwable ignored) {
-            }
-        }
-        try {
-            Hawk.put(KEY, arr.toString());
-        } catch (Throwable ignored) {
-        }
+    private static Item convert(FavRepository.Item src) {
+        Item it = new Item();
+        it.vodId = src.vodId;
+        it.sourceKey = src.sourceKey;
+        it.name = src.name;
+        it.pic = src.pic;
+        it.note = src.note;
+        it.time = src.time;
+        return it;
+    }
+
+    private static FavRepository.Item toRepo(Item it) {
+        FavRepository.Item src = new FavRepository.Item();
+        src.vodId = it.vodId;
+        src.sourceKey = it.sourceKey;
+        src.name = it.name;
+        src.pic = it.pic;
+        src.note = it.note;
+        src.time = it.time;
+        return src;
     }
 }

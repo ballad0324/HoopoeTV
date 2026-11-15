@@ -91,6 +91,13 @@ public class AccountDialog {
                 doFavPull();
             }
         });
+        v.findViewById(R.id.btnLanSync).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 局域网直连同步：不经过任何服务器，同一 WiFi 下与手机直接互传
+                new LanSyncDialog(act).show();
+            }
+        });
         dialog = new AlertDialog.Builder(act).setView(v).create();
         dialog.show();
         refreshState();

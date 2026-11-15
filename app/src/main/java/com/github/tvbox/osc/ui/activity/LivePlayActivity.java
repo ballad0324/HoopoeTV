@@ -1722,8 +1722,7 @@ public class LivePlayActivity extends BaseActivity {
     private void initLiveChannelList() {
         List<LiveChannelGroup> list = ApiConfig.get().getChannelGroupList();
         if (list.isEmpty()) {
-            Toast.makeText(App.getInstance(), getString(R.string.act_live_play_empty_channel), Toast.LENGTH_SHORT).show();
-            finish();
+            showNoLiveSource();
             return;
         }
 
@@ -1734,6 +1733,46 @@ public class LivePlayActivity extends BaseActivity {
             liveChannelGroupList.addAll(list);
             showSuccess();
             initLiveState();
+        }
+    }
+
+    /**
+     * 直播源为空时不再直接 finish（旧逻辑会让人感觉「点了没反应、闪回首页」），
+     * 改为给明确引导：能分清「没配源」和「配了但解析不出来」两种情况。
+     */
+    private void showNoLiveSource() {
+        String liveUrl = Hawk.get(HawkConfig.LIVE_URL, "");
+        final boolean notConfigured = StringUtils.isBlank(liveUrl);
+        String msg = notConfigured
+                ? "还没有配置直播源。\n\n请到「设置 → 直播源」填入直播源地址（.txt 列表或接口地址），保存后重新进入直播。"
+                : "直播源地址没有解析出任何频道：\n" + liveUrl + "\n\n请检查该地址是否可访问、内容是否为直播列表。";
+        try {
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle(notConfigured ? "直播源未配置" : "直播源解析失败")
+                    .setMessage(msg)
+                    .setPositiveButton("去设置", new android.content.DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(android.content.DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                            if (notConfigured) {
+                                jumpActivity(SettingActivity.class);
+                            }
+                        }
+                    })
+                    .setNegativeButton("返回", new android.content.DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(android.content.DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                        }
+                    })
+                    .setCancelable(false)
+                    .show();
+        } catch (Throwable th) {
+            th.printStackTrace();
+            Toast.makeText(App.getInstance(), getString(R.string.act_live_play_empty_channel), Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 

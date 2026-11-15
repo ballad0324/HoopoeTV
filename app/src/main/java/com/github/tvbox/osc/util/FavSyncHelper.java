@@ -1,10 +1,6 @@
 package com.github.tvbox.osc.util;
 
-import com.github.tvbox.osc.bean.VodInfo;
-import com.github.tvbox.osc.cache.RoomDataManger;
-import com.github.tvbox.osc.cache.VodCollect;
-import com.github.tvbox.osc.mobile.ui.MobileFavorites;
-import com.orhanobut.hawk.Hawk;
+import com.github.tvbox.osc.cache.FavRepository;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,15 +11,16 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.orhanobut.hawk.Hawk;
+
 /**
  * 收藏跨端同步（手机 ⇄ 电视）。
  *
- * 手机端收藏存在 Hawk（MobileFavorites），电视端收藏存在 Room（vodCollect 表），
- * 同一台设备切界面模式时两份数据互不相通，跨设备更不通。
+ * 收藏现在统一存在 Room 表 vodCollect（见 {@link FavRepository}），
+ * 所以这里只需要把本机一份收藏打包/合并，不用再对齐两套存储。
  *
- * 这里把两份收藏统一成一份 JSON 放进云备份通道（不新增服务端接口）：
- *   push：合并本机两份收藏 → 打包成 fav_sync 目录 → CloudBackupHelper.push
- *   pull：下载 fav_sync → 逐条写入本机两份收藏（已存在的跳过，只做并集，不删本机已有项）
+ * 传输层有三条：云备份通道（异地）、局域网直连（同一 WiFi）、文件导入导出。
+ * 三条共用下面的 buildPack / applyPack，合并规则只有一份。
  */
 public final class FavSyncHelper {
 
@@ -61,23 +58,16 @@ public final class FavSyncHelper {
         return o;
     }
 
-    /** 汇总本机两份收藏（手机端 Hawk + 电视端数据库），按 vodId+sourceKey 去重 */
+    /** 汇总本机收藏（单一份存储），跳过本机墓碑 */
     public static JSONArray collect() {
         Map<String, JSONObject> map = new LinkedHashMap<>();
+        java.util.List<FavTombstone.Item> tombstones = FavTombstone.load();
         try {
-            for (MobileFavorites.Item it : MobileFavorites.load()) {
+            for (FavRepository.Item it : FavRepository.load()) {
+                if (FavTombstone.isRemoved(it.vodId, it.sourceKey, tombstones)) continue;
                 String key = idOf(it.vodId, it.sourceKey);
                 if (!map.containsKey(key)) {
                     map.put(key, item(it.vodId, it.sourceKey, it.name, it.pic, it.note, it.time));
-                }
-            }
-        } catch (Throwable ignored) {
-        }
-        try {
-            for (VodCollect it : RoomDataManger.getAllVodCollect()) {
-                String key = idOf(it.vodId, it.sourceKey);
-                if (!map.containsKey(key)) {
-                    map.put(key, item(it.vodId, it.sourceKey, it.name, it.pic, "", it.updateTime));
                 }
             }
         } catch (Throwable ignored) {
@@ -87,6 +77,79 @@ public final class FavSyncHelper {
         return arr;
     }
 
+    /** 本机墓碑（用户主动取消收藏的记录），随包上传，让对端也删掉 */
+    private static JSONArray collectRemoved() {
+        JSONArray arr = new JSONArray();
+        for (FavTombstone.Item it : FavTombstone.load()) {
+            JSONObject o = new JSONObject();
+            try {
+                o.put("vodId", it.vodId);
+                o.put("sourceKey", it.sourceKey);
+                o.put("time", it.time);
+                arr.put(o);
+            } catch (Throwable ignored) {
+            }
+        }
+        return arr;
+    }
+
+    /** 打包本机收藏（云端上传与局域网直连共用同一份结构） */
+    public static JSONObject buildPack() {
+        JSONObject pack = new JSONObject();
+        try {
+            pack.put("items", collect());
+            pack.put("removed", collectRemoved());
+        } catch (Throwable ignored) {
+        }
+        return pack;
+    }
+
+    /**
+     * 把对端传来的收藏包并入本机（并集 + 先执行删除），
+     * 返回形如「对端 N 条收藏，新增 M 条，移除 K 条」的提示。
+     */
+    public static String applyPack(JSONObject pack) {
+        JSONArray arr = pack.optJSONArray("items");
+        // 先执行删除：对端记录的"用户主动取消收藏"同步到本机，否则取消的条目会复活
+        JSONArray removedArr = pack.optJSONArray("removed");
+        int removedCount = 0;
+        if (removedArr != null) {
+            for (int i = 0; i < removedArr.length(); i++) {
+                JSONObject o = removedArr.optJSONObject(i);
+                if (o == null) continue;
+                String vodId = o.optString("vodId", "");
+                if (vodId.length() == 0) continue;
+                String sourceKey = o.optString("sourceKey", "");
+                if (FavRepository.has(vodId, sourceKey)) removedCount++;
+                FavRepository.remove(vodId, sourceKey);
+                FavTombstone.record(vodId, sourceKey);
+            }
+        }
+        java.util.List<FavTombstone.Item> tombstones = FavTombstone.load();
+        int n = arr == null ? 0 : arr.length();
+        int added = 0;
+        for (int i = 0; i < n; i++) {
+            JSONObject o = arr.optJSONObject(i);
+            if (o == null) continue;
+            String vodId = o.optString("vodId", "");
+            if (vodId.length() == 0) continue;
+            String sourceKey = o.optString("sourceKey", "");
+            // 已在本机墓碑里的条目不再加回来
+            if (FavTombstone.isRemoved(vodId, sourceKey, tombstones)) continue;
+            FavRepository.Item it = new FavRepository.Item();
+            it.vodId = vodId;
+            it.sourceKey = sourceKey;
+            it.name = o.optString("name", "");
+            it.pic = o.optString("pic", "");
+            it.note = o.optString("note", "");
+            it.time = o.optLong("time", 0);
+            if (FavRepository.add(it)) added++;
+        }
+        stamp();
+        return "对端 " + n + " 条收藏，新增 " + added + " 条"
+                + (removedCount > 0 ? "，移除 " + removedCount + " 条" : "");
+    }
+
     /** 上传本机收藏到云端 */
     public static CloudBackupHelper.Res push() {
         if (CloudBackupHelper.getToken().length() == 0) {
@@ -94,12 +157,10 @@ public final class FavSyncHelper {
             if (!login.ok) return CloudBackupHelper.Res.fail("请先登录云备份账号：" + login.msg);
         }
         try {
-            JSONArray arr = collect();
+            JSONObject pack = buildPack();
             File dir = new File(BackupHelper.root(), PACK);
             if (dir.exists()) FileUtils.recursiveDelete(dir);
             if (!dir.mkdirs() && !dir.exists()) return CloudBackupHelper.Res.fail("无法写入本地目录");
-            JSONObject pack = new JSONObject();
-            pack.put("items", arr);
             if (!FileUtils.writeSimple(pack.toString().getBytes("UTF-8"), new File(dir, FILE_NAME))) {
                 FileUtils.recursiveDelete(dir);
                 return CloudBackupHelper.Res.fail("写入收藏包失败");
@@ -112,7 +173,7 @@ public final class FavSyncHelper {
             FileUtils.recursiveDelete(dir);
             if (res.ok) {
                 stamp();
-                res.msg = "已上传 " + arr.length() + " 条收藏";
+                res.msg = "已上传 " + pack.optJSONArray("items").length() + " 条收藏";
             }
             return res;
         } catch (Throwable t) {
@@ -141,51 +202,11 @@ public final class FavSyncHelper {
                 return CloudBackupHelper.Res.fail("读取收藏包失败");
             }
             JSONObject pack = new JSONObject(new String(data, "UTF-8"));
-            JSONArray arr = pack.optJSONArray("items");
-            int n = arr == null ? 0 : arr.length();
-            int added = 0;
-            for (int i = 0; i < n; i++) {
-                JSONObject o = arr.optJSONObject(i);
-                if (o == null) continue;
-                String vodId = o.optString("vodId", "");
-                if (vodId.length() == 0) continue;
-                String sourceKey = o.optString("sourceKey", "");
-                String name = o.optString("name", "");
-                String pic = o.optString("pic", "");
-                String note = o.optString("note", "");
-                long time = o.optLong("time", 0);
-                // 手机端那份（Hawk）
-                try {
-                    if (!MobileFavorites.has(vodId, sourceKey)) {
-                        MobileFavorites.Item it = new MobileFavorites.Item();
-                        it.vodId = vodId;
-                        it.sourceKey = sourceKey;
-                        it.name = name;
-                        it.pic = pic;
-                        it.note = note;
-                        it.time = time;
-                        MobileFavorites.add(it);
-                        added++;
-                    }
-                } catch (Throwable ignored) {
-                }
-                // 电视端那份（Room）
-                try {
-                    if (!RoomDataManger.isVodCollect(sourceKey, vodId)) {
-                        VodInfo info = new VodInfo();
-                        info.id = vodId;
-                        info.name = name;
-                        info.pic = pic;
-                        RoomDataManger.insertVodCollect(sourceKey, info);
-                    }
-                } catch (Throwable ignored) {
-                }
-            }
+            String msg = applyPack(pack);
             FileUtils.recursiveDelete(dir);
-            stamp();
             CloudBackupHelper.Res ok = new CloudBackupHelper.Res();
             ok.ok = true;
-            ok.msg = "云端 " + n + " 条收藏，新增 " + added + " 条";
+            ok.msg = "云端" + msg;
             ok.data = pack;
             return ok;
         } catch (Throwable t) {

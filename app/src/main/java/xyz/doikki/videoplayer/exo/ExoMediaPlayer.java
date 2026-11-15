@@ -320,45 +320,16 @@ public class ExoMediaPlayer extends AbstractPlayer implements Player.Listener {
     public void onPlayerError(@NonNull PlaybackException error) {
         errorCode = error.errorCode;
         Log.e("tag--", "" + error.errorCode);
-        String proxyServer = Hawk.get(HawkConfig.PROXY_SERVER, "");
-        if ("".equals(proxyServer)) {
-            if (retriedTimes == 0) {
-                retriedTimes = 1;
-                setDataSource(path, headers);
-                prepareAsync();
-                start();
-            } else {
-                if (mPlayerEventListener != null) {
-                    mPlayerEventListener.onError(error.errorCode, PlayerHelper.getRootCauseMessage(error));
-                }
-            }
-            return;
-        }
-        String[] proxyServers = proxyServer.split("\\s+|,|;|，");
-        if (retriedTimes > proxyServers.length - 1) {
-            if (mPlayerEventListener != null) {
-                mPlayerEventListener.onError(error.errorCode, PlayerHelper.getRootCauseMessage(error));
-            }
-            return;
-        }
-        String[] ps = proxyServers[retriedTimes].split(":");
-        if (ps.length != 2) {
-            if (mPlayerEventListener != null) {
-                mPlayerEventListener.onError(error.errorCode, PlayerHelper.getRootCauseMessage(error));
-            }
-            return;
-        }
-        try {
-            mMediaSourceHelper.setSocksProxy(ps[0], Integer.parseInt(ps[1]));
-            retriedTimes++;
+        // 代理服务器设置已移除：失败时只做一次重试，仍失败就上报
+        if (retriedTimes == 0) {
+            retriedTimes = 1;
             setDataSource(path, headers);
             prepareAsync();
             start();
-        } catch (Exception e) {
+        } else {
             if (mPlayerEventListener != null) {
                 mPlayerEventListener.onError(error.errorCode, PlayerHelper.getRootCauseMessage(error));
             }
-            return;
         }
     }
 

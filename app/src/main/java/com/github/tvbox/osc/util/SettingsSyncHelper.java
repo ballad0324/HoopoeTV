@@ -53,7 +53,7 @@ public final class SettingsSyncHelper {
             HawkConfig.VOD_PLAYER_PREFERRED, HawkConfig.BACKGROUND_PLAY_TYPE,
             HawkConfig.DEFAULT_PARSE, HawkConfig.PARSE_WEBVIEW,
             // 网络
-            HawkConfig.DOH_URL, HawkConfig.PROXY_SERVER,
+            HawkConfig.DOH_URL,
             // 搜索 / 字幕 / 列表
             HawkConfig.SEARCH_VIEW, HawkConfig.FAST_SEARCH_MODE, HawkConfig.SEARCH_FILTER_KEY,
             HawkConfig.SUBTITLE_TEXT_SIZE, HawkConfig.SUBTITLE_TEXT_STYLE, HawkConfig.SUBTITLE_TIME_DELAY,
@@ -91,6 +91,19 @@ public final class SettingsSyncHelper {
             }
         }
         return obj;
+    }
+
+    /** 把对端设置包写回本机白名单项，返回写入条数（云端 pull 与局域网直连共用） */
+    public static int apply(JSONObject obj) {
+        SharedPreferences sp = hawk2();
+        int n = 0;
+        for (String key : WHITELIST) {
+            if (!obj.has(key)) continue;
+            sp.edit().putString(key, obj.optString(key, "")).commit();
+            n++;
+        }
+        stamp();
+        return n;
     }
 
     /** 上传本机设置到云端 */
@@ -146,15 +159,8 @@ public final class SettingsSyncHelper {
                 return CloudBackupHelper.Res.fail("读取设置包失败");
             }
             JSONObject obj = new JSONObject(new String(data, "UTF-8"));
-            SharedPreferences sp = hawk2();
-            int n = 0;
-            for (String key : WHITELIST) {
-                if (!obj.has(key)) continue;
-                sp.edit().putString(key, obj.optString(key, "")).commit();
-                n++;
-            }
+            int n = apply(obj);
             FileUtils.recursiveDelete(dir);
-            stamp();
             CloudBackupHelper.Res ok = new CloudBackupHelper.Res();
             ok.ok = true;
             ok.msg = "已同步 " + n + " 项设置";

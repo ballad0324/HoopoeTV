@@ -44,7 +44,6 @@ public class ApiDialog extends BaseDialog {
     private final EditText inputApi;
     private final EditText inputLive;
     private final EditText inputEPG;
-    private final EditText inputProxy;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refresh(RefreshEvent event) {
@@ -56,9 +55,6 @@ public class ApiDialog extends BaseDialog {
         }
         if (event.type == RefreshEvent.TYPE_EPG_URL_CHANGE) {
             inputEPG.setText((String) event.obj);
-        }
-        if (event.type == RefreshEvent.TYPE_PROXYS_CHANGE) {
-            inputProxy.setText((String) event.obj);
         }
     }
 
@@ -76,8 +72,6 @@ public class ApiDialog extends BaseDialog {
         inputLive.setText(Hawk.get(HawkConfig.LIVE_URL, ""));
         inputEPG = findViewById(R.id.input_epg);
         inputEPG.setText(Hawk.get(HawkConfig.EPG_URL, ""));
-        inputProxy = findViewById(R.id.input_proxy);
-        inputProxy.setText(Hawk.get(HawkConfig.PROXY_SERVER, ""));
 
         findViewById(R.id.inputSubmit).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +79,6 @@ public class ApiDialog extends BaseDialog {
                 String newApi = inputApi.getText().toString().trim();
                 String newLive = inputLive.getText().toString().trim();
                 String newEPG = inputEPG.getText().toString().trim();
-                String newProxyServer = inputProxy.getText().toString().trim();
                 // takagen99: Convert all to clan://localhost format
                 if (newApi.startsWith("file://")) {
                     newApi = newApi.replace("file://", "clan://localhost/");
@@ -122,8 +115,6 @@ public class ApiDialog extends BaseDialog {
                         EPGHistory.remove(20);
                     Hawk.put(HawkConfig.EPG_HISTORY, EPGHistory);
                 }
-                // Capture oroxy server input into Settings
-                Hawk.put(HawkConfig.PROXY_SERVER, newProxyServer);
             }
         });
         findViewById(R.id.apiHistory).setOnClickListener(new View.OnClickListener() {

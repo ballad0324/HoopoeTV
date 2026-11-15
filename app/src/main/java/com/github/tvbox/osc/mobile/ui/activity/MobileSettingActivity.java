@@ -194,42 +194,16 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                     }
                 }));
 
-        // ---------- 跨端同步（手机 ⇄ 电视，走云备份通道） ----------
-        rows.add(MobileSettingAdapter.Row.header(tr("通用 · 跨端同步", "General · Cross-device")));
-        rows.add(MobileSettingAdapter.Row.item(tr("设置同步到云端", "Upload settings"),
-                SettingsSyncHelper.lastTime().length() == 0
-                        ? tr("未同步过", "Never synced")
-                        : tr("上次 ", "Last ") + SettingsSyncHelper.lastTime(),
+        // ---------- 跨端同步：只保留局域网直连（不经任何服务器/数据库） ----------
+        // 云端备份通道的四个入口已移除：同步交给「局域网直连」与电视端账号面板处理
+        rows.add(MobileSettingAdapter.Row.header(tr("通用 · 局域网同步", "General · LAN sync")));
+        rows.add(MobileSettingAdapter.Row.item(tr("局域网直连同步", "LAN direct sync"),
+                tr("同一 WiFi 下直接连电视，不经过任何服务器", "Direct over your Wi-Fi, no server"),
                 new Runnable() {
                     @Override
                     public void run() {
-                        doSettingsPush();
-                    }
-                }));
-        rows.add(MobileSettingAdapter.Row.item(tr("从云端拉回设置", "Pull settings"),
-                tr("接口 / 主题 / 播放器等；拉取后需重启", "API / theme / player; restarts after pull"),
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        confirmSettingsPull();
-                    }
-                }));
-        rows.add(MobileSettingAdapter.Row.item(tr("收藏同步到云端", "Upload favorites"),
-                FavSyncHelper.lastTime().length() == 0
-                        ? tr("未同步过", "Never synced")
-                        : tr("上次 ", "Last ") + FavSyncHelper.lastTime(),
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        doFavPush();
-                    }
-                }));
-        rows.add(MobileSettingAdapter.Row.item(tr("拉回云端收藏", "Pull favorites"),
-                tr("与电视端收藏合并，不删除本机已有项", "Merges with TV favorites"),
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        doFavPull();
+                        new com.github.tvbox.osc.ui.dialog.LanSyncDialog(
+                                MobileSettingActivity.this).show();
                     }
                 }));
         // ---------- 通用：外观（两端共用，走 CommonSetting） ----------
@@ -324,19 +298,7 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                     }
                 }));
 
-        rows.add(MobileSettingAdapter.Row.input(tr("代理服务器","Proxy server"),
-                tr("形如 http://127.0.0.1:7890，留空即不走代理；EXO 内核生效",
-                        "e.g. http://127.0.0.1:7890; empty = no proxy (EXO only)"),
-                "http://127.0.0.1:7890",
-                CommonSetting.getProxyServer(), tr("立即更改","Apply"),
-                new MobileSettingAdapter.OnInput() {
-                    @Override
-                    public void onInput(MobileSettingAdapter.Row row, String text) {
-                        CommonSetting.putProxyServer(text == null ? "" : text.trim());
-                        toast(tr("代理已保存", "Proxy saved"));
-                        refreshRows();
-                    }
-                }));
+        // 代理服务器设置已移除（电视端 EXO 的代理重试逻辑一并删掉）
 
         // ---------- 通用 · 存储与关于（审计补缺：原先手机端没有这三项） ----------
         rows.add(MobileSettingAdapter.Row.header(tr("通用 · 存储与关于","General · Storage & About")));

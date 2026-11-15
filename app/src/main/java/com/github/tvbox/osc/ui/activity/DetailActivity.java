@@ -378,6 +378,7 @@ public class DetailActivity extends BaseActivity {
                     tvCollect.setText(getString(R.string.det_fav_star));
                 } else {
                     RoomDataManger.deleteVodCollect(sourceKey, vodInfo);
+                    com.github.tvbox.osc.util.FavTombstone.record(vodInfo.id, sourceKey);
                     Toast.makeText(DetailActivity.this, getString(R.string.det_fav_del), Toast.LENGTH_SHORT).show();
                     tvCollect.setText(getString(R.string.det_fav_unstar));
                 }

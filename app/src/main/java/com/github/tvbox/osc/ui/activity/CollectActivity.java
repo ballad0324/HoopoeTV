@@ -119,6 +119,7 @@ public class CollectActivity extends BaseActivity {
                     if (delMode) {
                         collectAdapter.remove(position);
                         RoomDataManger.deleteVodCollect(vodInfo.getId());
+                        com.github.tvbox.osc.util.FavTombstone.record(vodInfo.vodId, vodInfo.sourceKey);
                     } else {
                         if (ApiConfig.get().getSource(vodInfo.sourceKey) != null) {
                             Bundle bundle = new Bundle();
@@ -153,6 +154,8 @@ public class CollectActivity extends BaseActivity {
         List<VodCollect> allVodRecord = RoomDataManger.getAllVodCollect();
         List<VodCollect> vodInfoList = new ArrayList<>();
         for (VodCollect vodInfo : allVodRecord) {
+            // 手机端的直播频道收藏也在同一张表里，电视端没有对应数据源，这里过滤掉
+            if (com.github.tvbox.osc.cache.FavRepository.isLiveItem(vodInfo.sourceKey)) continue;
             vodInfoList.add(vodInfo);
         }
         collectAdapter.setNewData(vodInfoList);

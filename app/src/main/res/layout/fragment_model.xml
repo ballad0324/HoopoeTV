@@ -953,7 +953,7 @@
 
                         <LinearLayout
                             android:id="@+id/llLocale"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             android:layout_width="@dimen/vs_0"
                             android:layout_height="match_parent"
                             android:layout_marginEnd="@dimen/vs_5"
@@ -997,7 +997,7 @@
 
                         <LinearLayout
                             android:id="@+id/llTheme"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             android:layout_width="@dimen/vs_0"
                             android:layout_height="match_parent"
                             android:layout_marginStart="@dimen/vs_5"

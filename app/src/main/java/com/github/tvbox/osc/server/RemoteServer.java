@@ -81,10 +81,13 @@ public class RemoteServer extends NanoHTTPD {
         getRequestList.add(new RawRequestProcess(this.mContext, "/jquery.js", R.raw.jquery, "application/x-javascript"));
         getRequestList.add(new RawRequestProcess(this.mContext, "/script.js", R.raw.script, "application/x-javascript"));
         getRequestList.add(new RawRequestProcess(this.mContext, "/favicon.ico", R.drawable.app_icon, "image/x-icon"));
+        // 局域网直连同步（收藏/设置），不依赖任何服务器
+        getRequestList.add(new SyncRequestProcess());
     }
 
     private void addPostRequestProcess() {
         postRequestList.add(new InputRequestProcess(this));
+        postRequestList.add(new SyncRequestProcess());
     }
 
     @Override

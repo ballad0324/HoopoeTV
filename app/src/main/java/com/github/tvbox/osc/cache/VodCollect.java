@@ -20,6 +20,9 @@ public class VodCollect implements Serializable {
     public String name;
     @ColumnInfo(name = "pic")
     public String pic;
+    /** 收藏备注（手机端「已收藏 · 备注」/ 直播频道标记），电视端原先没有这一列 */
+    @ColumnInfo(name = "note")
+    public String note;
 
     public int getId() {
         return id;

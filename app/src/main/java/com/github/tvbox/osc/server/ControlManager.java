@@ -54,8 +54,7 @@ public class ControlManager {
     public void startServer() {
         if (mServer != null) {
             return;
-        }
-        do {
+        }        do {
             mServer = new RemoteServer(RemoteServer.serverPort, mContext);
             mServer.setDataReceiver(new DataReceiver() {
                 @Override
@@ -126,6 +125,32 @@ public class ControlManager {
     public void stopServer() {
         if (mServer != null && mServer.isStarting()) {
             mServer.stop();
+        }
+    }
+
+    /** 局域网服务是否在跑（同步面板用它判断本机能不能被另一台设备连上） */
+    public boolean isServerRunning() {
+        return mServer != null && mServer.isStarting();
+    }
+
+    /**
+     * 需要时启动局域网服务。电视端首页启动过就不用重复启动；
+     * 手机端原本没有启动点，打开「局域网直连同步」时补启动一次，双向都能被连。
+     */
+    public synchronized void startIfNeeded() {
+        if (isServerRunning()) {
+            return;
+        }
+        try {
+            if (mServer != null) {
+                try {
+                    mServer.stop();
+                } catch (Throwable ignored) {
+                }
+                mServer = null;
+            }
+            startServer();
+        } catch (Throwable ignored) {
         }
     }
 }

@@ -75,6 +75,22 @@ public class AppDataManager {
             }
         }
     };
+    /**
+     * v3 → v4：收藏表加 note 列（手机端收藏并入同一张表后需要存备注）。
+     *
+     * 注意：DB_FILE_VERSION 故意不跟着涨 —— 库文件名带着版本号，
+     * 涨了就会新建一个空库、老用户收藏全部看不见。这里让迁移跑在同一个文件上。
+     */
+    static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            try {
+                database.execSQL("ALTER TABLE vodCollect ADD COLUMN note TEXT");
+            } catch (SQLiteException e) {
+                e.printStackTrace();
+            }
+        }
+    };
     static String dbPath() {
         return DB_NAME + ".v" + DB_FILE_VERSION + ".db";
     }
@@ -88,6 +104,7 @@ public class AppDataManager {
                     .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
                     .addMigrations(MIGRATION_1_2)
                     .addMigrations(MIGRATION_2_3)
+                    .addMigrations(MIGRATION_3_4)
                     .addCallback(new RoomDatabase.Callback() {
                         @Override
                         public void onCreate(@NonNull SupportSQLiteDatabase db) {
