@@ -106,6 +106,12 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
+        <View
+            android:layout_width="4dp"
+            android:layout_height="18dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/shape_title_bar" />
+
         <TextView
             android:id="@+id/tvHistoryTitle"
             android:layout_width="0dp"
@@ -183,6 +189,12 @@
         android:paddingTop="16dp"
         android:paddingEnd="2dp"
         android:paddingBottom="8dp">
+
+        <View
+            android:layout_width="4dp"
+            android:layout_height="18dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/shape_title_bar" />
 
         <TextView
             android:id="@+id/tvSectionTitle"

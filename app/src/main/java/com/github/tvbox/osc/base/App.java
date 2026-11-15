@@ -67,8 +67,11 @@ public class App extends MultiDexApplication {
         initParams();
         // takagen99 : Initialize Locale
         initLocale();
-        // 公共设置层：手机端 UI 才应用明暗模式，TV 端保持原有固定深色主题
-        com.github.tvbox.osc.setting.CommonSetting.applyNightModeOnStartup();
+        // 手机端固定明亮（明暗切换开关与相关功能已移除）；TV 端保持原有固定深色主题
+        if (com.github.tvbox.osc.setting.CommonSetting.isMobileUi()) {
+            androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(
+                    androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
+        }
         // OKGo
         OkGoHelper.init();
         // 闭关检查模式

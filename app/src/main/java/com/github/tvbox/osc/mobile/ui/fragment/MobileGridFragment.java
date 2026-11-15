@@ -316,8 +316,9 @@ public class MobileGridFragment extends BaseLazyFragment {
             swThumb.setTranslationX(on ? onX : 0f);
         }
         if (tvFilterLabel != null) {
-            tvFilterLabel.setTextColor(mContext.getResources().getColor(
-                    on ? R.color.shell_primary : R.color.shell_text_dim));
+            tvFilterLabel.setTextColor(on
+                    ? com.github.tvbox.osc.util.SkinManager.accent(mContext)
+                    : mContext.getResources().getColor(R.color.shell_text_dim));
         }
     }
 

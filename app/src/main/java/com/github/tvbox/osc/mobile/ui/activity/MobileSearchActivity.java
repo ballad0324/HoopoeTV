@@ -75,6 +75,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 顶部输入框 → 空输入时展示「搜索历史 + 热门搜索」，输入中展示「猜你想搜」→
  * 提交后多源并发搜索，结果按来源站点聚合展示，点击进入手机端详情页。
  */
+import com.github.tvbox.osc.util.SkinManager;
+
 public class MobileSearchActivity extends BaseActivity {
 
     private EditText etSearch;
@@ -861,7 +863,7 @@ public class MobileSearchActivity extends BaseActivity {
         chip.setPadding(dp(12), 0, dp(12), 0);
         chip.setBackgroundResource(R.drawable.shape_filter_chip);
         chip.setSelected(selected);
-        chip.setTextColor(selected ? 0xFFFFFFFF : getResources().getColor(R.color.shell_text_dim));
+        chip.setTextColor(selected ? SkinManager.onAccent(this) : getResources().getColor(R.color.shell_text_dim));
         chip.setOnClickListener(listener);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, h);
@@ -942,9 +944,9 @@ public class MobileSearchActivity extends BaseActivity {
     private void selectCat(int idx) {
         browseCat = Math.max(0, Math.min(idx, CAT_NAMES.length - 1));
         if (llCatTabs != null) {
-            int colorOn = getResources().getColor(R.color.shell_secondary);
+            int colorOn = com.github.tvbox.osc.util.SkinManager.accent2(this);
             int colorOff = getResources().getColor(R.color.shell_text_dim);
-            int lineOn = getResources().getColor(R.color.shell_secondary);
+            int lineOn = com.github.tvbox.osc.util.SkinManager.accent2(this);
             for (int i = 0; i < llCatTabs.getChildCount(); i++) {
                 View child = llCatTabs.getChildAt(i);
                 if (!(child instanceof TextView)) continue;

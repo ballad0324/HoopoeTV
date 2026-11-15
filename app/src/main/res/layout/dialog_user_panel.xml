@@ -23,7 +23,7 @@
             android:contentDescription="头像"
             android:padding="12dp"
             android:src="@drawable/ic_user_avatar"
-            android:tint="@color/shell_primary" />
+            android:tint="?attr/skin_accent" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -169,7 +169,7 @@
         android:focusable="true"
         android:gravity="center"
         android:text="登录"
-        android:textColor="@color/shell_primary"
+        android:textColor="?attr/skin_accent"
         android:textSize="15sp"
         android:textStyle="bold" />
 

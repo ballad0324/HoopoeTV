@@ -38,24 +38,6 @@ public class MobileSetting {
     /** 首页卡片圆角 */
     public static final int VOD_CARD_CORNER_DP = 11;
 
-    /* ------------ 外观模式入口 ------------ */
-
-    /**
-     * 手机端“设置 → 外观 → 外观模式”一行的文案。
-     * 取值与写值都委托 CommonSetting，保证与 TV 端读到同一个 night_mode。
-     */
-    public static String getAppearanceModeName() {
-        return CommonSetting.getNightModeName();
-    }
-
-    public static int getAppearanceModeIndex() {
-        return CommonSetting.getNightModeIndex();
-    }
-
-    public static void putAppearanceModeIndex(int index) {
-        CommonSetting.putNightModeIndex(index);
-    }
-
     /* ------------ 启动页 ------------ */
 
     /** 手机端使用独立的启动页（不再走 main 的 bitmap 背景） */

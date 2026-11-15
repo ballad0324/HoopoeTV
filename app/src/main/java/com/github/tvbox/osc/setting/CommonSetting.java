@@ -2,8 +2,6 @@ package com.github.tvbox.osc.setting;
 
 import android.content.res.Configuration;
 
-import androidx.appcompat.app.AppCompatDelegate;
-
 import com.github.tvbox.osc.BuildConfig;
 import com.github.tvbox.osc.base.App;
 import com.github.tvbox.osc.util.HawkConfig;
@@ -19,77 +17,14 @@ import com.orhanobut.hawk.Hawk;
  */
 public class CommonSetting {
 
-    /* ===================== 明暗模式（两端共用） ===================== */
+    /* ===================== 聚合搜索（两端共用） ===================== */
 
-    public static final String KEY_NIGHT_MODE = "night_mode";
     public static final String KEY_AGG_SEARCH = "agg_search";
 
-    public static final int NIGHT_FOLLOW_SYSTEM = 0;
-    public static final int NIGHT_LIGHT = 1;
-    public static final int NIGHT_DARK = 2;
-
-    private static final int[] NIGHT_OPTIONS = {NIGHT_FOLLOW_SYSTEM, NIGHT_LIGHT, NIGHT_DARK};
-
-    public static int getNightMode() {
-        // 默认明亮：未设置过时不再默认进深色
-        int mode = Hawk.get(KEY_NIGHT_MODE, NIGHT_LIGHT);
-        return isNightMode(mode) ? mode : NIGHT_LIGHT;
-    }
-
-    public static void putNightMode(int mode) {
-        int value = isNightMode(mode) ? mode : NIGHT_LIGHT;
-        Hawk.put(KEY_NIGHT_MODE, value);
-        applyNightMode(value);
-    }
-
-    /** 设置页展示用的序号：0 跟随系统 / 1 明亮 / 2 深色 */
-    public static int getNightModeIndex() {
-        int mode = getNightMode();
-        for (int i = 0; i < NIGHT_OPTIONS.length; i++) {
-            if (NIGHT_OPTIONS[i] == mode) return i;
-        }
-        return 1;
-    }
-
-    public static void putNightModeIndex(int index) {
-        putNightMode(index >= 0 && index < NIGHT_OPTIONS.length ? NIGHT_OPTIONS[index] : NIGHT_LIGHT);
-    }
-
-    public static String getNightModeName() {
-        switch (getNightMode()) {
-            case NIGHT_LIGHT:
-                return "明亮";
-            case NIGHT_DARK:
-                return "深色";
-            default:
-                return "跟随系统";
-        }
-    }
-
-    public static void applyNightMode() {
-        applyNightMode(getNightMode());
-    }
-
+    /** 当前是否处于深色配置（仅供个别控件的取色判断；手机端已固定明亮） */
     public static boolean isNightUi() {
         return (App.getInstance().getResources().getConfiguration().uiMode
                 & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
-    }
-
-    private static boolean isNightMode(int mode) {
-        for (int option : NIGHT_OPTIONS) {
-            if (option == mode) return true;
-        }
-        return false;
-    }
-
-    private static void applyNightMode(int mode) {
-        AppCompatDelegate.setDefaultNightMode(toDelegateNightMode(mode));
-    }
-
-    private static int toDelegateNightMode(int mode) {
-        if (mode == NIGHT_LIGHT) return AppCompatDelegate.MODE_NIGHT_NO;
-        if (mode == NIGHT_DARK) return AppCompatDelegate.MODE_NIGHT_YES;
-        return AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
     }
 
     /* ===================== 语言（两端共用） ===================== */
@@ -340,47 +275,5 @@ public class CommonSetting {
         return isMobileUi() ? "手机端" : "电视端";
     }
 
-    /** 手机端 UI 才应用明暗模式，TV 端保持原有固定深色主题，避免破坏已调好的电视配色 */
-    public static void applyNightModeOnStartup() {
-        if (isMobileUi()) {
-            applyNightMode();
-        }
-    }
-
-    /* ===================== 磨砂背景图（两端共用，值=本地文件绝对路径） ===================== */
-
-    // 手机端与电视端背景图各自独立：按 UI 模式 + 明暗共四套
-    public static final String KEY_GLASS_BG_LIGHT_MOBILE = "glass_bg_light_mobile";
-    public static final String KEY_GLASS_BG_DARK_MOBILE = "glass_bg_dark_mobile";
-    public static final String KEY_GLASS_BG_LIGHT_TV = "glass_bg_light_tv";
-    public static final String KEY_GLASS_BG_DARK_TV = "glass_bg_dark_tv";
-
-    private static String glassBgKey(boolean night) {
-        if (isMobileUi()) {
-            return night ? KEY_GLASS_BG_DARK_MOBILE : KEY_GLASS_BG_LIGHT_MOBILE;
-        }
-        return night ? KEY_GLASS_BG_DARK_TV : KEY_GLASS_BG_LIGHT_TV;
-    }
-
-    public static String getGlassBgLight() {
-        return Hawk.get(glassBgKey(false), "");
-    }
-
-    public static void putGlassBgLight(String path) {
-        Hawk.put(glassBgKey(false), path == null ? "" : path);
-    }
-
-    public static String getGlassBgDark() {
-        return Hawk.get(glassBgKey(true), "");
-    }
-
-    public static void putGlassBgDark(String path) {
-        Hawk.put(glassBgKey(true), path == null ? "" : path);
-    }
-    /** night=true 取深色主题背景图，否则取明亮主题 */
-    public static String getGlassBgPath(boolean night) {
-        return Hawk.get(glassBgKey(night), "");
-    }
-
-    public static final String BG_SPEC_HINT = "支持 PNG / JPG / WebP；竖屏建议 1080×1920 及以上（9:16），横屏建议 1920×1080（16:9），单张 ≤ 1MB";
+    
 }

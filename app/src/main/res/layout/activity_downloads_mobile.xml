@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_glass_page"
+    android:background="@drawable/bg_page_fill"
     android:orientation="vertical">
 
     <LinearLayout
@@ -42,7 +42,7 @@
             android:paddingStart="8dp"
             android:paddingEnd="4dp"
             android:text="@string/m_refresh"
-            android:textColor="@color/shell_primary"
+            android:textColor="?attr/skin_accent"
             android:textSize="13sp" />
     </LinearLayout>
 

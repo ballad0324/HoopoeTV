@@ -43,7 +43,6 @@ public class MobileAdminActivity extends BaseActivity {
     private EditText etEpgUrl;
     private View llSourceConfig;
     private TextView tvSourceLoginHint;
-    private TextView tvCloudHint;
     private boolean pulledOnce = false;
 
     @Override
@@ -66,7 +65,6 @@ public class MobileAdminActivity extends BaseActivity {
         etEpgUrl = findViewById(R.id.etEpgUrl);
         llSourceConfig = findViewById(R.id.llSourceConfig);
         tvSourceLoginHint = findViewById(R.id.tvSourceLoginHint);
-        tvCloudHint = findViewById(R.id.tvCloudHint);
 
         // 源模式胶囊：内置源 / 解析源
         if (tvModeBuiltin != null) {
@@ -152,16 +150,6 @@ public class MobileAdminActivity extends BaseActivity {
             });
         }
 
-        View rowCloud = findViewById(R.id.rowCloud);
-        if (rowCloud != null) {
-            rowCloud.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new android.content.Intent(MobileAdminActivity.this,
-                            MobileCloudBackupActivity.class));
-                }
-            });
-        }
 
         View rowClearHistory = findViewById(R.id.rowClearHistory);
         if (rowClearHistory != null) {
@@ -274,14 +262,6 @@ public class MobileAdminActivity extends BaseActivity {
         if (etLiveUrl != null) etLiveUrl.setText(CommonSetting.getLiveUrl());
         if (etEpgUrl != null) etEpgUrl.setText(CommonSetting.getEpgUrl());
 
-        if (tvCloudHint != null) {
-            String hint = "";
-            try {
-                hint = com.github.tvbox.osc.util.CloudBackupHelper.summary();
-            } catch (Throwable ignored) {
-            }
-            tvCloudHint.setText(TextUtils.isEmpty(hint) ? "备份到 MySQL 云端 / 从云端恢复" : hint);
-        }
 
         try {
             String ver = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
@@ -294,7 +274,7 @@ public class MobileAdminActivity extends BaseActivity {
 
     /** 胶囊选中态：选中的那侧白底 + primary 文字，另一侧透明 + dim 文字 */
     private void applyModeUi(boolean builtin) {
-        int onText = getResources().getColor(R.color.shell_primary);
+        int onText = com.github.tvbox.osc.util.SkinManager.accent(this);
         int offText = getResources().getColor(R.color.shell_text_dim);
         if (tvModeBuiltin != null) {
             tvModeBuiltin.setBackgroundResource(builtin ? R.drawable.shape_home_segment_on : 0);

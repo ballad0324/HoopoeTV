@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -63,6 +64,8 @@ import xyz.doikki.videoplayer.player.VideoView;
  * 只有点「全屏」才跳横屏的 MobilePlayActivity，并把当前进度带过去续播。
  * 数据与解析链路沿用 TV 端：SourceViewModel.getPlay + MobileParseHelper。
  */
+import com.github.tvbox.osc.util.SkinManager;
+
 public class MobileDetailActivity extends BaseActivity {
 
     private ImageView ivThumb;
@@ -212,7 +215,8 @@ public class MobileDetailActivity extends BaseActivity {
             stage = "bindViews";
             bindViews();
             stage = "glassCard";
-            UiSkin.card(findViewById(R.id.glassInfoCard));
+            UiSkin.card(findViewById(R.id.infoCard));
+            // v1.7.7：信息卡回到实色，不再需要给文字加外发光（原为 30% 透明底可读性补丁）
             // 立即播放胶囊 + 三个圆形图标按钮也换成液态玻璃
             TextView tvPlayGlass = findViewById(R.id.tvPlay);
             UiSkin.pill(tvPlayGlass);
@@ -316,6 +320,25 @@ public class MobileDetailActivity extends BaseActivity {
                 pbLoading.setVisibility(View.GONE);
             }
             Toast.makeText(this, "详情页初始化失败（" + stage + "）：" + th, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /** 递归给信息卡里的所有文字加一层外发光：亮色主题用白色光晕，暗色主题用黑色 */
+    private void applyTextShadow(View root) {
+        if (root == null) return;
+        boolean night = (getResources().getConfiguration().uiMode
+                & android.content.res.Configuration.UI_MODE_NIGHT_MASK)
+                == android.content.res.Configuration.UI_MODE_NIGHT_YES;
+        int glow = night ? 0xCC000000 : 0xCCFFFFFF;
+        if (root instanceof TextView) {
+            ((TextView) root).setShadowLayer(4f, 0f, 1f, glow);
+            return;
+        }
+        if (root instanceof ViewGroup) {
+            ViewGroup g = (ViewGroup) root;
+            for (int i = 0; i < g.getChildCount(); i++) {
+                applyTextShadow(g.getChildAt(i));
+            }
         }
     }
 
@@ -1167,7 +1190,7 @@ public class MobileDetailActivity extends BaseActivity {
             chip.setSelected(chipOn);
             // 液态玻璃 chip：选中态走蓝色玻璃，未选中走透明白玻璃
             UiSkin.chip(chip, chipOn);
-            chip.setTextColor(chipOn ? 0xFFFFFFFF
+            chip.setTextColor(chipOn ? SkinManager.onAccent(this)
                     : getResources().getColor(R.color.shell_text_dim));
             chip.setOnClickListener(new View.OnClickListener() {
                 @Override

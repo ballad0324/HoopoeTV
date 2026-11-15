@@ -170,7 +170,7 @@ public class MobileDiscoverActivity extends BaseActivity {
 
     private void paintTab(TextView tv, boolean on) {
         if (tv == null) return;
-        tv.setTextColor(getResources().getColor(on ? R.color.shell_primary : R.color.shell_text_dim));
+        tv.setTextColor((on ? com.github.tvbox.osc.util.SkinManager.accent(this) : getResources().getColor(R.color.shell_text_dim)));
         tv.getPaint().setFakeBoldText(on);
         tv.invalidate();
     }
@@ -251,7 +251,7 @@ public class MobileDiscoverActivity extends BaseActivity {
         tv.setPadding(dp(12), dp(6), dp(12), dp(6));
         tv.setBackgroundResource(R.drawable.selector_discover_chip);
         tv.setGravity(Gravity.CENTER);
-        tv.setTextColor(getResources().getColor(on ? R.color.shell_primary : R.color.shell_text_dim));
+        tv.setTextColor((on ? com.github.tvbox.osc.util.SkinManager.accent(this) : getResources().getColor(R.color.shell_text_dim)));
         tv.setSelected(on);
         tv.setOnClickListener(click);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -268,8 +268,9 @@ public class MobileDiscoverActivity extends BaseActivity {
             boolean on = child == selected;
             child.setSelected(on);
             if (child instanceof TextView) {
-                ((TextView) child).setTextColor(getResources().getColor(
-                        on ? R.color.shell_primary : R.color.shell_text_dim));
+                ((TextView) child).setTextColor(on
+                        ? com.github.tvbox.osc.util.SkinManager.accent(this)
+                        : getResources().getColor(R.color.shell_text_dim));
             }
         }
     }
@@ -390,7 +391,7 @@ public class MobileDiscoverActivity extends BaseActivity {
 
         View bar = new View(this);
         GradientDrawable gd = new GradientDrawable();
-        gd.setColor(getResources().getColor(R.color.shell_primary));
+        gd.setColor(com.github.tvbox.osc.util.SkinManager.accent(this));
         gd.setCornerRadius(dp(2));
         bar.setBackground(gd);
         LinearLayout.LayoutParams barLp = new LinearLayout.LayoutParams(dp(3), dp(16));
@@ -482,7 +483,7 @@ public class MobileDiscoverActivity extends BaseActivity {
             TextView tvTitle = new TextView(this);
             tvTitle.setText(title);
             tvTitle.setTextSize(16);
-            tvTitle.setTextColor(getResources().getColor(R.color.shell_primary));
+            tvTitle.setTextColor(com.github.tvbox.osc.util.SkinManager.accent(this));
             tvTitle.getPaint().setFakeBoldText(true);
             header.addView(tvTitle, new LinearLayout.LayoutParams(0,
                     ViewGroup.LayoutParams.WRAP_CONTENT, 1));
@@ -670,7 +671,7 @@ public class MobileDiscoverActivity extends BaseActivity {
         tvNo.setText(String.valueOf(no));
         int color;
         if (no == 1) color = getResources().getColor(R.color.shell_gold);
-        else if (no == 2) color = getResources().getColor(R.color.shell_secondary);
+        else if (no == 2) color = com.github.tvbox.osc.util.SkinManager.accent2(this);
         else if (no == 3) color = getResources().getColor(R.color.shell_badge_hd);
         else color = getResources().getColor(R.color.shell_text_dim);
         if (no <= 3) {

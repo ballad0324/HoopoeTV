@@ -4,9 +4,9 @@
          bg_gradient #0C1520->#14243A / surface #FFFFFF@0.11 / border #FFFFFF@0.18
          accent #4C9AFF / accent_warm #FF8A5C / 底色高于下限 #0C0C0F -->
     <color name="shell_bg">#FF0C1520</color>
-    <color name="shell_surface">#1CFFFFFF</color>
-    <color name="shell_surface_high">#24FFFFFF</color>
-    <color name="shell_surface_highest">#2EFFFFFF</color>
+    <color name="shell_surface">#FF20293A</color>
+    <color name="shell_surface_high">#FF273143</color>
+    <color name="shell_surface_highest">#FF2D3849</color>
     <color name="shell_outline">#2EFFFFFF</color>
 
     <color name="shell_primary">#FF4C9AFF</color>
@@ -26,7 +26,7 @@
     <color name="shell_badge_hd">#FFF5A623</color>
     <color name="shell_badge_4k">#FF4C9AFF</color>
     <color name="shell_badge_new">#FFFF8A5C</color>
-    <color name="shell_card_fill">#F21B2434</color>
+    <color name="shell_card_fill">#FF1B2434</color>
     <color name="shell_card_stroke">#40FFFFFF</color>
     <color name="shell_overlay">#66000000</color>
 
@@ -41,8 +41,8 @@
     <color name="glass_page_end">#FF14243A</color>
 
     <!-- ===== Liquid Glass 2.0（iOS 26 参考）：暗色玻璃，靠亮边而不是黑影 ===== -->
-    <color name="liquid_fill">#1FFFFFFF</color>
-    <color name="liquid_glow_top">#33FFFFFF</color>
+    <color name="liquid_fill">#FF20293A</color>
+    <color name="liquid_glow_top">#00FFFFFF</color>
     <color name="liquid_glow_bottom">#0AFFFFFF</color>
     <color name="liquid_stroke">#40FFFFFF</color>
     <color name="liquid_sheen">#33FFFFFF</color>

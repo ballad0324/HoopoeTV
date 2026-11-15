@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_glass_page"
+    android:background="@drawable/bg_page_fill"
     android:orientation="vertical">
 
     <!-- 顶部搜索栏 -->
@@ -220,7 +220,7 @@
                     android:id="@+id/pbLoading"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:indeterminateTint="@color/shell_primary" />
+                    android:indeterminateTint="?attr/skin_accent" />
 
                 <TextView
                     android:id="@+id/tvState"

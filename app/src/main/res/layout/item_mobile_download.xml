@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
-    android:background="@drawable/glass_card"
+    android:background="@drawable/shape_card_base"
     android:orientation="vertical"
     android:paddingStart="14dp"
     android:paddingTop="12dp"

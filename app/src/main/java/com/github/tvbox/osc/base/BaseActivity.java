@@ -23,9 +23,9 @@ import com.github.tvbox.osc.callback.EmptyCallback;
 import com.github.tvbox.osc.callback.LoadingCallback;
 import com.github.tvbox.osc.ui.activity.DetailActivity;
 import com.github.tvbox.osc.util.AppManager;
-import com.github.tvbox.osc.util.GlassBgHelper;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.LocaleHelper;
+import com.github.tvbox.osc.util.SkinManager;
 import com.kingja.loadsir.callback.Callback;
 import com.kingja.loadsir.core.LoadService;
 import com.kingja.loadsir.core.LoadSir;
@@ -51,6 +51,9 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
     private LoadService mLoadService;
 
     private static float screenRatio = -100.0f;
+
+    /** 手机上当前已经应用过色系主题的下标，用于其它页面回到前台时判断要不要重建 */
+    private static int sAppliedSkin = -1;
 
     // takagen99 : Fix for Locale change not persist on higher Android version
     @Override
@@ -116,6 +119,18 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
             setScreenOn();
             return;
         }
+        // 手机端：七套色系主题由 Theme.SkinX 提供，不再套 TV 端的固定色 theme
+        if (com.github.tvbox.osc.setting.CommonSetting.isMobileUi()) {
+            setTheme(SkinManager.themeRes());
+            super.onCreate(savedInstanceState);
+            setContentView(getLayoutResID());
+            mContext = this;
+            CutoutUtil.adaptCutoutAboveAndroidP(mContext, true);
+            AppManager.getInstance().addActivity(this);
+            init();
+            setScreenOn();
+            return;
+        }
         if (Hawk.get(HawkConfig.THEME_SELECT, 0) == 0) {
             setTheme(R.style.NetfxTheme);
         } else if (Hawk.get(HawkConfig.THEME_SELECT, 0) == 1) {
@@ -144,6 +159,16 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
     @Override
     protected void onResume() {
         super.onResume();
+        // 手机端：在设置页切了色系主题后，其它已打开的页面在下次回到前台时自动重建
+        if (com.github.tvbox.osc.setting.CommonSetting.isMobileUi()) {
+            int skin = SkinManager.get();
+            if (sAppliedSkin >= 0 && sAppliedSkin != skin) {
+                sAppliedSkin = skin;
+                recreate();
+                return;
+            }
+            sAppliedSkin = skin;
+        }
         hideSystemUI(true);
         changeWallpaper(false);
     }
@@ -360,8 +385,6 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
     protected static BitmapDrawable globalWp = null;
 
     public void changeWallpaper(boolean force) {
-        // 磨砂主题背景图：有自定义图时优先于内置 app_bg
-        if (GlassBgHelper.apply(this)) return;
         if (!force && globalWp != null) {
             getWindow().setBackgroundDrawable(globalWp);
             return;

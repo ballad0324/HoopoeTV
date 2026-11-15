@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center"
-        android:textColor="@color/shell_secondary"
+        android:textColor="?attr/skin_accent2"
         android:textSize="19sp"
         android:textStyle="bold"
         tools:text="1" />

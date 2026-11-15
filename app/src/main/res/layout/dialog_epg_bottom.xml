@@ -61,7 +61,7 @@
             android:paddingEnd="4dp"
             android:paddingBottom="4dp"
             android:text="全部频道 ›"
-            android:textColor="@color/shell_primary"
+            android:textColor="?attr/skin_accent"
             android:textSize="12sp" />
     </LinearLayout>
 

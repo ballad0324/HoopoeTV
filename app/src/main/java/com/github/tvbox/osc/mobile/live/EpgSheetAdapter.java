@@ -131,7 +131,7 @@ public class EpgSheetAdapter extends RecyclerView.Adapter<EpgSheetAdapter.Holder
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         final MobileEpgXml.Program p = shown.get(position);
         final int state = stateOf(p);
-        int primary = context.getResources().getColor(R.color.shell_primary);
+        int primary = com.github.tvbox.osc.util.SkinManager.accent(context);
         int textDim = context.getResources().getColor(R.color.shell_text_dim);
 
         holder.tvTime.setText(hm.format(p.start));

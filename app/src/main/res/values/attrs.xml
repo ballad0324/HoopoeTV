@@ -66,6 +66,10 @@
 
     <attr name="startColor" format="reference|color" />
     <attr name="topDelta" format="float" />
+
+    <!-- 七套色系主题的可变色：由 Theme.Skin0..6 提供，布局里用 ?attr/skin_accent 取用 -->
+    <attr name="skin_accent" format="color|reference" />
+    <attr name="skin_accent2" format="color|reference" />
     <!-- Selected Paint Color (color). -->
     <attr name="endColor" format="reference|color" />
 

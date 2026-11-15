@@ -1,27 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 卡片底部信息条：深色玻璃胶囊 + 顶部镜面高光 + 边缘亮线 -->
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <shape android:shape="rectangle">
-            <solid android:color="#5C000000" />
-            <corners android:radius="16dp" />
-        </shape>
-    </item>
-    <item>
-        <shape android:shape="rectangle">
-            <gradient
-                android:angle="270"
-                android:startColor="#40FFFFFF"
-                android:centerColor="@android:color/transparent"
-                android:endColor="#14000000" />
-            <corners android:radius="16dp" />
-        </shape>
-    </item>
-    <item>
-        <shape android:shape="rectangle">
-            <solid android:color="@android:color/transparent" />
-            <corners android:radius="16dp" />
-            <stroke android:width="1dp" android:color="#4DFFFFFF" />
-        </shape>
-    </item>
-</layer-list>
+<!-- 卡片底部信息条：不透明深色胶囊（v1.7.7 去镜面高光） -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#E6141920" />
+    <corners android:radius="16dp" />
+    <stroke android:width="1dp" android:color="#33FFFFFF" />
+</shape>

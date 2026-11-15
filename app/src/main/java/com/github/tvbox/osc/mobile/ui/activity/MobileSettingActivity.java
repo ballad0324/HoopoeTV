@@ -26,10 +26,10 @@ import com.github.tvbox.osc.setting.CommonSetting;
 import com.github.tvbox.osc.setting.TvSetting;
 import com.github.tvbox.osc.ui.activity.HomeActivity;
 import com.github.tvbox.osc.util.BackupHelper;
+import com.github.tvbox.osc.util.FavSyncHelper;
+import com.github.tvbox.osc.util.SettingsSyncHelper;
 import com.github.tvbox.osc.util.CacheHelper;
-import com.github.tvbox.osc.util.CloudBackupHelper;
 import com.github.tvbox.osc.util.DefaultConfig;
-import com.github.tvbox.osc.util.GlassBgHelper;
 import com.github.tvbox.osc.util.OkGoHelper;
 import com.github.tvbox.osc.util.PlayerHelper;
 import com.hjq.permissions.OnPermissionCallback;
@@ -194,50 +194,48 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                     }
                 }));
 
+        // ---------- 跨端同步（手机 ⇄ 电视，走云备份通道） ----------
+        rows.add(MobileSettingAdapter.Row.header(tr("通用 · 跨端同步", "General · Cross-device")));
+        rows.add(MobileSettingAdapter.Row.item(tr("设置同步到云端", "Upload settings"),
+                SettingsSyncHelper.lastTime().length() == 0
+                        ? tr("未同步过", "Never synced")
+                        : tr("上次 ", "Last ") + SettingsSyncHelper.lastTime(),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        doSettingsPush();
+                    }
+                }));
+        rows.add(MobileSettingAdapter.Row.item(tr("从云端拉回设置", "Pull settings"),
+                tr("接口 / 主题 / 播放器等；拉取后需重启", "API / theme / player; restarts after pull"),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        confirmSettingsPull();
+                    }
+                }));
+        rows.add(MobileSettingAdapter.Row.item(tr("收藏同步到云端", "Upload favorites"),
+                FavSyncHelper.lastTime().length() == 0
+                        ? tr("未同步过", "Never synced")
+                        : tr("上次 ", "Last ") + FavSyncHelper.lastTime(),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        doFavPush();
+                    }
+                }));
+        rows.add(MobileSettingAdapter.Row.item(tr("拉回云端收藏", "Pull favorites"),
+                tr("与电视端收藏合并，不删除本机已有项", "Merges with TV favorites"),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        doFavPull();
+                    }
+                }));
         // ---------- 通用：外观（两端共用，走 CommonSetting） ----------
         // 「界面模式」已提到页面顶部的分段按钮（A3），这里不再重复一行
         rows.add(MobileSettingAdapter.Row.header(tr("通用 · 外观","General · Appearance")));
-        rows.add(MobileSettingAdapter.Row.capsule(tr("明暗模式","Theme mode"),
-                tr("默认明亮；选「跟随系统」时按系统深色设置自动切换",
-                        "Light by default; System follows the phone's setting"),
-                new String[]{tr("跟随系统","System"), tr("明亮","Light"), tr("深色","Dark")},
-                CommonSetting.getNightModeIndex(), new MobileSettingAdapter.OnOption() {
-                    @Override
-                    public void onOption(MobileSettingAdapter.Row row, int index) {
-                        CommonSetting.putNightModeIndex(index);
-                        refreshRows();
-                    }
-                }));
-        // 更换背景图：明亮 / 深色两档，同样填地址即生效（也保留点选本地图的方式）
-        // 更换背景图（v1.6.37）：两档都改成点选式 —— 相册本地图 / 网络图片链接 / 恢复内置图
-        rows.add(MobileSettingAdapter.Row.item(tr("明亮主题背景","Light wallpaper"),
-                bgState(false) + "\n" + tr("点击：选本地图片或填网络链接","Tap: local image or image URL"),
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        showBgDialog(false);
-                    }
-                }));
-        rows.add(MobileSettingAdapter.Row.item(tr("深色主题背景","Dark wallpaper"),
-                bgState(true) + "\n" + tr("点击：选本地图片或填网络链接","Tap: local image or image URL"),
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        showBgDialog(true);
-                    }
-                }));
-        rows.add(MobileSettingAdapter.Row.item(tr("背景图规格","Wallpaper spec"),
-                "PNG/JPG/WebP · 1080×1920 以上 · 9:16 · ≤1MB", new Runnable() {
-                    @Override
-                    public void run() {
-                        new AlertDialog.Builder(MobileSettingActivity.this)
-                                .setTitle("背景图规格要求")
-                                .setMessage(CommonSetting.BG_SPEC_HINT
-                                        + "\n\n明亮与深色两档各自独立保存，显示时按当前明暗模式自动取用。")
-                                .setPositiveButton("知道了", null)
-                                .show();
-                    }
-                }));        rows.add(MobileSettingAdapter.Row.capsule(tr("语言","Language"),
+        rows.add(MobileSettingAdapter.Row.capsule(tr("语言","Language"),
                 tr("默认简体中文，切换后立即重建界面", "Simplified Chinese by default"),
                 new String[]{"简体中文", "English"},
                 CommonSetting.getLanguage(), new MobileSettingAdapter.OnOption() {
@@ -298,6 +296,20 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                     }
                 }));
 
+        rows.add(MobileSettingAdapter.Row.capsule(tr("直播内核","Live engine"),
+                tr("直播播放内核，与电视端共用同一设置项", "Same setting as the TV page"),
+                new String[]{"系统", "IJK", "EXO"},
+                CommonSetting.getLivePlayerType() >= 0 && CommonSetting.getLivePlayerType() <= 2
+                        ? CommonSetting.getLivePlayerType() : 0,
+                new MobileSettingAdapter.OnOption() {
+                    @Override
+                    public void onOption(MobileSettingAdapter.Row row, int index) {
+                        CommonSetting.putLivePlayerType(index);
+                        toast(tr("直播内核已切换，重进直播生效", "Live engine switched"));
+                        refreshRows();
+                    }
+                }));
+
         // ---------- 通用：网络 ----------
         rows.add(MobileSettingAdapter.Row.header(tr("通用 · 网络","General · Network")));
         rows.add(MobileSettingAdapter.Row.capsule("DNS",
@@ -308,6 +320,20 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                     public void onOption(MobileSettingAdapter.Row row, int index) {
                         CommonSetting.putDohUrl(index);
                         toast(tr("DNS 已切换", "DNS switched") + "：" + dnsName(index));
+                        refreshRows();
+                    }
+                }));
+
+        rows.add(MobileSettingAdapter.Row.input(tr("代理服务器","Proxy server"),
+                tr("形如 http://127.0.0.1:7890，留空即不走代理；EXO 内核生效",
+                        "e.g. http://127.0.0.1:7890; empty = no proxy (EXO only)"),
+                "http://127.0.0.1:7890",
+                CommonSetting.getProxyServer(), tr("立即更改","Apply"),
+                new MobileSettingAdapter.OnInput() {
+                    @Override
+                    public void onInput(MobileSettingAdapter.Row row, String text) {
+                        CommonSetting.putProxyServer(text == null ? "" : text.trim());
+                        toast(tr("代理已保存", "Proxy saved"));
                         refreshRows();
                     }
                 }));
@@ -579,242 +605,7 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                 .show();
     }
 
-    /* ===================== 云端备份（MySQL） ===================== */
-
-    private AlertDialog cloudDialog;
-    private TextView cloudStatus;
-
-    private void showCloudBackupDialog() {
-        if (cloudDialog != null && cloudDialog.isShowing()) cloudDialog.dismiss();
-        // 先自行 inflate：Dialog.create() 之前 DecorView 还没建好，Dialog.findViewById 会返回 null
-        android.view.View root = getLayoutInflater().inflate(R.layout.dialog_cloud_backup, null);
-        cloudDialog = new AlertDialog.Builder(this)
-                .setView(root)
-                .create();
-        final EditText etUrl = root.findViewById(R.id.etCloudUrl);
-        final EditText etUser = root.findViewById(R.id.etCloudUser);
-        final EditText etPass = root.findViewById(R.id.etCloudPass);
-        cloudStatus = root.findViewById(R.id.tvCloudStatus);
-        if (etUrl != null) etUrl.setText(CloudBackupHelper.getBaseUrl());
-        if (etUser != null) etUser.setText(CloudBackupHelper.getUser());
-        if (etPass != null) etPass.setText(CloudBackupHelper.getPass());
-        android.view.View btnSave = root.findViewById(R.id.btnCloudSave);
-        if (btnSave != null) btnSave.setOnClickListener(new android.view.View.OnClickListener() {
-            @Override
-            public void onClick(android.view.View v) {
-                saveCloudConfig(etUrl, etUser, etPass);
-                if (cloudStatus != null) cloudStatus.setText("已保存：" + CloudBackupHelper.summary());
-                refreshRows();
-            }
-        });
-        android.view.View btnTest = root.findViewById(R.id.btnCloudTest);
-        if (btnTest != null) btnTest.setOnClickListener(new android.view.View.OnClickListener() {
-            @Override
-            public void onClick(android.view.View v) {
-                saveCloudConfig(etUrl, etUser, etPass);
-                cloudStatus.setText("正在连接…");
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        CloudBackupHelper.Res ping = CloudBackupHelper.ping();
-                        CloudBackupHelper.Res login = ping.ok ? CloudBackupHelper.login() : ping;
-                        final String msg = ping.ok
-                                ? (login.ok ? "连接正常，账号密码已验证" : "服务器可达，但登录失败：" + login.msg)
-                                : "连接失败：" + ping.msg;
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (cloudStatus != null) cloudStatus.setText(msg);
-                            }
-                        });
-                    }
-                }).start();
-            }
-        });
-        android.view.View btnPush = root.findViewById(R.id.btnCloudPush);
-        if (btnPush != null) btnPush.setOnClickListener(new android.view.View.OnClickListener() {
-            @Override
-            public void onClick(android.view.View v) {
-                saveCloudConfig(etUrl, etUser, etPass);
-                doCloudPush();
-            }
-        });
-        android.view.View btnPull = root.findViewById(R.id.btnCloudPull);
-        if (btnPull != null) btnPull.setOnClickListener(new android.view.View.OnClickListener() {
-            @Override
-            public void onClick(android.view.View v) {
-                saveCloudConfig(etUrl, etUser, etPass);
-                doCloudPull(null);
-            }
-        });
-        android.view.View btnList = root.findViewById(R.id.btnCloudList);
-        if (btnList != null) btnList.setOnClickListener(new android.view.View.OnClickListener() {
-            @Override
-            public void onClick(android.view.View v) {
-                saveCloudConfig(etUrl, etUser, etPass);
-                showCloudList();
-            }
-        });
-        android.view.View btnClose = root.findViewById(R.id.btnCloudClose);
-        if (btnClose != null) btnClose.setOnClickListener(new android.view.View.OnClickListener() {
-            @Override
-            public void onClick(android.view.View v) {
-                if (cloudDialog != null) cloudDialog.dismiss();
-            }
-        });
-        cloudDialog.show();
-        android.view.Window w = cloudDialog.getWindow();
-        if (w != null) {
-            w.setBackgroundDrawableResource(android.R.color.transparent);
-            int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.92f);
-            w.setLayout(width, android.view.WindowManager.LayoutParams.WRAP_CONTENT);
-        }
-    }
-
-    private void saveCloudConfig(EditText etUrl, EditText etUser, EditText etPass) {
-        String url = etUrl == null ? "" : etUrl.getText().toString();
-        String user = etUser == null ? "" : etUser.getText().toString();
-        String pass = etPass == null ? "" : etPass.getText().toString();
-        CloudBackupHelper.save(url, user, pass);
-    }
-
-    private void cloudStatusText(final String s) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (cloudStatus != null) cloudStatus.setText(s);
-            }
-        });
-    }
-
-    /** 上传：优先传最新一份本地备份，没有就先做一份 */
-    private void doCloudPush() {
-        if (!CloudBackupHelper.isConfigured()) {
-            toast("请先填写地址、用户名、密码");
-            return;
-        }
-        final String latest = BackupHelper.list().isEmpty() ? null : BackupHelper.list().get(0);
-        cloudStatusText("打包中…");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String name = latest;
-                if (name == null) name = BackupHelper.backup(MobileSettingActivity.this);
-                if (name == null) {
-                    cloudStatusText("本地备份失败，请检查存储空间");
-                    return;
-                }
-                cloudStatusText("上传中（" + name + "）…");
-                CloudBackupHelper.Res res = CloudBackupHelper.push(name);
-                final String msg = res.ok ? "已上传到云端：" + name : "上传失败：" + res.msg;
-                cloudStatusText(msg);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        toast(msg);
-                        refreshRows();
-                    }
-                });
-            }
-        }).start();
-    }
-
-    /** 拉取：默认拿云端最新一份，解到本地后再走同一套恢复流程 */
-    private void doCloudPull(final String remoteName) {
-        if (!CloudBackupHelper.isConfigured()) {
-            toast("请先填写地址、用户名、密码");
-            return;
-        }
-        cloudStatusText("拉取中…");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                CloudBackupHelper.Res res = CloudBackupHelper.pull(remoteName);
-                if (!res.ok) {
-                    cloudStatusText("拉取失败：" + res.msg);
-                    return;
-                }
-                final String localName = res.msg;
-                cloudStatusText("已下载到本地：" + localName);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshRows();
-                        new AlertDialog.Builder(MobileSettingActivity.this)
-                                .setTitle("恢复这份云端备份？")
-                                .setMessage(localName + "\n恢复会覆盖当前收藏、历史与设置，完成后 App 自动重启。")
-                                .setPositiveButton("恢复", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        doRestore(localName);
-                                    }
-                                })
-                                .setNegativeButton("先放着", null)
-                                .show();
-                    }
-                });
-            }
-        }).start();
-    }
-
-    /** 云端备份列表：点一份即拉取 */
-    private void showCloudList() {
-        if (!CloudBackupHelper.isConfigured()) {
-            toast("请先填写地址、用户名、密码");
-            return;
-        }
-        cloudStatusText("读取云端列表…");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                CloudBackupHelper.Res res = CloudBackupHelper.listRemote();
-                if (!res.ok) {
-                    cloudStatusText("读取失败：" + res.msg);
-                    return;
-                }
-                final String[] names = new String[res.data.optJSONArray("items") == null
-                        ? 0 : res.data.optJSONArray("items").length()];
-                final String[] labels = new String[names.length];
-                org.json.JSONArray items = res.data.optJSONArray("items");
-                for (int i = 0; i < names.length; i++) {
-                    org.json.JSONObject o = items.optJSONObject(i);
-                    names[i] = o.optString("name", "");
-                    labels[i] = names[i] + "  " + o.optString("size_text", "") + "  " + o.optString("time", "");
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        cloudStatusText("云端共 " + names.length + " 份");
-                        if (names.length == 0) {
-                            toast("云端还没有备份");
-                            return;
-                        }
-                        new AlertDialog.Builder(MobileSettingActivity.this)
-                                .setTitle("云端备份")
-                                .setItems(labels, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        doCloudPull(names[which]);
-                                    }
-                                })
-                                .setNegativeButton("取消", null)
-                                .show();
-                    }
-                });
-            }
-        }).start();
-    }
-
-    private void toastOnUi(final String s) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                toast(s);
-            }
-        });
-    }
-
-    private String versionText() {
+        private String versionText() {
         try {
             return getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
         } catch (Throwable t) {
@@ -823,6 +614,106 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
     }
 
     /** 关于：不复用 TV 的 dialog_about（那份布局按 TV 600px 宽写死，手机屏会超宽） */
+    /* ===================== 跨端设置同步（手机 ⇄ 电视） ===================== */
+
+    private void doSettingsPush() {
+        toast(tr("正在上传设置…", "Uploading settings…"));
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final com.github.tvbox.osc.util.CloudBackupHelper.Res r =
+                        com.github.tvbox.osc.util.SettingsSyncHelper.push();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        toast(r.ok ? r.msg : tr("上传失败：", "Upload failed: ") + r.msg);
+                        refreshRows();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private void confirmSettingsPull() {
+        new AlertDialog.Builder(this)
+                .setTitle(tr("从云端拉回设置", "Pull settings"))
+                .setMessage(tr("会用云端的接口地址、主题、播放器等设置覆盖本机，拉取后自动重启。确定继续？",
+                        "Cloud settings will overwrite local ones, then the app restarts. Continue?"))
+                .setPositiveButton(tr("拉取", "Pull"), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        doSettingsPull();
+                    }
+                })
+                .setNegativeButton(tr("取消", "Cancel"), null)
+                .show();
+    }
+
+    private void doSettingsPull() {
+        toast(tr("正在拉取设置…", "Pulling settings…"));
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final com.github.tvbox.osc.util.CloudBackupHelper.Res r =
+                        com.github.tvbox.osc.util.SettingsSyncHelper.pull();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (r.ok) {
+                            toast(tr("已同步，3 秒后重启", "Synced, restarting in 3s"));
+                            new android.os.Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    BackupHelper.restartApp(MobileSettingActivity.this);
+                                }
+                            }, 3000);
+                        } else {
+                            toast(tr("拉取失败：", "Pull failed: ") + r.msg);
+                        }
+                        refreshRows();
+                    }
+                });
+            }
+        }).start();
+    }
+    /* ===================== 收藏跨端同步（手机 ⇄ 电视） ===================== */
+
+    private void doFavPush() {
+        toast(tr("正在上传收藏…", "Uploading favorites…"));
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final com.github.tvbox.osc.util.CloudBackupHelper.Res r =
+                        com.github.tvbox.osc.util.FavSyncHelper.push();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        toast(r.ok ? r.msg : tr("上传失败：", "Upload failed: ") + r.msg);
+                        refreshRows();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private void doFavPull() {
+        toast(tr("正在拉取收藏…", "Pulling favorites…"));
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final com.github.tvbox.osc.util.CloudBackupHelper.Res r =
+                        com.github.tvbox.osc.util.FavSyncHelper.pull();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        toast(r.ok ? r.msg : tr("拉取失败：", "Pull failed: ") + r.msg);
+                        refreshRows();
+                    }
+                });
+            }
+        }).start();
+    }
+
     private void showAbout() {
         int code = 0;
         try {
@@ -920,27 +811,9 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
         refreshRows();
     }
 
-    private String bgPath(boolean night) {
-        String path = CommonSetting.getGlassBgPath(night);
-        return path == null ? "" : path;
-    }
+    
 
-    /** 背景图：留空回到内置图，否则按图片全局地址/本机路径下载并应用 */
-    private void applyBg(final boolean night, String text) {
-        if (TextUtils.isEmpty(text)) {
-            GlassBgHelper.reset(this, night);
-            toast(tr("已恢复内置背景","Back to built-in wallpaper"));
-            refreshRows();
-            return;
-        }
-        toast(tr("正在应用背景…","Applying wallpaper…"));
-        GlassBgHelper.importUrl(this, night, text, new Runnable() {
-            @Override
-            public void run() {
-                refreshRows();
-            }
-        });
-    }
+    
 
     /**
      * 选择点播数据源：列出 json 配置里未隐藏的站点，选中即写入 HawkConfig.HOME_API 并回首页重载。
@@ -1025,76 +898,15 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
         finish();
     }
 
-    /* ===================== 更换背景图（明亮 / 深色） ===================== */
 
-    private String bgState(boolean night) {
-        String path = night ? CommonSetting.getGlassBgDark() : CommonSetting.getGlassBgLight();
-        return TextUtils.isEmpty(path) ? "内置默认图" : "已设置（点击更换）";
-    }
+    
 
-    private void showBgDialog(final boolean night) {
-        final String[] items = new String[]{
-                "从手机相册选图片",
-                "用网络图片链接",
-                "恢复内置背景图"
-        };
-        new AlertDialog.Builder(this)
-                .setTitle(night ? "深色主题背景图" : "明亮主题背景图")
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) {
-                            GlassBgHelper.pick(MobileSettingActivity.this, night);
-                        } else if (which == 1) {
-                            askBgUrl(night);
-                        } else {
-                            GlassBgHelper.reset(MobileSettingActivity.this, night);
-                            GlassBgHelper.apply(MobileSettingActivity.this);
-                            toast(tr("已恢复内置背景", "Back to built-in wallpaper"));
-                            refreshRows();
-                        }
-                    }
-                })
-                .setNegativeButton("取消", null)
-                .show();
-    }
+    
 
     /** 网络图片：输入图片直链，下载后落到本地再应用（与相册选图走同一条流程） */
-    private void askBgUrl(final boolean night) {
-        final EditText input = new EditText(this);
-        input.setSingleLine(true);
-        input.setHint("https://example.com/bg.jpg");
-        input.setText(bgPath(night));
-        input.setPadding(dp(14), dp(10), dp(14), dp(10));
-        new AlertDialog.Builder(this)
-                .setTitle(night ? "深色主题背景图 · 网络链接" : "明亮主题背景图 · 网络链接")
-                .setMessage("规格：" + CommonSetting.BG_SPEC_HINT)
-                .setView(input)
-                .setPositiveButton("应用", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String url = input.getText() == null ? "" : input.getText().toString().trim();
-                        if (TextUtils.isEmpty(url)) {
-                            toast("链接不能为空");
-                            return;
-                        }
-                        applyBg(night, url);
-                    }
-                })
-                .setNegativeButton("取消", null)
-                .show();
-    }
+    
 
-    private int dp(int v) {
-        return (int) (getResources().getDisplayMetrics().density * v);
-    }
+    
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (GlassBgHelper.handleResult(this, requestCode, resultCode, data)) {
-            GlassBgHelper.apply(this);
-            refreshRows();
-        }
-    }
+    
 }

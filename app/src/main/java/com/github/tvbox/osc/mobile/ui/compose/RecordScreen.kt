@@ -194,9 +194,9 @@ private fun RecordScreen(initialFav: Boolean, host: RecordHost) {
 
 @Composable
 private fun Capsule(fav: Boolean, onSwitch: (Boolean) -> Unit, modifier: Modifier = Modifier) {
-    val trackFill = colorResource(R.color.shell_surface_high)
+    val trackFill = colorResource(R.color.shell_card_fill)
     val trackStroke = colorResource(R.color.shell_card_stroke)
-    val onFill = colorResource(R.color.shell_card_fill)
+    val onFill = skinAccent()
     val textColor = colorResource(R.color.shell_text)
     val dimColor = colorResource(R.color.shell_text_dim)
 
@@ -230,7 +230,7 @@ private fun CapsuleTab(
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        ShellText(text, 14, true, if (selected) textColor else dimColor)
+        ShellText(text, 14, true, if (selected) skinOnAccent() else dimColor)
     }
 }
 

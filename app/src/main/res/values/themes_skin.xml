@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  七套色系：直接沿用 TV 端已有的七套模板色值（Netfx/Dorae/Pepsi/Naruto/Minion/Yagami/Sakura），
+  两端同一套名字、同一条 alpha 阶梯（80/70/60/50/40），换主题只换色，不换结构。
+  0 奈飞红 1 哆啦蓝 2 百事深蓝 3 鸣人橙 4 小黄黄 5 八神粉 6 樱花粉
+-->
+<resources>
+    <!-- 0 Netfx红 -->
+    <style name="Theme.Skin0" parent="Theme.MobileSplash">
+        <item name="skin_accent">#FFD81F26</item>
+        <item name="skin_accent2">#FFF2A03A</item>
+        <item name="colorAccent">#FFD81F26</item>
+        <item name="color_theme">#FFD81F26</item>
+        <item name="color_theme_80">#CCD81F26</item>
+        <item name="color_theme_70">#B3D81F26</item>
+        <item name="color_theme_60">#99D81F26</item>
+        <item name="color_theme_50">#80D81F26</item>
+        <item name="color_theme_40">#66D81F26</item>
+        <item name="color_theme_dark_70">#FF8C1418</item>
+    </style>
+
+    <!-- 1 哆啦蓝 -->
+    <style name="Theme.Skin1" parent="Theme.MobileSplash">
+        <item name="skin_accent">#FF18A2E7</item>
+        <item name="skin_accent2">#FFFF6FB5</item>
+        <item name="colorAccent">#FF18A2E7</item>
+        <item name="color_theme">#FF18A2E7</item>
+        <item name="color_theme_80">#CC18A2E7</item>
+        <item name="color_theme_70">#B318A2E7</item>
+        <item name="color_theme_60">#9918A2E7</item>
+        <item name="color_theme_50">#8018A2E7</item>
+        <item name="color_theme_40">#6618A2E7</item>
+        <item name="color_theme_dark_70">#FF106D9C</item>
+    </style>
+
+    <!-- 2 百事深蓝 -->
+    <style name="Theme.Skin2" parent="Theme.MobileSplash">
+        <item name="skin_accent">#FF004B93</item>
+        <item name="skin_accent2">#FF3E8BD8</item>
+        <item name="colorAccent">#FF004B93</item>
+        <item name="color_theme">#FF004B93</item>
+        <item name="color_theme_80">#CC004B93</item>
+        <item name="color_theme_70">#B3004B93</item>
+        <item name="color_theme_60">#99004B93</item>
+        <item name="color_theme_50">#80004B93</item>
+        <item name="color_theme_40">#66004B93</item>
+        <item name="color_theme_dark_70">#FF002547</item>
+    </style>
+
+    <!-- 3 鸣人橙 -->
+    <style name="Theme.Skin3" parent="Theme.MobileSplash">
+        <item name="skin_accent">#FFFF7439</item>
+        <item name="skin_accent2">#FFFFC14D</item>
+        <item name="colorAccent">#FFFF7439</item>
+        <item name="color_theme">#FFFF7439</item>
+        <item name="color_theme_80">#CCFF7439</item>
+        <item name="color_theme_70">#B3FF7439</item>
+        <item name="color_theme_60">#99FF7439</item>
+        <item name="color_theme_50">#80FF7439</item>
+        <item name="color_theme_40">#66FF7439</item>
+        <item name="color_theme_dark_70">#FFB35127</item>
+    </style>
+
+    <!-- 4 小黄黄 -->
+    <style name="Theme.Skin4" parent="Theme.MobileSplash">
+        <item name="skin_accent">#FFFFD55E</item>
+        <item name="skin_accent2">#FF7A5A16</item>
+        <item name="colorAccent">#FFFFD55E</item>
+        <item name="color_theme">#FFFFD55E</item>
+        <item name="color_theme_80">#CCFFD55E</item>
+        <item name="color_theme_70">#B3FFD55E</item>
+        <item name="color_theme_60">#99FFD55E</item>
+        <item name="color_theme_50">#80FFD55E</item>
+        <item name="color_theme_40">#66FFD55E</item>
+        <item name="color_theme_dark_70">#FFB39542</item>
+    </style>
+
+    <!-- 5 八神粉 -->
+    <style name="Theme.Skin5" parent="Theme.MobileSplash">
+        <item name="skin_accent">#FFFF2F70</item>
+        <item name="skin_accent2">#FFB3204E</item>
+        <item name="colorAccent">#FFFF2F70</item>
+        <item name="color_theme">#FFFF2F70</item>
+        <item name="color_theme_80">#CCFF2F70</item>
+        <item name="color_theme_70">#B3FF2F70</item>
+        <item name="color_theme_60">#99FF2F70</item>
+        <item name="color_theme_50">#80FF2F70</item>
+        <item name="color_theme_40">#66FF2F70</item>
+        <item name="color_theme_dark_70">#FFB3204E</item>
+    </style>
+
+    <!-- 6 樱花粉 -->
+    <style name="Theme.Skin6" parent="Theme.MobileSplash">
+        <item name="skin_accent">#FFFD9BDB</item>
+        <item name="skin_accent2">#FF9B6BD4</item>
+        <item name="colorAccent">#FFFD9BDB</item>
+        <item name="color_theme">#FFFD9BDB</item>
+        <item name="color_theme_80">#CCFD9BDB</item>
+        <item name="color_theme_70">#B3FD9BDB</item>
+        <item name="color_theme_60">#99FD9BDB</item>
+        <item name="color_theme_50">#80FD9BDB</item>
+        <item name="color_theme_40">#66FD9BDB</item>
+        <item name="color_theme_dark_70">#FFB06B98</item>
+    </style>
+
+</resources>

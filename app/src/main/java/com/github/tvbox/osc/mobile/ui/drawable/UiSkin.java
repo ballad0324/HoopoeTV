@@ -15,9 +15,9 @@ public final class UiSkin {
     private UiSkin() {
     }
 
-    /** 大块面板（首页面板 / 详情信息卡） */
+    /** 大块面板（首页面板 / 详情信息卡）：方案② 30% 不透明，透出底部海报墙 */
     public static void card(View view) {
-        set(view, R.drawable.glass_card);
+        set(view, R.drawable.shape_card_panel);
     }
 
     /** 列表行卡 */
@@ -27,12 +27,12 @@ public final class UiSkin {
 
     /** 底部 dock 胶囊 */
     public static void dock(View view) {
-        set(view, R.drawable.glass_dock_bg);
+        set(view, R.drawable.shape_dock_pill);
     }
 
     /** 顶部导航条 */
     public static void nav(View view) {
-        set(view, R.drawable.glass_nav_bg);
+        set(view, R.drawable.shape_nav_pill);
     }
 
     /** 大胶囊按钮（立即播放） */

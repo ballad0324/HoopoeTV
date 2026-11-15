@@ -77,6 +77,8 @@ import xyz.doikki.videoplayer.player.VideoView;
  *   - 单频道没有 catchup 模板时，自动找同名的其它分组源做兜底；
  *   - EPG 里确实没有该频道时，回看按钮置灰，不再白等一次 2.6MB 下载。
  */
+import com.github.tvbox.osc.util.SkinManager;
+
 public class MobileLiveActivity extends BaseActivity {
 
     private RecyclerView rvChannel;
@@ -628,7 +630,7 @@ public class MobileLiveActivity extends BaseActivity {
 
     private void paintSheetChips() {
         if (llSheetChips == null) return;
-        int primary = getResources().getColor(R.color.shell_primary);
+        int primary = com.github.tvbox.osc.util.SkinManager.accent(this);
         for (int i = 0; i < llSheetChips.getChildCount(); i++) {
             View child = llSheetChips.getChildAt(i);
             if (!(child instanceof TextView)) continue;
@@ -639,7 +641,7 @@ public class MobileLiveActivity extends BaseActivity {
             bg.setCornerRadius(dp(16));
             if (day == sheetDayOffset) {
                 bg.setColor(primary);
-                chip.setTextColor(0xFFFFFFFF);
+                chip.setTextColor(SkinManager.onAccent(this));
             } else {
                 bg.setColor(Color.argb(0x14, Color.red(primary), Color.green(primary), Color.blue(primary)));
                 chip.setTextColor(primary);

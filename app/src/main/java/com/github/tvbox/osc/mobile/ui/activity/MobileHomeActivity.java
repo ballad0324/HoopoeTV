@@ -66,10 +66,11 @@ import java.util.List;
  * 手机端首页：与 TV 端 HomeActivity 共用同一套内核（ApiConfig / SourceViewModel / GridFragment），
  * 只换外壳（toolbar + 横向分类 tab + 底部导航），不复用 TV 的左侧拨轮与横屏布局。
  */
+import com.github.tvbox.osc.util.SkinManager;
+
 public class MobileHomeActivity extends BaseActivity implements MobileGridFragment.HeaderBinder, HomeDockHost {
 
     private ViewPager pager;
-    private ImageView btnTheme;
     private ImageView btnUiMode;
     private ImageView btnUser;
     /** 底部导航栏（Compose 绘制：分类 tab + 四图标 dock） */
@@ -140,7 +141,6 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
 
     private void initView() {
         pager = findViewById(R.id.pager);
-        btnTheme = findViewById(R.id.btnTheme);
         btnUiMode = findViewById(R.id.btnUiMode);
         btnUser = findViewById(R.id.btnUser);
         cvDock = findViewById(R.id.cvDock);
@@ -176,13 +176,9 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         if (cvDock != null) MobileHomeDock.bindHomeDock(cvDock, this);
 
         applyDisplaySettings();
-
-        // Liquid Glass 动效：顶栏液态按压 + 顶栏玻璃周期性扫光（底部改为 Compose 自带按压反馈）
-        LiquidMotion.bindPress(btnTheme, 0.88f);
+        // Liquid Glass 按压反馈保留（触感），顶栏玻璃周期性扫光已在 v1.7.7 取消
         LiquidMotion.bindPress(btnUiMode, 0.88f);
         LiquidMotion.bindPress(btnUser, 0.88f);
-        // toolbar：顶 6dp / 高 56dp / 左右 10dp / 圆角 22dp，与 glass_card 完全对齐
-        LiquidMotion.attachHeaderSheen(this, 6f, 56f, 10f, 22f);
     }
 
     /** 应用手机端专有显示开关（设置页改完返回首页即生效） */
@@ -193,25 +189,10 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         HomeDockState.updateShowLabels(MobileSetting.isShowNavLabel());
     }
 
-    /** 顶栏明暗切换：深色 ↔ 明亮，立即生效（AppCompatDelegate 会重建界面） */
-    private void toggleNightMode() {
-        int cur = CommonSetting.getNightMode();
-        int next = (cur == CommonSetting.NIGHT_DARK) ? CommonSetting.NIGHT_LIGHT : CommonSetting.NIGHT_DARK;
-        CommonSetting.putNightMode(next);
-        Toast.makeText(this, next == CommonSetting.NIGHT_DARK ? "已切换到深色模式" : "已切换到明亮模式",
-                Toast.LENGTH_SHORT).show();
-        refreshThemeButton();
-    }
-
-    /** 深色模式下图标金色高亮、明亮模式下灰色，让当前状态一眼可辨；
-     *  v1.7.1：图标随状态切换——明亮模式显示月亮（点了变暗），深色模式显示太阳（点了变亮） */
+    /** 顶栏图标状态：深色模式下图标金色高亮、明亮模式下灰色，让当前状态一眼可辨 */
     private void refreshThemeButton() {
         int color = getResources().getColor(
                 CommonSetting.isNightUi() ? R.color.shell_gold : R.color.shell_text_dim);
-        if (btnTheme != null) {
-            btnTheme.setImageResource(CommonSetting.isNightUi() ? R.drawable.play_brightness : R.drawable.ic_moon);
-            btnTheme.setColorFilter(color);
-        }
         if (btnUiMode != null) btnUiMode.setColorFilter(color);
         if (btnUser != null) btnUser.setColorFilter(color);
     }
@@ -238,7 +219,7 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         dialog.show();
         Window window = dialog.getWindow();
         if (window != null) {
-            window.setBackgroundDrawableResource(R.drawable.glass_card);
+            window.setBackgroundDrawableResource(R.drawable.shape_card_base);
             window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
 
@@ -254,7 +235,7 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
                     : "已登录 · 解析源");
             tvAction.setText("退出登录");
             if (ivAvatar != null) {
-                ivAvatar.setColorFilter(getResources().getColor(R.color.shell_primary));
+                ivAvatar.setColorFilter(com.github.tvbox.osc.util.SkinManager.accent(this));
             }
         } else {
             tvName.setText("未登录");
@@ -318,7 +299,7 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         dialog.show();
         Window window = dialog.getWindow();
         if (window != null) {
-            window.setBackgroundDrawableResource(R.drawable.glass_card);
+            window.setBackgroundDrawableResource(R.drawable.shape_card_base);
             window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
 
@@ -471,12 +452,6 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
             @Override
             public void onClick(View v) {
                 switchToTvUi();
-            }
-        });
-        btnTheme.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleNightMode();
             }
         });
         btnUser.setOnClickListener(new View.OnClickListener() {
@@ -695,7 +670,7 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
     private void styleSegment(TextView tv, boolean on) {
         if (tv == null) return;
         tv.setBackgroundResource(on ? R.drawable.shape_home_segment_on : android.R.color.transparent);
-        tv.setTextColor(getResources().getColor(on ? R.color.shell_text : R.color.shell_text_dim));
+        tv.setTextColor(on ? SkinManager.onAccent(this) : getResources().getColor(R.color.shell_text_dim));
         tv.setTypeface(null, on ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL);
     }
 

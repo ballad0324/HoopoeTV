@@ -4,9 +4,9 @@
          bg_gradient #EAF2FA->#D8E6F2 / surface #FFFFFF@0.60 / border #FFFFFF@0.70
          accent #3A7BD5 / accent_warm #E0603A -->
     <color name="shell_bg">#FFEAF2FA</color>
-    <color name="shell_surface">#99FFFFFF</color>
-    <color name="shell_surface_high">#A3FFFFFF</color>
-    <color name="shell_surface_highest">#A6FFFFFF</color>
+    <color name="shell_surface">#FFFFFFFF</color>
+    <color name="shell_surface_high">#FFF8FAFD</color>
+    <color name="shell_surface_highest">#FFF2F5FA</color>
     <color name="shell_outline">#B3FFFFFF</color>
 
     <color name="shell_primary">#FF3A7BD5</color>
@@ -26,7 +26,7 @@
     <color name="shell_badge_hd">#FFF5A623</color>
     <color name="shell_badge_4k">#FF3A7BD5</color>
     <color name="shell_badge_new">#FFE0603A</color>
-    <color name="shell_card_fill">#F4FFFFFF</color>
+    <color name="shell_card_fill">#FFFFFFFF</color>
     <color name="shell_card_stroke">#1F2B3A55</color>
     <color name="shell_overlay">#660A1B33</color>
 
@@ -42,9 +42,9 @@
 
     <!-- ===== Liquid Glass 2.0（iOS 26 参考）：多层玻璃需要的高光/厚度 token ===== -->
     <!-- 玻璃本体填充（比旧 glass_fill 略透，靠高光与描边立起来） -->
-    <color name="liquid_fill">#8AFFFFFF</color>
+    <color name="liquid_fill">#FFFFFFFF</color>
     <!-- 玻璃内部顶部镜面高光（从顶往下衰减） -->
-    <color name="liquid_glow_top">#59FFFFFF</color>
+    <color name="liquid_glow_top">#00FFFFFF</color>
     <!-- 玻璃内部底部反光（很淡，制造厚度） -->
     <color name="liquid_glow_bottom">#0DFFFFFF</color>
     <!-- 边缘高光描边：亮色主题下接近纯白 -->

@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_glass_page"
+    android:background="@drawable/bg_page_fill"
     android:orientation="vertical">
 
     <!-- 顶部：三段切换（上映表 / 专题 / 排行榜）+ 搜索 -->
@@ -25,7 +25,7 @@
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
             android:text="上映表"
-            android:textColor="@color/shell_primary"
+            android:textColor="?attr/skin_accent"
             android:textSize="17sp"
             android:textStyle="bold" />
 

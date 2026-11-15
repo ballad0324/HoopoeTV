@@ -81,6 +81,20 @@ public class MobileFavorites {
         return true;
     }
 
+    /** 跨端同步用：本机没有才追加，规则与 toggle 一致（置顶、上限 100） */
+    public static boolean add(Item item) {
+        if (item == null || item.vodId == null || item.vodId.length() == 0) return false;
+        if (has(item.vodId, item.sourceKey)) return false;
+        List<Item> list = load();
+        if (item.time <= 0) item.time = System.currentTimeMillis();
+        list.add(0, item);
+        while (list.size() > MAX) {
+            list.remove(list.size() - 1);
+        }
+        save(list);
+        return true;
+    }
+
     public static void remove(String vodId, String sourceKey) {
         List<Item> list = load();
         for (int i = list.size() - 1; i >= 0; i--) {

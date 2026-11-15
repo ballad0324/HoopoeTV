@@ -3,7 +3,7 @@
     <item android:state_selected="true">
         <shape android:shape="rectangle">
             <corners android:radius="8dp" />
-            <solid android:color="@color/shell_primary" />
+            <solid android:color="?attr/skin_accent" />
         </shape>
     </item>
     <item>

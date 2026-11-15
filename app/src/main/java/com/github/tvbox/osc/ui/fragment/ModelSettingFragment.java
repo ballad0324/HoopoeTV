@@ -39,7 +39,7 @@ import com.github.tvbox.osc.ui.dialog.SelectDialog;
 import com.github.tvbox.osc.ui.dialog.XWalkInitDialog;
 import com.github.tvbox.osc.util.CacheHelper;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
-import com.github.tvbox.osc.util.GlassBgHelper;
+
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.HistoryHelper;
 import com.github.tvbox.osc.util.OkGoHelper;
@@ -69,6 +69,8 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
  * @date :2020/12/23
  * @description:
  */
+import com.github.tvbox.osc.ui.dialog.AccountDialog;
+
 public class ModelSettingFragment extends BaseLazyFragment {
     private TextView tvDebugOpen;
     private TextView tvApi;
@@ -182,21 +184,6 @@ public class ModelSettingFragment extends BaseLazyFragment {
 
         //takagen99 : Set HomeApi as default
         // 更换背景图（电视端独立存储：与手机端分开，各用各的）
-        refreshBgState();
-        findViewById(R.id.llBgLight).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FastClickCheckUtil.check(v);
-                showBgDialog(false);
-            }
-        });
-        findViewById(R.id.llBgDark).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FastClickCheckUtil.check(v);
-                showBgDialog(true);
-            }
-        });
         findViewById(R.id.llHomeApi).requestFocus();
 
         findViewById(R.id.llDebug).setOnClickListener(new View.OnClickListener() {
@@ -696,6 +683,15 @@ public class ModelSettingFragment extends BaseLazyFragment {
                 dialog.show();
             }
         });
+        // 账号与云备份（TV 端补齐手机端已有的账号体系）
+        findViewById(R.id.llAccount).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FastClickCheckUtil.check(v);
+                new AccountDialog(requireActivity()).show();
+            }
+        });
+
         // Load Wallpaper from URL -------------------------------------
         findViewById(R.id.llWp).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -922,6 +918,20 @@ public class ModelSettingFragment extends BaseLazyFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        refreshAccountValue();
+    }
+
+    /** 电视端账号行右侧显示：已登录显示账号名，未登录显示“未登录” */
+    private void refreshAccountValue() {
+        TextView tv = findViewById(R.id.tvAccountValue);
+        if (tv == null) return;
+        tv.setText(com.github.tvbox.osc.mobile.ui.MobileUser.isLoggedIn()
+                ? com.github.tvbox.osc.mobile.ui.MobileUser.name() : "未登录");
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         SettingActivity.callback = null;
@@ -984,61 +994,5 @@ public class ModelSettingFragment extends BaseLazyFragment {
     }
 
 
-    /* ===================== 更换背景图（电视端，与手机端互不影响） ===================== */
 
-    private void refreshBgState() {
-        TextView light = findViewById(R.id.tvBgLightValue);
-        if (light != null) light.setText(CommonSetting.getGlassBgLight().isEmpty() ? "内置默认" : "已自定义");
-        TextView dark = findViewById(R.id.tvBgDarkValue);
-        if (dark != null) dark.setText(CommonSetting.getGlassBgDark().isEmpty() ? "内置默认" : "已自定义");
-    }
-
-    private void showBgDialog(final boolean night) {
-        String state = night
-                ? (CommonSetting.getGlassBgDark().isEmpty() ? "内置默认" : "已自定义")
-                : (CommonSetting.getGlassBgLight().isEmpty() ? "内置默认" : "已自定义");
-        new androidx.appcompat.app.AlertDialog.Builder(mActivity)
-                .setTitle(night ? "更换背景图 · 黑暗主题" : "更换背景图 · 明亮主题")
-                .setMessage("当前：" + state
-                        + "\n规格要求：" + CommonSetting.BG_SPEC_HINT
-                        + "\n电视端与手机端的背景图分别保存，互不影响。")
-                .setPositiveButton("选择图片", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        pickBgImage(night);
-                    }
-                })
-                .setNeutralButton("恢复默认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (night) CommonSetting.putGlassBgDark("");
-                        else CommonSetting.putGlassBgLight("");
-                        GlassBgHelper.apply(mActivity);
-                        refreshBgState();
-                    }
-                })
-                .setNegativeButton("取消", null)
-                .show();
-    }
-
-    private void pickBgImage(boolean night) {
-        try {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            startActivityForResult(Intent.createChooser(intent, night ? "选择黑暗主题背景图" : "选择明亮主题背景图"),
-                    night ? GlassBgHelper.REQ_BG_DARK : GlassBgHelper.REQ_BG_LIGHT);
-        } catch (Exception e) {
-            Toast.makeText(mActivity, "电视端未提供图片选择器，可把图片拷到 App 私有目录后用设置页恢复默认", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (GlassBgHelper.handleResult(mActivity, requestCode, resultCode, data)) {
-            GlassBgHelper.apply(mActivity);
-            refreshBgState();
-        }
-    }
 }

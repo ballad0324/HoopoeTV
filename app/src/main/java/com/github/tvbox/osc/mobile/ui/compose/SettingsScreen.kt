@@ -82,7 +82,7 @@ private fun SettingsList(host: SettingsHost) {
     val stroke = colorResource(R.color.shell_card_stroke)
     val text = colorResource(R.color.shell_text)
     val dim = colorResource(R.color.shell_text_dim)
-    val primary = colorResource(R.color.shell_primary)
+    val primary = skinAccent()
     val fieldBg = colorResource(R.color.shell_surface_high)
 
     LazyColumn(
@@ -240,7 +240,7 @@ private fun InputRow(
                 BasicText(
                     text = row.actionText ?: "立即更改",
                     style = TextStyle(
-                        color = Color.White,
+                        color = skinOnAccent(),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
@@ -306,7 +306,7 @@ private fun SwitchRow(
                     .padding(horizontal = 3.dp)
                     .size(16.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(Color.White)
+                    .background(skinOnAccent())
             )
         }
     }
@@ -371,7 +371,7 @@ private fun CapsuleRow(
                         text = label,
                         modifier = Modifier.padding(horizontal = 4.dp),
                         style = TextStyle(
-                            color = if (on) Color.White else dim,
+                            color = if (on) skinOnAccent() else dim,
                             fontSize = if (options.size > 4) 10.sp else 12.sp,
                             textAlign = TextAlign.Center
                         ),

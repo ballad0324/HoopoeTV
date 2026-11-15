@@ -67,12 +67,12 @@ public class MobileDockHelper {
             View child = item.getChildAt(i);
             if (child instanceof ImageView) {
                 ImageView icon = (ImageView) child;
-                int color = on ? item.getResources().getColor(R.color.shell_primary)
+                int color = on ? com.github.tvbox.osc.util.SkinManager.accent(item.getContext())
                         : item.getResources().getColor(R.color.shell_text_dim);
                 icon.setColorFilter(color, android.graphics.PorterDuff.Mode.SRC_IN);
             } else if (child instanceof TextView) {
                 TextView label = (TextView) child;
-                label.setTextColor(on ? item.getResources().getColor(R.color.shell_primary)
+                label.setTextColor(on ? com.github.tvbox.osc.util.SkinManager.accent(item.getContext())
                         : item.getResources().getColor(R.color.shell_text_dim));
                 label.getPaint().setFakeBoldText(on);
                 label.invalidate();
