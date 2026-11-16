@@ -15,7 +15,8 @@ android {
             pip {
                 install "lxml"
                 install "ujson"
-                install "pyquery"
+                // pyquery 新版要求 cssselect>=1.5.0，Chaquopy 源只到 1.2.0，钉到可用的老版本
+                install "pyquery==1.4.3"
                 install "requests"
                 install "jsonpath"
                 install "cachetools"

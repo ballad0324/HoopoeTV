@@ -13,8 +13,8 @@ android {
     defaultConfig {
         applicationId 'com.hoopoetv.tvbox'
         targetSdkVersion 28
-        versionCode 10106
-        versionName "v1.7.15"
+        versionCode 10121
+        versionName "v1.7.30"
         multiDexEnabled true
         // UI 身份开关：false = TV 端 UI，true = 手机端 UI（由 mobile flavor 覆盖）
         buildConfigField "boolean", "UI_MOBILE", "false"
@@ -81,13 +81,32 @@ android {
             buildConfigField "boolean", "UI_MOBILE", "true"
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        // mt = 移动+电视双端合一：默认进手机 UI，设置里「界面模式」可随时切回 TV UI
+        // 两套 UI 类都在 main 源集里，所以同一个 APK 两种形态都能跑
+        mtjava {
+            dimension = "mode"
+            minSdkVersion 21
+            buildConfigField "boolean", "UI_MOBILE", "true"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        // 双端合一 + 内嵌 Python（Chaquopy），内核与 python flavor 相同，只是默认 UI 变手机端
+        mtpython {
+            dimension = "mode"
+            minSdkVersion 21
+            buildConfigField "boolean", "UI_MOBILE", "true"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'proguard-python.pro'
+        }
     }
     applicationVariants.configureEach { variant ->
         variant.outputs.configureEach { output ->
-            def flavorNames = variant.productFlavors.collect { it.name == "normal" ? "java" : it.name }.join('-')
-            // 构建自定义文件名
-            def fileName = "TVBox_${variant.buildType.name}-${flavorNames}.apk"
-            outputFileName = fileName
+            // 产物命名：HoopoeTV_<版本>_<ABI>-<内核>-mt.apk，便于四包并排分发
+            def abiLabel = [arm64: "arm64-v8a", armeabi: "armeabi-v7a"]
+            def modeLabel = [normal: "java", python: "python", mobile: "mobile",
+                             mtjava: "java-mt", mtpython: "python-mt"]
+            def abiName = variant.productFlavors.find { it.dimension == "abi" }?.name
+            def modeName = variant.productFlavors.find { it.dimension == "mode" }?.name
+            def ver = android.defaultConfig.versionName
+            outputFileName = "HoopoeTV_${ver}_${abiLabel[abiName] ?: abiName}-${modeLabel[modeName] ?: modeName}.apk"
         }
     }
 
@@ -122,6 +141,14 @@ android {
         // flavor 源集只剩 mode 维度契约类的手机版本（pyLoader 桩）。
         mobile {
             java.srcDirs = ['src/mobile/java']
+        }
+        // mtjava 用手机源的 pyLoader 桩（不加载 python 内核）
+        mtjava {
+            java.srcDirs = ['src/mobile/java']
+        }
+        // mtpython 用 python 源：真 pyLoader + pyramid 的 PythonLoader/PythonSpider 等
+        mtpython {
+            java.srcDirs = ['src/python/java']
         }
     }
 
@@ -161,6 +188,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.12.0'
     implementation project(path: ':quickjs')
     pythonImplementation project(":pyramid")
+    mtpythonImplementation project(":pyramid")
     
     kapt 'androidx.room:room-compiler:2.6.1'
     implementation 'com.github.alidili:FlowLayout:v1.5'

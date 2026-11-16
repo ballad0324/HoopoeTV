@@ -71,11 +71,6 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".mobile.ui.activity.MobileAdminActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
-        <activity
             android:name=".mobile.ui.activity.MobileRecordActivity"
             android:exported="false"
             android:screenOrientation="portrait"
