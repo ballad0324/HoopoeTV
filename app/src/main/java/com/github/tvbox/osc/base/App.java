@@ -195,6 +195,8 @@ public class App extends MultiDexApplication {
             }
             Hawk.put("shell_url_reset_v1", true);
         }
+        // v1.7.20：出厂不内置任何源 —— 升级上来后一次性清空接口/直播/EPG（老用户的旧地址也清掉）
+        com.github.tvbox.osc.setting.CommonSetting.resetSourcesOnce();
     }
 
     public static App getInstance() {

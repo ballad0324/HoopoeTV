@@ -230,7 +230,44 @@ public class ApiDialog extends BaseDialog {
                 }
             }
         });
+        // v1.7.20：出厂不内置任何源，电视端也只能靠口令写入默认三件套
+        findViewById(R.id.btnDefaultSource).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDefaultSourceDialog();
+            }
+        });
         refreshQRCode();
+    }
+
+    /** 电视端口令入口：口令错只 Toast，不发请求；对了写入三件套并回填输入框 */
+    private void showDefaultSourceDialog() {
+        final EditText et = new EditText(getContext());
+        et.setSingleLine(true);
+        et.setHint("口令");
+        new android.app.AlertDialog.Builder(getContext())
+                .setTitle("拉取默认源")
+                .setMessage("输入口令后写入默认的接口 / 直播源 / EPG（会覆盖当前三项）")
+                .setView(et)
+                .setPositiveButton("确定", new android.content.DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(android.content.DialogInterface dialog, int which) {
+                        String pass = et.getText().toString().trim();
+                        if (!com.github.tvbox.osc.setting.CommonSetting.BUILTIN_PASS.equals(pass)) {
+                            Toast.makeText(getContext(), "口令错误", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        com.github.tvbox.osc.setting.CommonSetting.applyDefaultSource();
+                        String api = com.github.tvbox.osc.setting.CommonSetting.getApiUrl();
+                        inputApi.setText(api);
+                        inputLive.setText(com.github.tvbox.osc.setting.CommonSetting.getLiveUrl());
+                        inputEPG.setText(com.github.tvbox.osc.setting.CommonSetting.getEpgUrl());
+                        listener.onchange(api);
+                        Toast.makeText(getContext(), "已写入默认源", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("取消", null)
+                .show();
     }
 
     private void refreshQRCode() {

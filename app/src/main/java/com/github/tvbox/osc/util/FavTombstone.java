@@ -19,10 +19,10 @@ import java.util.List;
 public final class FavTombstone {
 
     private static final String KEY = "fav_removed";
-    /** 最多保留 300 条墓碑，防止无限增长 */
-    private static final int MAX = 300;
-    /** 墓碑有效期 60 天，超时的删除事件不再传播 */
-    private static final long KEEP_MS = 60L * 24 * 3600 * 1000;
+    /** 最多保留 2000 条墓碑，防止无限增长（单人收藏量远小于此） */
+    private static final int MAX = 2000;
+    /** 墓碑有效期 365 天：拉长到一年，避免久不联网的对端把旧收藏又拉回来 */
+    private static final long KEEP_MS = 365L * 24 * 3600 * 1000;
 
     public static class Item {
         public String vodId = "";

@@ -416,6 +416,10 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
         }
         if (globalWp != null) {
             getWindow().setBackgroundDrawable(globalWp);
+        } else if (com.github.tvbox.osc.setting.CommonSetting.isMobileUi()) {
+            // v1.7.30：没设壁纸时窗口底色直接跟主题 L0，不再用内置蓝色渐变图 app_bg.png 盖住七套配色
+            getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(
+                    SkinManager.bgPage(this)));
         } else {
             getWindow().setBackgroundDrawableResource(R.drawable.app_bg);
         }

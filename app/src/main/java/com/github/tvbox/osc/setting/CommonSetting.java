@@ -136,71 +136,87 @@ public class CommonSetting {
     }
 
     public static String getApiUrl() {
-        return Hawk.get(HawkConfig.API_URL, "");
+        return getApiUrlStored();
     }
 
     public static void putApiUrl(String url) {
-        Hawk.put(HawkConfig.API_URL, url);
+        Hawk.put(HawkConfig.API_URL, url == null ? "" : url);
     }
 
-    /** 用户自填的接口地址原文（不含内置源兜底），给「接口地址」输入框回填用 */
+    /** 用户自填的接口地址原文（不含任何内置兜底），给「接口地址」输入框回填用 */
     public static String getApiUrlStored() {
         String s = Hawk.get(HawkConfig.API_URL, "");
         return s == null ? "" : s;
     }
 
+    /** 直播源 / EPG 是否被用户手动设置过（用于区分“用户填过”与“还是出厂空值”） */
+    private static final String KEY_LIVE_SET = "live_url_manual";
+    private static final String KEY_EPG_SET = "epg_url_manual";
+
+    /**
+     * 直播源：只认存储值。
+     * v1.7.20 起出厂不内置任何源 —— 没填过、没口令拉取过就是空串，直播页会提示「未配置直播源」。
+     */
     public static String getLiveUrl() {
-        return Hawk.get(HawkConfig.LIVE_URL, "");
+        String v = Hawk.get(HawkConfig.LIVE_URL, "");
+        return v == null ? "" : v;
     }
 
     public static void putLiveUrl(String url) {
-        Hawk.put(HawkConfig.LIVE_URL, url);
+        Hawk.put(HawkConfig.LIVE_URL, url == null ? "" : url);
+        Hawk.put(KEY_LIVE_SET, true);
     }
 
+    /** EPG：同样只认存储值，未配置就是空串 */
     public static String getEpgUrl() {
-        return Hawk.get(HawkConfig.EPG_URL, "");
+        String v = Hawk.get(HawkConfig.EPG_URL, "");
+        return v == null ? "" : v;
     }
 
     public static void putEpgUrl(String url) {
-        Hawk.put(HawkConfig.EPG_URL, url);
+        Hawk.put(HawkConfig.EPG_URL, url == null ? "" : url);
+        Hawk.put(KEY_EPG_SET, true);
     }
 
-    /* ===================== 源模式（v1.6.38） ===================== */
+    /* ===================== 默认源（口令解锁后写入，v1.7.20） ===================== */
 
-    /** 源模式存储键：0 = 内置源，1 = 解析源（用户自填接口），未设置时按登录态推断 */
-    private static final String KEY_SOURCE_MODE = "mobile_source_mode";
-
-    public static int getSourceModeIndex() {
-        try {
-            return Hawk.get(KEY_SOURCE_MODE, -1);
-        } catch (Throwable th) {
-            return -1;
-        }
-    }
-
-    public static void putSourceModeIndex(int index) {
-        Hawk.put(KEY_SOURCE_MODE, index);
-    }
-
-    /** 首页/搜索等取源时统一走这里：内置源 or 用户自填的解析源 */
-    public static boolean useBuiltinSource() {
-        int mode = getSourceModeIndex();
-        if (mode == 0) return isBuiltinUnlocked();
-        if (mode == 1) return false;
-        // 没手动切过：登录用户走内置源，未登录走自填源（v1.6.36 的默认规则）
-        try {
-            return com.github.tvbox.osc.mobile.ui.MobileUser.isLoggedIn() && isBuiltinUnlocked();
-        } catch (Throwable th) {
-            return false;
-        }
-    }
-
-    /* ===================== 出厂内置源需要口令解锁（v1.7） ===================== */
-
-    /** 出厂内置源的解锁口令；改了这里就等于换密码 */
+    /** 拉取默认源需要的口令；改这里等于换密码 */
     public static final String BUILTIN_PASS = "98555576";
 
     private static final String KEY_BUILTIN_UNLOCK = "mobile_builtin_unlock";
+    /** 一次性清空标记：从旧版本升上来时执行一次“清空全部数据源” */
+    private static final String KEY_SRC_RESET = "src_reset_v4";
+
+    /** 默认三件套的密文（XOR + Base64）。明文地址能反编译拿到，口令只是弱防护 */
+    private static final String SRC_SALT = "hoopoe-ui-2026";
+    private static final String ENC_API = "ABsbAFVKAkFaAwACBBhcW0FBX1AXQ1kbBB9TRgFBHxgfSlkDC0JKU1RR";
+    private static final String ENC_LIVE = "ABsbAFVKAkFaAwACBBhcW0FBX1AXQ1kbAx9ITxwXQBkBEUgHD0xRVRxbWxo=";
+    private static final String ENC_EPG = "ABsbAFVKAkFaAwACBBhcW0FBX1AXQ1kbAx9ITxwXQAADBFQXCE5ZHkpbBA==";
+
+    private static String decodeSource(String b64) {
+        try {
+            byte[] body = android.util.Base64.decode(b64, android.util.Base64.NO_WRAP);
+            byte[] salt = SRC_SALT.getBytes("UTF-8");
+            for (int i = 0; i < body.length; i++) {
+                body[i] = (byte) (body[i] ^ salt[i % salt.length]);
+            }
+            return new String(body, "UTF-8");
+        } catch (Throwable th) {
+            return "";
+        }
+    }
+
+    public static String defaultApiUrl() {
+        return decodeSource(ENC_API);
+    }
+
+    public static String defaultLiveUrl() {
+        return decodeSource(ENC_LIVE);
+    }
+
+    public static String defaultEpgUrl() {
+        return decodeSource(ENC_EPG);
+    }
 
     public static boolean isBuiltinUnlocked() {
         try {
@@ -215,12 +231,42 @@ public class CommonSetting {
         Hawk.put(KEY_BUILTIN_UNLOCK, unlocked);
     }
 
-    /* ===================== 内置源（已改为云端下发） ===================== */
+    /** 接口 / 直播 / EPG 三项是否都已配置（仅用于设置页显示状态） */
+    public static boolean hasAllSources() {
+        return !getApiUrl().trim().isEmpty()
+                && !getLiveUrl().trim().isEmpty()
+                && !getEpgUrl().trim().isEmpty();
+    }
 
-    /** 兜底三件套：云端拉不到时仍可用，首次启动也按这套初始化 */
-    public static final String BUILTIN_API_URL = "http://43.226.44.105:6066/api.php/tvboxcfg";
-    public static final String BUILTIN_LIVE_URL = "http://43.226.44.105:6061/zytx/interface.m3u";
-    public static final String BUILTIN_EPG_URL = "http://43.226.44.105:6061/zytx/playback.xml";
+    /** 口令校验通过后：把默认三件套写进本机，并记住已解锁 */
+    public static void applyDefaultSource() {
+        Hawk.put(HawkConfig.API_URL, defaultApiUrl());
+        putLiveUrl(defaultLiveUrl());
+        putEpgUrl(defaultEpgUrl());
+        putBuiltinUnlocked(true);
+        markConfigDirty();
+    }
+
+    /** 清空全部数据源：三项一起清、撤销解锁（双端共用同一组键，清完两端都空） */
+    public static void clearAllSource() {
+        Hawk.put(HawkConfig.API_URL, "");
+        Hawk.put(HawkConfig.LIVE_URL, "");
+        Hawk.put(HawkConfig.EPG_URL, "");
+        Hawk.put(KEY_LIVE_SET, false);
+        Hawk.put(KEY_EPG_SET, false);
+        putBuiltinUnlocked(false);
+        markConfigDirty();
+    }
+
+    /** 升级后的一次性清空：出厂不再内置任何源，老用户的旧地址也一起清掉 */
+    public static void resetSourcesOnce() {
+        boolean done = Hawk.get(KEY_SRC_RESET, false);
+        if (done) {
+            return;
+        }
+        Hawk.put(KEY_SRC_RESET, true);
+        clearAllSource();
+    }
 
     /* ===================== 配置即时生效（改完接口/数据源不用重启 App） ===================== */
 

@@ -24,6 +24,7 @@ import com.github.tvbox.osc.util.AES;
 import com.github.tvbox.osc.util.AdBlocker;
 import com.github.tvbox.osc.util.DefaultConfig;
 import com.github.tvbox.osc.util.HawkConfig;
+import com.github.tvbox.osc.setting.CommonSetting;
 import com.github.tvbox.osc.util.M3U8;
 import com.github.tvbox.osc.util.MD5;
 import com.github.tvbox.osc.util.FileUtils;
@@ -157,33 +158,15 @@ public class ApiConfig {
             }
         }
         if (s == null) s = "";
-        // v1.6.40：strings 里的 app_source 被清空过（v1.6.37 要求默认为空），
-        // 登录后切「内置源」会拿到空串 → 首页报「源地址为空」。
-        // 内置源改为回退到服务端下发的 TVBox 标准配置，保证登录用户一定有源可用。
-        if (s.trim().isEmpty()) {
-            s = com.github.tvbox.osc.setting.CommonSetting.BUILTIN_API_URL;
-        }
+        // v1.7.20：出厂不再内置任何接口地址。这里只回显 strings 里的空值，
+        // 真正有源只能靠用户手填或「拉取默认源」写入。
         return s;
     }
 
     public static String getApiUrl() {
-        String def = getDefaultApiUrl();
-        if (def == null) def = "";
-        // 源模式（v1.6.38）：管理面板的胶囊开关优先 —— 内置源 or 解析源（用户自填接口）。
-        // 没手动切过时按登录态推断（已登录 = 内置源，未登录 = 自填源），与 v1.6.36 一致。
-        try {
-            if (com.github.tvbox.osc.setting.CommonSetting.useBuiltinSource()) {
-                return def.trim();
-            }
-        } catch (Throwable ignored) {
-        }
         String stored = Hawk.get(HawkConfig.API_URL, "");
         if (stored == null) stored = "";
-        // 内置源已清空：默认走空壳，但允许用户在设置里手动填源
-        if (stored.trim().isEmpty()) {
-            return def.trim();
-        }
-        return stored;
+        return stored.trim();
     }
 
     public void loadConfig(boolean useCache, LoadConfigCallback callback, Activity activity) {
@@ -505,8 +488,8 @@ public class ApiConfig {
 
         // takagen99: Check if Live URL is setup in Settings, if no, get from File Config
         liveChannelGroupList.clear();           //修复从后台切换重复加载频道列表
-        String liveURL = Hawk.get(HawkConfig.LIVE_URL, "");
-        String epgURL  = Hawk.get(HawkConfig.EPG_URL, "");
+        String liveURL = CommonSetting.getLiveUrl();
+        String epgURL  = CommonSetting.getEpgUrl();
 
         String liveURL_final = null;
         try {
@@ -617,8 +600,12 @@ public class ApiConfig {
                 if (StringUtils.isBlank(liveURL_final)) {
                     liveURL_final = liveURL;
                 }
+                // v1.7.20：源是 m3u/m3u8 时必须让代理按 m3u 解析。原来写死 type=txt，
+                // 一批标准 m3u 直播源被当成 txt 解析 → 0 频道 → 弹「直播源解析失败」。
+                String plainLive = liveURL_final;
                 liveURL_final = Base64.encodeToString(liveURL_final.getBytes("UTF-8"), Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP);
-                liveURL_final = "http://127.0.0.1:9978/proxy?do=live&type=txt&ext=" + liveURL_final;
+                String liveType = (plainLive != null && plainLive.toLowerCase().contains(".m3u")) ? "m3u" : "txt";
+                liveURL_final = "http://127.0.0.1:9978/proxy?do=live&type=" + liveType + "&ext=" + liveURL_final;
                 LiveChannelGroup liveChannelGroup = new LiveChannelGroup();
                 liveChannelGroup.setGroupName(liveURL_final);
                 liveChannelGroupList.add(liveChannelGroup);
@@ -629,14 +616,24 @@ public class ApiConfig {
             th.printStackTrace();
         }
 
-        // 内置兜底：接口未下发 lives/epg 时，用 strings.xml 里的默认地址补进设置
-        if (StringUtils.isBlank(Hawk.get(HawkConfig.LIVE_URL, ""))) {
-            String defLive = HomeActivity.getRes().getString(R.string.app_live);
-            if (!StringUtils.isBlank(defLive)) Hawk.put(HawkConfig.LIVE_URL, defLive);
-        }
-        if (StringUtils.isBlank(Hawk.get(HawkConfig.EPG_URL, ""))) {
-            String defEpg = HomeActivity.getRes().getString(R.string.app_epg);
-            if (!StringUtils.isBlank(defEpg)) Hawk.put(HawkConfig.EPG_URL, defEpg);
+        // v1.7.21：接口 json 里没有 lives（我们这套私有配置就是这种）时，上面的分组一个都不会建，
+        // 电视端直播页 getChannelGroupList() 恒为空 → 直接弹「没解析出任何频道」。
+        // 这里用设置里的直播源自己造一个「本地代理格式」分组：LivePlayActivity 看到
+        // 只有一个 127.0.0.1 分组就会走 loadProxyLives，它把 ext 解出来直接 GET 原地址再本地解析。
+        if (liveChannelGroupList.isEmpty()) {
+            String sLive = CommonSetting.getLiveUrl();
+            if (sLive != null && sLive.trim().length() > 0) {
+                try {
+                    String enc = Base64.encodeToString(sLive.trim().getBytes("UTF-8"),
+                            Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP);
+                    LiveChannelGroup fallbackGroup = new LiveChannelGroup();
+                    fallbackGroup.setGroupName("http://127.0.0.1:9978/proxy?do=live&type=txt&ext=" + enc);
+                    liveChannelGroupList.add(fallbackGroup);
+                    System.out.println("Live URL (fallback group):" + sLive);
+                } catch (Throwable th) {
+                    th.printStackTrace();
+                }
+            }
         }
 
         // Video parse rule for host

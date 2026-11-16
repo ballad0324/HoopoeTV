@@ -95,15 +95,40 @@ public final class FavRepository {
             remove(item.vodId, item.sourceKey);
             return false;
         }
-        insert(item);
+        insert(item, 0);
         return true;
     }
 
-    /** 跨端同步用：本机没有才写入 */
+    /**
+     * 跨端同步用：本机没有就写入；已有但传入的条目更新更晚，则覆盖（备注/名字/封面跟着走）。
+     * 返回 true 表示本机收藏发生了变化（新增或更新）。
+     */
     public static boolean add(Item item) {
         if (item == null || item.vodId == null || item.vodId.length() == 0) return false;
-        if (has(item.vodId, item.sourceKey)) return false;
-        insert(item);
+        String sourceKey = item.sourceKey == null ? "" : item.sourceKey;
+        VodCollect existing = null;
+        try {
+            existing = com.github.tvbox.osc.data.AppDataManager.get()
+                    .getVodCollectDao().getVodCollect(sourceKey, item.vodId);
+        } catch (Throwable ignored) {
+        }
+        if (existing == null) {
+            insert(item, 0);
+            return true;
+        }
+        // 已存在：对端时间更新才覆盖，避免旧数据把新改的备注冲掉
+        if (item.time <= 0 || item.time <= existing.updateTime) return false;
+        Item base = new Item();
+        base.vodId = existing.vodId;
+        base.sourceKey = sourceKey;
+        base.name = item.name == null || item.name.length() == 0
+                ? (existing.name == null ? "" : existing.name) : item.name;
+        base.pic = item.pic == null || item.pic.length() == 0
+                ? (existing.pic == null ? "" : existing.pic) : item.pic;
+        base.note = item.note == null || item.note.length() == 0
+                ? (existing.note == null ? "" : existing.note) : item.note;
+        base.time = item.time;
+        insert(base, existing.getId());
         return true;
     }
 
@@ -125,7 +150,7 @@ public final class FavRepository {
         }
     }
 
-    private static void insert(Item item) {
+    private static void insert(Item item, int keepId) {
         try {
             VodCollect c = new VodCollect();
             c.vodId = item.vodId;
@@ -134,6 +159,7 @@ public final class FavRepository {
             c.pic = item.pic == null ? "" : item.pic;
             c.note = item.note == null ? "" : item.note;
             c.updateTime = item.time > 0 ? item.time : System.currentTimeMillis();
+            if (keepId > 0) c.setId(keepId);   // 覆盖已有行（REPLACE 同主键 = 原地更新）
             com.github.tvbox.osc.data.AppDataManager.get().getVodCollectDao().insert(c);
         } catch (Throwable ignored) {
         }
@@ -161,7 +187,7 @@ public final class FavRepository {
                     it.note = o.optString("note", "");
                     android.util.Log.i("FavRepository", "migrate " + vodId + " / " + sourceKey);
                     it.time = o.optLong("time", 0);
-                    insert(it);
+                    insert(it, 0);
                 }
                 Hawk.put(LEGACY_BACKUP_KEY, raw);
                 Hawk.delete(LEGACY_KEY);

@@ -91,6 +91,26 @@ public class AppDataManager {
             }
         }
     };
+    /**
+     * v4 → v5：给收藏表加 (sourceKey, vodId) 唯一索引，让"同一条收藏只有一行"由数据库兜底。
+     *
+     * 老库里可能有重复行（历史同步插过），所以先把重复项删掉只留 id 最大的一条再建索引，
+     * 否则 CREATE UNIQUE INDEX 会直接失败。
+     */
+    static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            try {
+                database.execSQL("DELETE FROM vodCollect WHERE id NOT IN "
+                        + "(SELECT MAX(id) FROM vodCollect GROUP BY sourceKey, vodId)");
+                database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS "
+                        + "index_vodCollect_sourceKey_vodId ON vodCollect (sourceKey, vodId)");
+            } catch (SQLiteException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
     static String dbPath() {
         return DB_NAME + ".v" + DB_FILE_VERSION + ".db";
     }
@@ -105,6 +125,7 @@ public class AppDataManager {
                     .addMigrations(MIGRATION_1_2)
                     .addMigrations(MIGRATION_2_3)
                     .addMigrations(MIGRATION_3_4)
+                    .addMigrations(MIGRATION_4_5)
                     .addCallback(new RoomDatabase.Callback() {
                         @Override
                         public void onCreate(@NonNull SupportSQLiteDatabase db) {

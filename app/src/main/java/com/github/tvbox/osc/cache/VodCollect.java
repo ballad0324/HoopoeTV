@@ -2,11 +2,13 @@ package com.github.tvbox.osc.cache;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "vodCollect")
+@Entity(tableName = "vodCollect",
+        indices = {@Index(value = {"sourceKey", "vodId"}, unique = true)})
 public class VodCollect implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;

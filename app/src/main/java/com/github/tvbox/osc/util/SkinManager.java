@@ -115,9 +115,133 @@ public final class SkinManager {
     }
 
 
+    /* ==================== 「背景即主题」语义 token ====================
+     * 七套色值见 res/values/themes_skin.xml（与 HoopoeTV-七套主题-实现规范 逐字一致）。
+     * 布局里优先直接用 ?attr/skin_bg_page 这类引用；代码里必须取色时走下面这组方法。
+     */
+
+    public static int bgPage(Context c) {
+        return resolve(c, R.attr.skin_bg_page, TOKEN_BG_PAGE[get()]);
+    }
+
+    public static int bgCard(Context c) {
+        return resolve(c, R.attr.skin_bg_card, TOKEN_BG_CARD[get()]);
+    }
+
+    public static int bgFloat(Context c) {
+        return resolve(c, R.attr.skin_bg_float, TOKEN_BG_FLOAT[get()]);
+    }
+
+    public static int bgModal(Context c) {
+        return resolve(c, R.attr.skin_bg_modal, TOKEN_BG_MODAL[get()]);
+    }
+
+    public static int text1(Context c) {
+        return resolve(c, R.attr.skin_text_1, TOKEN_TEXT1[get()]);
+    }
+
+    public static int text2(Context c) {
+        return resolve(c, R.attr.skin_text_2, TOKEN_TEXT2[get()]);
+    }
+
+    public static int text3(Context c) {
+        return resolve(c, R.attr.skin_text_3, TOKEN_TEXT3[get()]);
+    }
+
+    public static int text4(Context c) {
+        return resolve(c, R.attr.skin_text_4, TOKEN_TEXT4[get()]);
+    }
+
+    public static int btnBg(Context c) {
+        return resolve(c, R.attr.skin_btn_bg, TOKEN_BTN_BG[get()]);
+    }
+
+    public static int btnFg(Context c) {
+        return resolve(c, R.attr.skin_btn_fg, TOKEN_BTN_FG[get()]);
+    }
+
+    /** 卡片内评分色 */
+    public static int rating(Context c) {
+        return resolve(c, R.attr.skin_rating, TOKEN_RATING[get()]);
+    }
+
+    /** 海报上的评分色（05/07 必须换成亮色，否则深棕数字在暗海报上读不出） */
+    public static int ratingOnPoster(Context c) {
+        return resolve(c, R.attr.skin_rating_poster, TOKEN_RATING_POSTER[get()]);
+    }
+
+    public static int lineColor(Context c) {
+        return resolve(c, R.attr.skin_line, TOKEN_LINE[get()]);
+    }
+
+    public static int frame(Context c) {
+        return resolve(c, R.attr.skin_frame, TOKEN_FRAME[get()]);
+    }
+
+    /** 主题圆角（px） */
+    public static int radiusPx(Context c) {
+        try {
+            android.util.TypedValue tv = new android.util.TypedValue();
+            if (c != null && c.getTheme().resolveAttribute(R.attr.skin_radius, tv, true)) {
+                return (int) tv.getDimension(c.getResources().getDisplayMetrics());
+            }
+        } catch (Throwable ignored) {
+        }
+        return (int) (12 * c.getResources().getDisplayMetrics().density);
+    }
+
+    /** 当前主题是否为亮色底（05 小黄黄 / 07 樱花粉） */
+    public static boolean isLight() {
+        return LIGHT[get()];
+    }
+
+    /** 兜底色（Theme 解析失败时用），与 themes_skin.xml 保持一致 */
+    private static final int[] TOKEN_BG_PAGE = {
+            0xFF1A0507, 0xFF07203A, 0xFF000000, 0xFF2A1206, 0xFFFFE155, 0xFF3A0620, 0xFFFFE3EA
+    };
+    private static final int[] TOKEN_BG_CARD = {
+            0xFF260B0E, 0xFF0D2C4C, 0xFF0B0B0D, 0xFF3A1B0B, 0xFFFFFCEA, 0xFF4C0A2B, 0xFFFFFFFF
+    };
+    private static final int[] TOKEN_BG_FLOAT = {
+            0xFF341014, 0xFF143A62, 0xFF15161A, 0xFF4A240F, 0xFFFFF3B8, 0xFF5E1036, 0xFFFFD3DD
+    };
+    private static final int[] TOKEN_BG_MODAL = {
+            0xFF43151A, 0xFF1B4977, 0xFF202127, 0xFF5A2E13, 0xFFFFFDF6, 0xFF721642, 0xFFFFFFFF
+    };
+    private static final int[] TOKEN_TEXT1 = {
+            0xFFFFF1F0, 0xFFE8F3FF, 0xFFF5F7FA, 0xFFFFEFDD, 0xFF241C00, 0xFFFFE9F3, 0xFF2A1218
+    };
+    private static final int[] TOKEN_TEXT2 = {
+            0xFFD8A9A6, 0xFFA9C4DC, 0xFFB7BCC6, 0xFFE0B48D, 0xFF4A3D00, 0xFFE0A8C2, 0xFF5E3C46
+    };
+    private static final int[] TOKEN_TEXT3 = {
+            0xFFA87C79, 0xFF7E9BB4, 0xFF858B95, 0xFFB78C68, 0xFF6B5900, 0xFFB77F9C, 0xFF8A5F6A
+    };
+    private static final int[] TOKEN_TEXT4 = {
+            0xFF7A5754, 0xFF5C778F, 0xFF5F6672, 0xFF8C6847, 0xFF8A7500, 0xFF8E5F77, 0xFFA9838D
+    };
+    private static final int[] TOKEN_BTN_BG = {
+            0xFFFFFFFF, 0xFFEAF4FF, 0xFFFFFFFF, 0xFFFFEFDD, 0xFF241C00, 0xFFFFE9F3, 0xFF3A2228
+    };
+    private static final int[] TOKEN_BTN_FG = {
+            0xFF1A0507, 0xFF07203A, 0xFF000000, 0xFF2A1206, 0xFFFFE155, 0xFF3A0620, 0xFFFFE3EA
+    };
+    private static final int[] TOKEN_RATING = {
+            0xFFF0C64B, 0xFFFFD166, 0xFFFFC94D, 0xFFFFC069, 0xFF8A6000, 0xFFFFC24D, 0xFFB4562A
+    };
+    private static final int[] TOKEN_RATING_POSTER = {
+            0xFFF5CF57, 0xFFFFD166, 0xFFFFC94D, 0xFFFFC069, 0xFFFFE39A, 0xFFFFC24D, 0xFFFFCFAE
+    };
+    private static final int[] TOKEN_LINE = {
+            0x1AFFFFFF, 0x1AFFFFFF, 0x1AFFFFFF, 0x1AFFFFFF, 0x12000000, 0x1AFFFFFF, 0x12000000
+    };
+    private static final int[] TOKEN_FRAME = {
+            0xFF4A2022, 0xFF1E4A70, 0xFF2C3037, 0xFF5C3317, 0xFFE8CC55, 0xFF6A1740, 0xFFEBC3CE
+    };
+    private static final boolean[] LIGHT = { false, false, false, false, true, false, true };
+
     /** 从当前 Theme 里解析任意 skin_* 属性 */
-    public static int resolve(Context c, int attr, int fallback) {
-        if (c == null || attr == 0) return fallback;
+    public static int resolve(Context c, int attr, int fallback) {        if (c == null || attr == 0) return fallback;
         try {
             TypedValue tv = new TypedValue();
             if (c.getTheme().resolveAttribute(attr, tv, true) && tv.data != 0) {

@@ -51,6 +51,7 @@ import com.github.tvbox.osc.ui.dialog.ApiHistoryDialog;
 import com.github.tvbox.osc.ui.dialog.LivePasswordDialog;
 import com.github.tvbox.osc.util.EpgUtil;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
+import com.github.tvbox.osc.setting.CommonSetting;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.HawkUtils;
 import com.github.tvbox.osc.util.JavaUtil;
@@ -221,7 +222,7 @@ public class LivePlayActivity extends BaseActivity {
         hideSystemUI(false);
 
         // Getting EPG Address
-        epgStringAddress = Hawk.get(HawkConfig.EPG_URL, "");
+        epgStringAddress = CommonSetting.getEpgUrl();
         if (StringUtils.isBlank(epgStringAddress)) {
             epgStringAddress = "https://epg.112114.xyz/";
 //            Hawk.put(HawkConfig.EPG_URL, epgStringAddress);
@@ -1722,6 +1723,20 @@ public class LivePlayActivity extends BaseActivity {
     private void initLiveChannelList() {
         List<LiveChannelGroup> list = ApiConfig.get().getChannelGroupList();
         if (list.isEmpty()) {
+            // v1.7.28：这里以前直接弹「没解析出任何频道」，但分组为空有两种情况——
+            // ①接口里没有 lives 字段；②接口根本还没加载（例如冷启动直接进直播页）。
+            // 两种都该先用「设置里的直播源」自己解析一次，而不是糊一个错误弹窗。
+            String selfLiveUrl = CommonSetting.getLiveUrl();
+            if (!StringUtils.isBlank(selfLiveUrl)) {
+                try {
+                    String enc = Base64.encodeToString(selfLiveUrl.trim().getBytes("UTF-8"),
+                            Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP);
+                    loadProxyLives("http://127.0.0.1:9978/proxy?do=live&type=txt&ext=" + enc);
+                    return;
+                } catch (Throwable th) {
+                    th.printStackTrace();
+                }
+            }
             showNoLiveSource();
             return;
         }
@@ -1741,7 +1756,7 @@ public class LivePlayActivity extends BaseActivity {
      * 改为给明确引导：能分清「没配源」和「配了但解析不出来」两种情况。
      */
     private void showNoLiveSource() {
-        String liveUrl = Hawk.get(HawkConfig.LIVE_URL, "");
+        String liveUrl = CommonSetting.getLiveUrl();
         final boolean notConfigured = StringUtils.isBlank(liveUrl);
         String msg = notConfigured
                 ? "还没有配置直播源。\n\n请到「设置 → 直播源」填入直播源地址（.txt 列表或接口地址），保存后重新进入直播。"
