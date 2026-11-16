@@ -1,9 +1,9 @@
-# HoopoeTV
+# TVBox_MT版，tvbox手机端，tvbox影视端，TVBox影视双端，
 
 基于 [takagen99/Box](https://github.com/takagen99/Box)（TVBox 系 TV 端影视客户端）二次定制的自有品牌版本。
-包名 `com.hoopoetv.tvbox`，应用名 **HoopoeTV**，默认主题 + 简体中文，已做「空壳播放器化」——不内置任何视频源、直播源、节目单地址，由使用者自行配置。
+包名 `com.hoopoetv.tvbox`，应用名 **HoopoeTV**，默双端七套主题 + 英文简体中文切换，已做「空壳播放器化」——不内置任何视频源、直播源、节目单地址，由使用者自行配置。
 
-- 当前版本：`v0.0.1`（versionCode 1）
+- 当前版本：`v1.7.30`（versionCode 1）
 - 编译环境：JDK 17 / Gradle 7.5 / AGP 7.4.2 / compileSdk 34 / minSdk 21 / targetSdk 28
 - 编译变体：`arm64` + `generic` + `normal`
 
