@@ -170,7 +170,7 @@ public class MobileDiscoverActivity extends BaseActivity {
 
     private void paintTab(TextView tv, boolean on) {
         if (tv == null) return;
-        tv.setTextColor((on ? com.github.tvbox.osc.util.SkinManager.accent(this) : getResources().getColor(R.color.shell_text_dim)));
+        tv.setTextColor((on ? com.github.tvbox.osc.util.SkinManager.accent(this) : com.github.tvbox.osc.util.SkinManager.text2(this)));
         tv.getPaint().setFakeBoldText(on);
         tv.invalidate();
     }
@@ -251,7 +251,7 @@ public class MobileDiscoverActivity extends BaseActivity {
         tv.setPadding(dp(12), dp(6), dp(12), dp(6));
         tv.setBackgroundResource(R.drawable.selector_discover_chip);
         tv.setGravity(Gravity.CENTER);
-        tv.setTextColor((on ? com.github.tvbox.osc.util.SkinManager.accent(this) : getResources().getColor(R.color.shell_text_dim)));
+        tv.setTextColor((on ? com.github.tvbox.osc.util.SkinManager.accent(this) : com.github.tvbox.osc.util.SkinManager.text2(this)));
         tv.setSelected(on);
         tv.setOnClickListener(click);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -270,7 +270,7 @@ public class MobileDiscoverActivity extends BaseActivity {
             if (child instanceof TextView) {
                 ((TextView) child).setTextColor(on
                         ? com.github.tvbox.osc.util.SkinManager.accent(this)
-                        : getResources().getColor(R.color.shell_text_dim));
+                        : com.github.tvbox.osc.util.SkinManager.text2(this));
             }
         }
     }
@@ -401,7 +401,7 @@ public class MobileDiscoverActivity extends BaseActivity {
         TextView tv = new TextView(this);
         tv.setText(label + " [" + count + "部]");
         tv.setTextSize(14);
-        tv.setTextColor(getResources().getColor(R.color.shell_text));
+        tv.setTextColor(com.github.tvbox.osc.util.SkinManager.text1(this));
         tv.getPaint().setFakeBoldText(true);
         row.addView(tv);
         return row;
@@ -491,7 +491,7 @@ public class MobileDiscoverActivity extends BaseActivity {
             final TextView tvMore = new TextView(this);
             tvMore.setText("查看更多 ›");
             tvMore.setTextSize(11);
-            tvMore.setTextColor(getResources().getColor(R.color.shell_text_dim));
+            tvMore.setTextColor(com.github.tvbox.osc.util.SkinManager.text2(this));
             tvMore.setPadding(dp(8), dp(4), dp(2), dp(4));
             header.addView(tvMore);
             llTopic.addView(header);
@@ -673,7 +673,7 @@ public class MobileDiscoverActivity extends BaseActivity {
         if (no == 1) color = getResources().getColor(R.color.shell_gold);
         else if (no == 2) color = com.github.tvbox.osc.util.SkinManager.accent2(this);
         else if (no == 3) color = getResources().getColor(R.color.shell_badge_hd);
-        else color = getResources().getColor(R.color.shell_text_dim);
+        else color = com.github.tvbox.osc.util.SkinManager.text2(this);
         if (no <= 3) {
             // 前三名做成色块徽章，参考图就是这个样子
             GradientDrawable gd = new GradientDrawable();

@@ -20,7 +20,7 @@
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/shell_text"
+        android:textColor="?attr/skin_text_1"
         android:textSize="13sp"
         tools:text="小城良方" />
 
@@ -32,7 +32,7 @@
         android:focusable="true"
         android:gravity="center"
         android:text="×"
-        android:textColor="@color/shell_text_dim"
+        android:textColor="?attr/skin_text_2"
         android:textSize="15sp" />
 
 </LinearLayout>

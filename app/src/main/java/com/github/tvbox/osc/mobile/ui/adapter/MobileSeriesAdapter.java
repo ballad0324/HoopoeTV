@@ -53,7 +53,7 @@ public class MobileSeriesAdapter extends RecyclerView.Adapter<MobileSeriesAdapte
         // 液态玻璃集数格子：选中蓝玻璃 + 白字，未选中白玻璃 + 灰字
         UiSkin.cell(holder.tvSeries, series.selected);
         holder.tvSeries.setTextColor(series.selected ? 0xFFFFFFFF
-                : holder.tvSeries.getResources().getColor(R.color.shell_text_dim));
+                : com.github.tvbox.osc.util.SkinManager.text2(holder.tvSeries.getContext()));
         holder.tvSeries.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

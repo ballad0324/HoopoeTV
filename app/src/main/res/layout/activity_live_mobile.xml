@@ -20,7 +20,7 @@
             android:gravity="center_vertical"
             android:paddingEnd="12dp"
             android:text="@string/m_back"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="14sp" />
 
         <TextView
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="直播"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -140,7 +140,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="节目单未加载 · 点「回看」可加载"
-        android:textColor="@color/shell_text_dim"
+        android:textColor="?attr/skin_text_2"
         android:textSize="11sp" />
 
     <!-- 节目回看：选日期 + 半小时时间段，直接按时间窗口拉回看流 -->
@@ -169,7 +169,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="节目回看"
-                android:textColor="@color/shell_text"
+                android:textColor="?attr/skin_text_1"
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
@@ -182,7 +182,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="选日期和时间段，按半小时回看"
-                android:textColor="@color/shell_text_dim"
+                android:textColor="?attr/skin_text_2"
                 android:textSize="10sp" />
 
             <!-- 节目回看开关：胶囊开关，默认关闭（面板默认收起） -->
@@ -292,7 +292,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="点中间频道看节目单"
-                    android:textColor="@color/shell_text_dim"
+                    android:textColor="?attr/skin_text_2"
                     android:textSize="10sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -313,7 +313,7 @@
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:text="EPG 里没有这个频道的节目单"
-                    android:textColor="@color/shell_text_dim"
+                    android:textColor="?attr/skin_text_2"
                     android:textSize="11sp"
                     android:visibility="gone" />
             </LinearLayout>
@@ -333,7 +333,7 @@
             android:gravity="center"
             android:padding="24dp"
             android:text="@string/m_live_empty"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="13sp"
             android:visibility="gone" />
 

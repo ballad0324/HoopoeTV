@@ -51,6 +51,26 @@ public class MobileSetting {
     public static final String KEY_SHOW_NAV_LABEL = "mobile_show_nav_label";
     /** 分类 tab 选中下划线是否显示 */
     public static final String KEY_SHOW_TAB_INDICATOR = "mobile_show_tab_indicator";
+    /** 首页顶部的「继续观看 / 我的收藏」横条是否显示（对应电视端「首页显示」） */
+    public static final String KEY_SHOW_HOME_STRIP = "mobile_show_home_strip";
+    /** 开 App 后是否直达直播页（对应电视端「直播启动」） */
+    public static final String KEY_LIVE_BOOT = "mobile_live_boot";
+
+    public static boolean isShowHomeStrip() {
+        return Hawk.get(KEY_SHOW_HOME_STRIP, true);
+    }
+
+    public static void putShowHomeStrip(boolean show) {
+        Hawk.put(KEY_SHOW_HOME_STRIP, show);
+    }
+
+    public static boolean isLiveBoot() {
+        return Hawk.get(KEY_LIVE_BOOT, false);
+    }
+
+    public static void putLiveBoot(boolean on) {
+        Hawk.put(KEY_LIVE_BOOT, on);
+    }
 
     /* 三个显示开关已按需求固定为「开启」，设置页不再暴露；
        这里直接返回 true，避免设备上遗留的旧 Hawk 值把功能关掉。 */

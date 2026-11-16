@@ -318,7 +318,7 @@ public class MobileGridFragment extends BaseLazyFragment {
         if (tvFilterLabel != null) {
             tvFilterLabel.setTextColor(on
                     ? com.github.tvbox.osc.util.SkinManager.accent(mContext)
-                    : mContext.getResources().getColor(R.color.shell_text_dim));
+                    : com.github.tvbox.osc.util.SkinManager.text2(mContext));
         }
     }
 
@@ -344,7 +344,7 @@ public class MobileGridFragment extends BaseLazyFragment {
             TextView label = new TextView(mContext);
             label.setText(filter.name);
             label.setTextSize(11);
-            label.setTextColor(mContext.getResources().getColor(R.color.shell_text_dim));
+            label.setTextColor(com.github.tvbox.osc.util.SkinManager.text2(mContext));
             label.setPadding(0, 0, dp(8), 0);
             row.addView(label);
 
@@ -366,8 +366,7 @@ public class MobileGridFragment extends BaseLazyFragment {
                 String selected = sortData.filterSelect.get(filter.key);
                 boolean on = selected != null && selected.equals(chipKey);
                 chip.setSelected(on);
-                chip.setTextColor(mContext.getResources().getColor(
-                        on ? R.color.shell_text : R.color.shell_text_dim));
+                chip.setTextColor((on ? com.github.tvbox.osc.util.SkinManager.text1(mContext) : com.github.tvbox.osc.util.SkinManager.text2(mContext)));
                 chip.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

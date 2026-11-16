@@ -4,5 +4,5 @@
     <corners
         android:topLeftRadius="20dp"
         android:topRightRadius="20dp" />
-    <solid android:color="@color/shell_surface_highest" />
+    <solid android:color="?attr/skin_bg_float" />
 </shape>

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 圆形图标按钮：白底 + 细描边 -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
-    <solid android:color="#F7FFFFFF" />
-    <stroke
-        android:width="1dp"
-        android:color="#1F2B3A55" />
+<!-- 圆形图标按钮：浮层 L2 底 + 细描边，图标只跟文字色（v1.7.29） -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+    <solid android:color="?attr/skin_bg_float" />
+    <stroke android:width="1dp" android:color="?attr/skin_line" />
 </shape>

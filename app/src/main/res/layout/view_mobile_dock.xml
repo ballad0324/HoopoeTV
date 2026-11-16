@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:text="@string/m_nav_movie"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="10sp" />
     </LinearLayout>
 
@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:text="@string/m_nav_live"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="10sp" />
     </LinearLayout>
 
@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:text="@string/m_nav_search"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="10sp" />
     </LinearLayout>
 
@@ -119,7 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:text="@string/m_nav_discover"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="10sp" />
     </LinearLayout>
 

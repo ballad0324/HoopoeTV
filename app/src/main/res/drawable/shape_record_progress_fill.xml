@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 播放进度：蓝色 -->
+<!-- 播放进度：彩色只允许这一小块，取评分色 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <corners android:radius="3dp" />
-    <solid android:color="#1A6DFF" />
+    <solid android:color="?attr/skin_rating" />
 </shape>

@@ -3,6 +3,8 @@ package com.github.tvbox.osc.mobile.ui.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.widget.EditText;
@@ -25,16 +27,27 @@ import com.github.tvbox.osc.mobile.ui.adapter.MobileSettingAdapter;
 import com.github.tvbox.osc.setting.CommonSetting;
 import com.github.tvbox.osc.setting.TvSetting;
 import com.github.tvbox.osc.ui.activity.HomeActivity;
+import com.github.tvbox.osc.ui.dialog.MediaSettingDialog;
+import com.github.tvbox.osc.ui.dialog.ResetDialog;
 import com.github.tvbox.osc.util.BackupHelper;
 import com.github.tvbox.osc.util.FavSyncHelper;
 import com.github.tvbox.osc.util.SettingsSyncHelper;
 import com.github.tvbox.osc.util.CacheHelper;
 import com.github.tvbox.osc.util.DefaultConfig;
+import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.OkGoHelper;
 import com.github.tvbox.osc.util.PlayerHelper;
+import com.github.tvbox.osc.util.SkinManager;
 import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.XXPermissions;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.FileCallback;
+import com.lzy.okgo.model.Progress;
+import com.lzy.okgo.model.Response;
+import com.orhanobut.hawk.Hawk;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,10 +131,8 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
         TextView tvCurrent = findViewById(R.id.tvModeCurrent);
         tvMobile.setSelected(mobile);
         tvTv.setSelected(!mobile);
-        tvMobile.setTextColor(getResources().getColor(
-                mobile ? R.color.shell_text : R.color.shell_text_dim));
-        tvTv.setTextColor(getResources().getColor(
-                mobile ? R.color.shell_text_dim : R.color.shell_text));
+        tvMobile.setTextColor((mobile ? com.github.tvbox.osc.util.SkinManager.text1(this) : com.github.tvbox.osc.util.SkinManager.text2(this)));
+        tvTv.setTextColor((mobile ? com.github.tvbox.osc.util.SkinManager.text2(this) : com.github.tvbox.osc.util.SkinManager.text1(this)));
         tvCurrent.setText("当前：" + CommonSetting.getUiModeName() + "，切换后立即重启界面");
     }
 
@@ -131,20 +142,12 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
         // ---------- 通用：数据源（置顶：接口/直播源是最常改的配置） ----------
         // 四项都改成「输入框 + 立即更改」：填完就地生效，不再弹对话框
         rows.add(MobileSettingAdapter.Row.header(tr("通用 · 数据源","General · Data source")));
-        // 内置源开关与「从云端拉内置源」入口均已删除，内置源不再由 App 侧下发
-        // 数据源保持原来「点击弹站点列表选择」的方式，不做输入框
-        rows.add(MobileSettingAdapter.Row.item(tr("数据源","Data source"),
-                homeSourceName(), new Runnable() {
-                    @Override
-                    public void run() {
-                        showSourcePicker();
-                    }
-                }));
+        // v1.7.20：出厂不内置任何源。源模式胶囊与「数据源」站点列表已删除，
+        // 这里只留「手动填三项」+「口令拉取默认源」+「清空」。
         rows.add(MobileSettingAdapter.Row.input(tr("接口地址","API URL"),
                 tr("填 TVBox 标准 json 接口地址；改完返回首页会自动重新拉取，不用重启",
                         "TVBox JSON API address; reloads when you go back home"),
-                "https://raw.liucn.cc/box/m.json",
-                ApiConfig.getApiUrl(), tr("立即更改","Apply"),
+                "", ApiConfig.getApiUrl(), tr("立即更改","Apply"),
                 new MobileSettingAdapter.OnInput() {
                     @Override
                     public void onInput(MobileSettingAdapter.Row row, String text) {
@@ -167,7 +170,7 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
         rows.add(MobileSettingAdapter.Row.input(tr("直播源","Live source"),
                 tr("填直播源地址（m3u/txt），保存后重新进直播页生效",
                         "Live source (.m3u/.txt); takes effect when you re-enter Live"),
-                "http://example.com/live.m3u",
+                "",
                 CommonSetting.getLiveUrl(), tr("立即更改","Apply"),
                 new MobileSettingAdapter.OnInput() {
                     @Override
@@ -183,7 +186,7 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                 }));
         rows.add(MobileSettingAdapter.Row.input(tr("EPG 地址","EPG URL"),
                 tr("填 EPG 地址，填完即生效", "EPG address, applied immediately"),
-                "http://epg.example.com/?ch={name}&date={date}",
+                "",
                 CommonSetting.getEpgUrl(), tr("立即更改","Apply"),
                 new MobileSettingAdapter.OnInput() {
                     @Override
@@ -194,18 +197,39 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                     }
                 }));
 
-        // ---------- 跨端同步：只保留局域网直连（不经任何服务器/数据库） ----------
-        // 云端备份通道的四个入口已移除：同步交给「局域网直连」与电视端账号面板处理
-        rows.add(MobileSettingAdapter.Row.header(tr("通用 · 局域网同步", "General · LAN sync")));
-        rows.add(MobileSettingAdapter.Row.item(tr("局域网直连同步", "LAN direct sync"),
-                tr("同一 WiFi 下直接连电视，不经过任何服务器", "Direct over your Wi-Fi, no server"),
+        // ---------- 默认源（口令门禁）：出厂什么源都没有，只有这里能一次性写入 ----------
+        rows.add(MobileSettingAdapter.Row.item(tr("拉取默认源","Pull default source"),
+                CommonSetting.isBuiltinUnlocked()
+                        ? tr("已启用（口令已验证，再次拉取会覆盖当前三项）","Enabled (verified; re-pull overwrites)")
+                        : tr("未启用 · 点击后输入口令才会写入","Off · tap and enter the password"),
                 new Runnable() {
                     @Override
                     public void run() {
-                        new com.github.tvbox.osc.ui.dialog.LanSyncDialog(
-                                MobileSettingActivity.this).show();
+                        showDefaultSourceDialog();
                     }
                 }));
+        rows.add(MobileSettingAdapter.Row.item(tr("清空数据源","Clear sources"),
+                tr("接口 / 直播源 / EPG 全部清空，并撤销默认源解锁",
+                        "Wipes API / live / EPG and revokes the unlock"),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        confirmAction(tr("清空所有数据源","Clear all sources"),
+                                tr("接口、直播源、EPG 都会被清空，之后要重新输口令才能拉取默认源。确定？",
+                                        "API, live source and EPG will be wiped. Continue?"),
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        CommonSetting.clearAllSource();
+                                        toast(tr("已清空所有数据源","All sources cleared"));
+                                        refreshRows();
+                                    }
+                                });
+                    }
+                }));
+
+        // 局域网直连入口已按用户要求关闭（实现代码仍在，需要时再挂回来）
+
         // ---------- 通用：外观（两端共用，走 CommonSetting） ----------
         // 「界面模式」已提到页面顶部的分段按钮（A3），这里不再重复一行
         rows.add(MobileSettingAdapter.Row.header(tr("通用 · 外观","General · Appearance")));
@@ -225,7 +249,36 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                     }
                 }));
 
-        // ---------- 通用：播放 ----------
+        // v1.7.22：补齐电视端设置里原有的三项外观开关（原位置：语言之后）
+        rows.add(MobileSettingAdapter.Row.capsule(tr("主题","Theme"),
+                tr("七套配色，选中立即生效", "Seven color presets, applied at once"),
+                SkinManager.allNames(), SkinManager.get(), new MobileSettingAdapter.OnOption() {
+                    @Override
+                    public void onOption(MobileSettingAdapter.Row row, int index) {
+                        SkinManager.set(index);
+                        toast(tr("已切换主题：", "Theme: ") + SkinManager.name(index));
+                        recreate();
+                    }
+                }));
+        rows.add(MobileSettingAdapter.Row.item(tr("换壁纸","Change wallpaper"),
+                tr("点按更换","Tap to change"),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        changeWallpaperNow();
+                    }
+                }));
+        rows.add(MobileSettingAdapter.Row.item(tr("重置壁纸","Reset wallpaper"),
+                tr("恢复默认","Restore"),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        File wp = new File(getFilesDir().getAbsolutePath() + "/wp");
+                        if (wp.exists()) wp.delete();
+                        changeWallpaper(true);
+                        toast(tr("壁纸已重置", "Wallpaper reset"));
+                    }
+                }));
         rows.add(MobileSettingAdapter.Row.header(tr("通用 · 播放","General · Playback")));
         rows.add(MobileSettingAdapter.Row.switchRow(tr("聚合搜索","Aggregated search"),
                 tr("开启后在所有可搜索站点并发检索，关闭只搜当前源","On: search every site at once. Off: current source only"),
@@ -284,6 +337,157 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                     }
                 }));
 
+        // v1.7.24：电视端「首页显示」「直播启动」在手机端的等价落地
+        rows.add(MobileSettingAdapter.Row.switchRow(tr("首页继续观看条","Home watch strip"),
+                tr("关闭后首页顶部不再显示「继续观看 / 我的收藏」横条", "Hide the continue-watching strip on home"),
+                MobileSetting.isShowHomeStrip(),
+                new MobileSettingAdapter.OnSwitch() {
+                    @Override
+                    public void onSwitch(MobileSettingAdapter.Row row, boolean checked) {
+                        MobileSetting.putShowHomeStrip(checked);
+                        toast(checked ? tr("首页横条已显示", "Strip shown") : tr("首页横条已隐藏", "Strip hidden"));
+                    }
+                }));
+        rows.add(MobileSettingAdapter.Row.switchRow(tr("启动直达直播","Open live on launch"),
+                tr("开 App 后直接进直播页，不再停在首页", "Jump straight to the live page after launch"),
+                MobileSetting.isLiveBoot(),
+                new MobileSettingAdapter.OnSwitch() {
+                    @Override
+                    public void onSwitch(MobileSettingAdapter.Row row, boolean checked) {
+                        MobileSetting.putLiveBoot(checked);
+                        toast(checked ? tr("下次启动直达直播", "Will open live next launch")
+                                : tr("下次启动回到首页", "Will open home next launch"));
+                    }
+                }));
+
+        // v1.7.23：补齐电视端设置里有、手机端缺的通用项（同一份 Hawk 键，双端共用）
+        rows.add(MobileSettingAdapter.Row.capsule(tr("后台播放器","Background player"),
+                tr("切后台后是否继续播放", "Keep playing when app goes background"),
+                new String[]{"关闭", "开启", "画中画"},
+                clampInt(Hawk.get(HawkConfig.BACKGROUND_PLAY_TYPE, 0), 0, 2),
+                new MobileSettingAdapter.OnOption() {
+                    @Override
+                    public void onOption(MobileSettingAdapter.Row row, int index) {
+                        Hawk.put(HawkConfig.BACKGROUND_PLAY_TYPE, index);
+                        toast(tr("已设置：", "Set: ") + new String[]{"关闭", "开启", "画中画"}[index]);
+                        refreshRows();
+                    }
+                }));
+        // v1.7.30：媒资设置不再弹「两列大列表」，拆成四行胶囊就地切换
+        final String[] exoRenderer = getResources().getStringArray(R.array.media_content_ExoPlayer_renderer);
+        int exoRendererIdx = clampInt(Hawk.get(HawkConfig.EXO_RENDERER, 0), 0, exoRenderer.length - 1);
+        rows.add(MobileSettingAdapter.Row.capsule(tr("播放器渲染器","Player renderer"),
+                tr("默认够用，花屏/黑屏才需要换","Default is fine; switch if glitches"),
+                exoRenderer, exoRendererIdx,
+                new MobileSettingAdapter.OnOption() {
+                    @Override
+                    public void onOption(MobileSettingAdapter.Row row, int index) {
+                        Hawk.put(HawkConfig.EXO_RENDERER, index);
+                        toast(tr("渲染器：", "Renderer: ") + exoRenderer[index]);
+                        refreshRows();
+                    }
+                }));
+        final String[] exoMode = getResources().getStringArray(R.array.media_content_ExoPlayer_renderer_mode);
+        int exoModeIdx = clampInt(Hawk.get(HawkConfig.EXO_RENDERER_MODE, 1), 0, exoMode.length - 1);
+        rows.add(MobileSettingAdapter.Row.capsule(tr("渲染模式","Render mode ext"),
+                tr("核心 / 扩展渲染器的取舍","Core vs extension renderer"),
+                exoMode, exoModeIdx,
+                new MobileSettingAdapter.OnOption() {
+                    @Override
+                    public void onOption(MobileSettingAdapter.Row row, int index) {
+                        Hawk.put(HawkConfig.EXO_RENDERER_MODE, index);
+                        toast(tr("渲染模式：", "Mode: ") + exoMode[index]);
+                        refreshRows();
+                    }
+                }));
+        final String[] cacheOnOff = new String[]{tr("关闭","Off"), tr("开启","On")};
+        int cacheIdx = Hawk.get(HawkConfig.IJK_CACHE_PLAY, false) ? 1 : 0;
+        rows.add(MobileSettingAdapter.Row.capsule(tr("播放缓存","Playback buffer"),
+                tr("弱网卡顿时开启","Turn on for unstable network"),
+                cacheOnOff, cacheIdx,
+                new MobileSettingAdapter.OnOption() {
+                    @Override
+                    public void onOption(MobileSettingAdapter.Row row, int index) {
+                        Hawk.put(HawkConfig.IJK_CACHE_PLAY, index == 1);
+                        toast(tr("播放缓存：", "Buffer: ") + cacheOnOff[index]);
+                        refreshRows();
+                    }
+                }));
+        final String[] vodPlayer = getResources().getStringArray(R.array.media_content_General_VodPlayerPreferred);
+        int vodPlayerIdx = clampInt(Hawk.get(HawkConfig.VOD_PLAYER_PREFERRED, 0), 0, vodPlayer.length - 1);
+        rows.add(MobileSettingAdapter.Row.capsule(tr("首选配置来源","Preferred config source"),
+                tr("点播优先用接口配置还是本机设置","Use API config or local settings"),
+                vodPlayer, vodPlayerIdx,
+                new MobileSettingAdapter.OnOption() {
+                    @Override
+                    public void onOption(MobileSettingAdapter.Row row, int index) {
+                        Hawk.put(HawkConfig.VOD_PLAYER_PREFERRED, index);
+                        toast(tr("首选配置：", "Config: ") + vodPlayer[index]);
+                        refreshRows();
+                    }
+                }));
+        rows.add(MobileSettingAdapter.Row.switchRow(tr("视频净化","Video purify"),
+                tr("屏蔽播放页的插片广告类链接", "Filter ad-like links on the play page"),
+                Hawk.get(HawkConfig.VIDEO_PURIFY, true),
+                new MobileSettingAdapter.OnSwitch() {
+                    @Override
+                    public void onSwitch(MobileSettingAdapter.Row row, boolean checked) {
+                        Hawk.put(HawkConfig.VIDEO_PURIFY, checked);
+                        toast(checked ? tr("已开启净化", "Purify on") : tr("已关闭净化", "Purify off"));
+                    }
+                }));
+        rows.add(MobileSettingAdapter.Row.capsule(tr("搜索展示","Search display"),
+                tr("搜索结果用列表还是缩略图", "List or thumbnail for search results"),
+                new String[]{"文字列表", "缩略图"},
+                clampInt(Hawk.get(HawkConfig.SEARCH_VIEW, 0), 0, 1),
+                new MobileSettingAdapter.OnOption() {
+                    @Override
+                    public void onOption(MobileSettingAdapter.Row row, int index) {
+                        Hawk.put(HawkConfig.SEARCH_VIEW, index);
+                        toast(tr("搜索展示已切换", "Search display switched"));
+                        refreshRows();
+                    }
+                }));
+        rows.add(MobileSettingAdapter.Row.switchRow(tr("快速搜索","Fast search"),
+                tr("输入即搜，命中更快", "Search as you type"),
+                Hawk.get(HawkConfig.FAST_SEARCH_MODE, false),
+                new MobileSettingAdapter.OnSwitch() {
+                    @Override
+                    public void onSwitch(MobileSettingAdapter.Row row, boolean checked) {
+                        Hawk.put(HawkConfig.FAST_SEARCH_MODE, checked);
+                        toast(checked ? tr("已开启快速搜索", "Fast search on") : tr("已关闭快速搜索", "Fast search off"));
+                    }
+                }));
+        rows.add(MobileSettingAdapter.Row.capsule(tr("解析 WebView","Parse WebView"),
+                tr("XWalkView 仅适合低版本系统，5.0 以上建议系统自带", "System WebView is recommended"),
+                new String[]{"系统自带", "XWalkView"},
+                Hawk.get(HawkConfig.PARSE_WEBVIEW, true) ? 0 : 1,
+                new MobileSettingAdapter.OnOption() {
+                    @Override
+                    public void onOption(MobileSettingAdapter.Row row, int index) {
+                        Hawk.put(HawkConfig.PARSE_WEBVIEW, index == 0);
+                        if (index == 1) {
+                            toast(tr("已切到 XWalkView，需重启 App 生效；低版本系统才建议用",
+                                    "XWalkView needs a restart and only suits old Android"));
+                        } else {
+                            toast(tr("已切到系统 WebView，重启后生效", "System WebView, restart to apply"));
+                        }
+                        refreshRows();
+                    }
+                }));
+        rows.add(MobileSettingAdapter.Row.capsule(tr("历史条数","History limit"),
+                tr("首页「继续观看」最多保留多少条", "How many continue-watching entries to keep"),
+                new String[]{"20 条", "40 条", "60 条", "80 条", "100 条"},
+                clampInt(Hawk.get(HawkConfig.HOME_NUM, 0), 0, 4),
+                new MobileSettingAdapter.OnOption() {
+                    @Override
+                    public void onOption(MobileSettingAdapter.Row row, int index) {
+                        Hawk.put(HawkConfig.HOME_NUM, index);
+                        toast(tr("历史条数已设置", "History limit set"));
+                        refreshRows();
+                    }
+                }));
+
         // ---------- 通用：网络 ----------
         rows.add(MobileSettingAdapter.Row.header(tr("通用 · 网络","General · Network")));
         rows.add(MobileSettingAdapter.Row.capsule("DNS",
@@ -300,8 +504,78 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
 
         // 代理服务器设置已移除（电视端 EXO 的代理重试逻辑一并删掉）
 
+        // ---------- 账号与云备份（v1.7.17：原「管理面板」的门槛取消） ----------
+        // 不再有登录/注册/退出登录这套概念：云备份用 App 内置的服务器与账号，
+        // 首次点开只需输一次密码，密码与 token 都记在本地，之后直接用。
+        rows.add(MobileSettingAdapter.Row.header(tr("云端备份","Cloud backup")));
+        // v1.7.30：账号与服务器地址不外露，只留「设置密码」入口
+        rows.add(MobileSettingAdapter.Row.item(tr("云备份密码","Cloud password"),
+                tr("内置服务器，输一次密码即可","Built-in server, set a password once"), new Runnable() {
+                    @Override
+                    public void run() {
+                        showCloudAccountDialog();
+                    }
+                }));
+        rows.add(MobileSettingAdapter.Row.item(tr("上传到云端","Upload to cloud"),
+                tr("把本机设置与收藏推到云端，另一台设备拉回即可","Push settings and favorites"),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        cloudPush();
+                    }
+                }));
+        rows.add(MobileSettingAdapter.Row.item(tr("从云端拉回","Pull from cloud"),
+                tr("拉取云端最近一次上传的设置与收藏","Pull the latest from cloud"),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        cloudPull();
+                    }
+                }));
+
         // ---------- 通用 · 存储与关于（审计补缺：原先手机端没有这三项） ----------
         rows.add(MobileSettingAdapter.Row.header(tr("通用 · 存储与关于","General · Storage & About")));
+        rows.add(MobileSettingAdapter.Row.item(tr("下载管理","Downloads"),
+                tr("下载过的视频与文件","Downloaded files"), new Runnable() {
+            @Override
+            public void run() {
+                jumpActivity(MobileDownloadsActivity.class);
+            }
+        }));
+        rows.add(MobileSettingAdapter.Row.item(tr("清空播放历史","Clear history"),
+                tr("只清本机的播放记录，收藏和设置不动","Local play records only"), new Runnable() {
+                    @Override
+                    public void run() {
+                        confirmAction(tr("清空播放历史","Clear history"),
+                                tr("确定清空全部播放记录？","Clear all play records?"), new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        com.github.tvbox.osc.mobile.ui.MobilePlayHistory.clear();
+                                        toast(tr("播放历史已清空","History cleared"));
+                                    }
+                                });
+                    }
+                }));
+        rows.add(MobileSettingAdapter.Row.item(tr("清空我的收藏","Clear favorites"),
+                tr("两端共用一份收藏，清完电视端也会同步变空","Favorites are shared with the TV UI"), new Runnable() {
+                    @Override
+                    public void run() {
+                        confirmAction(tr("清空我的收藏","Clear favorites"),
+                                tr("确定清空全部收藏？","Clear all favorites?"), new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        List<com.github.tvbox.osc.mobile.ui.MobileFavorites.Item> list =
+                                                com.github.tvbox.osc.mobile.ui.MobileFavorites.load();
+                                        if (list != null) {
+                                            for (com.github.tvbox.osc.mobile.ui.MobileFavorites.Item it : list) {
+                                                com.github.tvbox.osc.mobile.ui.MobileFavorites.remove(it.vodId, it.sourceKey);
+                                            }
+                                        }
+                                        toast(tr("收藏已清空","Favorites cleared"));
+                                    }
+                                });
+                    }
+                }));
         rows.add(MobileSettingAdapter.Row.item(tr("清理缓存","Clear cache"), cacheSizeText, new Runnable() {
             @Override
             public void run() {
@@ -314,6 +588,15 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                 showBackupDialog();
             }
         }));
+        // v1.7.23：电视端有「重置」，手机端也补上（同一个 ResetDialog）
+        rows.add(MobileSettingAdapter.Row.item(tr("恢复出厂设置","Factory reset"),
+                tr("清空配置", "Wipe config"),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        new ResetDialog(MobileSettingActivity.this).show();
+                    }
+                }));
         // 云端备份（MySQL）已移到首页右上角用户面板（v1.6.37），设置页不再重复这一行
         rows.add(MobileSettingAdapter.Row.item(tr("关于","About"), versionText(), new Runnable() {
             @Override
@@ -452,6 +735,223 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
     private String backupSummary() {
         int count = BackupHelper.list().size();
         return count == 0 ? "还没有备份" : (count + " 份备份");
+    }
+
+    /* ===================== 云端备份（v1.7.17） ===================== */
+
+    /** 云备份内置服务器与账号：不再有「登录」这一步，用户只需输一次密码 */
+    private static final String CLOUD_URL = "http://43.226.44.105:6066/tvbox";
+    private static final String CLOUD_USER = "ballad0324";
+
+    private String cloudAccountText() {
+        String url = com.github.tvbox.osc.util.CloudBackupHelper.getBaseUrl();
+        if (TextUtils.isEmpty(url)) {
+            return tr("未配置：点开输一次密码", "Not set: tap to enter password");
+        }
+        String user = com.github.tvbox.osc.util.CloudBackupHelper.getUser();
+        return (TextUtils.isEmpty(user) ? CLOUD_USER : user) + " · " + url.replace("http://", "");
+    }
+
+    private void showCloudAccountDialog() {
+        final EditText et = new EditText(this);
+        et.setHint(tr("云备份密码", "Cloud backup password"));
+        et.setSingleLine(true);
+        et.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        int pad = (int) (16 * getResources().getDisplayMetrics().density);
+        et.setPadding(pad, pad / 2, pad, pad / 2);
+        String pass = com.github.tvbox.osc.util.CloudBackupHelper.getPass();
+        if (!TextUtils.isEmpty(pass)) et.setText(pass);
+        new AlertDialog.Builder(this)
+                .setTitle(tr("云备份密码", "Cloud password"))
+                .setMessage(tr("账号由 App 内置，你只需要设一次密码；"
+                                + "密码和登录凭证都存在本机，之后自动使用，不用每次登录。",
+                        "The account is built in; set a password once and it is remembered on this device."))
+                .setView(et)
+                .setNegativeButton(tr("取消", "Cancel"), null)
+                .setPositiveButton(tr("保存", "Save"), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String p = et.getText() == null ? "" : et.getText().toString().trim();
+                        if (TextUtils.isEmpty(p)) {
+                            toast(tr("密码为空，未保存", "Empty password"));
+                            return;
+                        }
+                        cloudLogin(p);
+                    }
+                })
+                .show();
+    }
+
+    private void cloudLogin(final String pass) {
+        toast(tr("正在连接云端…", "Connecting…"));
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                com.github.tvbox.osc.util.CloudBackupHelper.save(CLOUD_URL, CLOUD_USER, pass);
+                final com.github.tvbox.osc.util.CloudBackupHelper.Res res =
+                        com.github.tvbox.osc.util.CloudBackupHelper.login();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        toast(res != null && res.ok
+                                ? tr("云备份已就绪", "Cloud backup ready")
+                                : tr("云端连接失败：", "Cloud failed: ") + (res == null ? "?" : res.msg));
+                        refreshRows();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private boolean ensureCloud() {
+        if (com.github.tvbox.osc.util.CloudBackupHelper.isConfigured()) return true;
+        toast(tr("先在「云备份密码」里设一次密码", "Set the cloud password first"));
+        showCloudAccountDialog();
+        return false;
+    }
+
+    private void cloudPush() {
+        if (!ensureCloud()) return;
+        toast(tr("正在上传…", "Uploading…"));
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final com.github.tvbox.osc.util.CloudBackupHelper.Res a = SettingsSyncHelper.push();
+                final com.github.tvbox.osc.util.CloudBackupHelper.Res b = FavSyncHelper.push();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        toast((a != null && a.ok
+                                ? tr("设置已上传", "Settings pushed")
+                                : tr("设置上传失败：", "Push failed: ") + (a == null ? "?" : a.msg))
+                                + "；" + (b != null && b.ok
+                                ? tr("收藏已上传", "Favorites pushed")
+                                : tr("收藏上传失败：", "Favorites failed: ") + (b == null ? "?" : b.msg)));
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private void cloudPull() {
+        if (!ensureCloud()) return;
+        confirmAction(tr("从云端拉回", "Pull from cloud"),
+                tr("会覆盖本机的设置与收藏（收藏按时间合并），确定继续？",
+                        "Overwrites settings; favorites are merged."),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        toast(tr("正在拉回…", "Pulling…"));
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                final com.github.tvbox.osc.util.CloudBackupHelper.Res a = SettingsSyncHelper.pull();
+                                final com.github.tvbox.osc.util.CloudBackupHelper.Res b = FavSyncHelper.pull();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        toast((a != null && a.ok
+                                                ? tr("设置已拉回", "Settings pulled")
+                                                : tr("设置拉回失败：", "Pull failed: ") + (a == null ? "?" : a.msg))
+                                                + "；" + (b != null && b.ok
+                                                ? tr("收藏已合并", "Favorites merged")
+                                                : tr("收藏拉回失败：", "Favorites failed: ") + (b == null ? "?" : b.msg)));
+                                        // 设置变了：回首页重新拉接口
+                                        CommonSetting.markConfigDirty();
+                                        refreshRows();
+                                    }
+                                });
+                            }
+                        }).start();
+                    }
+                });
+    }
+
+    /**
+     * 换壁纸：与电视端 ModelSettingFragment 同一套逻辑 ——
+     * 接口下发了 wallpaper 就下载到 files/wp 再用；没有就轮换内置三张。
+     */
+    private void changeWallpaperNow() {
+        if (!ApiConfig.get().wallpaper.isEmpty()) {
+            toast(tr("正在下载壁纸…", "Downloading wallpaper…"));
+            OkGo.<File>get(ApiConfig.get().wallpaper).execute(new FileCallback(getFilesDir().getAbsolutePath(), "wp") {
+                @Override
+                public void onSuccess(Response<File> response) {
+                    changeWallpaper(true);
+                    toast(tr("壁纸已更换", "Wallpaper changed"));
+                }
+
+                @Override
+                public void onError(Response<File> response) {
+                    super.onError(response);
+                    toast(tr("壁纸下载失败", "Wallpaper download failed"));
+                }
+
+                @Override
+                public void downloadProgress(Progress progress) {
+                    super.downloadProgress(progress);
+                }
+            });
+            return;
+        }
+        try {
+            int[] wps = new int[]{R.drawable.wallpaper_1, R.drawable.wallpaper_2, R.drawable.wallpaper_3};
+            int idx = (Hawk.get("wp_index", -1) + 1) % wps.length;
+            Hawk.put("wp_index", idx);
+            Bitmap bmp = BitmapFactory.decodeResource(getResources(), wps[idx]);
+            File wpFile = new File(getFilesDir().getAbsolutePath() + "/wp");
+            FileOutputStream fos = new FileOutputStream(wpFile);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 92, fos);
+            fos.flush();
+            fos.close();
+            bmp.recycle();
+            changeWallpaper(true);
+            toast(tr("壁纸已更换", "Wallpaper changed"));
+        } catch (Throwable th) {
+            th.printStackTrace();
+            toast(tr("换壁纸失败", "Change wallpaper failed"));
+        }
+    }
+
+    /** 默认源口令门禁：口令错只 Toast，不发任何请求；对了才写入三件套 */
+    private void showDefaultSourceDialog() {
+        final EditText et = new EditText(this);
+        et.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+        et.setHint(tr("请输入口令","Password"));
+        new AlertDialog.Builder(this)
+                .setTitle(tr("拉取默认源","Pull default source"))
+                .setMessage(tr("注意：口令仅在本人设备使用；写入后接口 / 直播源 / EPG 三项会被覆盖。",
+                        "Writes the default API, live source and EPG for this device."))
+                .setView(et)
+                .setNegativeButton(tr("取消","Cancel"), null)
+                .setPositiveButton(tr("拉取","Pull"), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String pass = et.getText().toString().trim();
+                        if (!CommonSetting.BUILTIN_PASS.equals(pass)) {
+                            toast(tr("口令错误","Wrong password"));
+                            return;
+                        }
+                        CommonSetting.applyDefaultSource();
+                        toast(tr("已写入默认源，返回首页自动重载","Default source applied"));
+                        refreshRows();
+                    }
+                })
+                .show();
+    }
+
+    private void confirmAction(String title, String msg, final Runnable action) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(msg)
+                .setNegativeButton(tr("取消", "Cancel"), null)
+                .setPositiveButton(tr("确定", "OK"), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        action.run();
+                    }
+                })
+                .show();
     }
 
     private void showBackupDialog() {
@@ -839,6 +1339,12 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                 })
                 .setNegativeButton("取消", null)
                 .show();
+    }
+
+    /** 存取下标兜底：越界一律拉回区间内，避免胶囊选中项空掉 */
+    private int clampInt(Integer v, int min, int max) {
+        int i = (v == null) ? min : v;
+        return i < min ? min : (i > max ? max : i);
     }
 
     private void toast(String msg) {

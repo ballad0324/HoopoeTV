@@ -66,7 +66,7 @@
         android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textColor="@color/shell_text"
+        android:textColor="?attr/skin_text_1"
         android:textSize="13sp"
         android:textStyle="bold" />
 
@@ -82,7 +82,7 @@
         android:paddingTop="3dp"
         android:paddingEnd="6dp"
         android:paddingBottom="3dp"
-        android:textColor="@color/shell_text_dim"
+        android:textColor="?attr/skin_text_2"
         android:textSize="10sp" />
 
 </LinearLayout>

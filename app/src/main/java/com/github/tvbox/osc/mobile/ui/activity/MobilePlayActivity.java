@@ -621,8 +621,7 @@ public class MobilePlayActivity extends BaseActivity {
             chip.setPadding(dp(12), 0, dp(12), 0);
             chip.setBackgroundResource(R.drawable.shape_filter_chip);
             chip.setSelected(on);
-            chip.setTextColor(getResources().getColor(
-                    on ? R.color.shell_text : R.color.shell_text_dim));
+            chip.setTextColor((on ? com.github.tvbox.osc.util.SkinManager.text1(this) : com.github.tvbox.osc.util.SkinManager.text2(this)));
             chip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

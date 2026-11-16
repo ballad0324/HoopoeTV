@@ -37,7 +37,7 @@
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
             android:text="专题"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="17sp" />
 
         <TextView
@@ -48,7 +48,7 @@
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
             android:text="排行榜"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="17sp" />
 
         <View
@@ -67,7 +67,7 @@
             android:padding="11dp"
             android:scaleType="fitCenter"
             android:src="@drawable/hm_search"
-            android:tint="@color/shell_text_dim" />
+            android:tint="?attr/skin_text_2" />
     </LinearLayout>
 
     <FrameLayout
@@ -193,7 +193,7 @@
             android:gravity="center"
             android:padding="40dp"
             android:text="加载中…"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="12sp" />
     </FrameLayout>
 

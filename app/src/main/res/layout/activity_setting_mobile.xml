@@ -29,7 +29,7 @@
             android:layout_marginStart="4dp"
             android:layout_weight="1"
             android:text="设置"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -38,7 +38,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/shell_outline" />
+        android:background="?attr/skin_line" />
 
     <!-- 界面模式：分段按钮（手机端 / 电视端）——已取消显示，改由首页右上角图标一键切换 -->
     <LinearLayout
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/m_ui_mode"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -69,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="12sp" />
 
         <LinearLayout
@@ -88,7 +88,7 @@
                 android:background="@drawable/selector_mode_segment"
                 android:gravity="center"
                 android:text="@string/m_ui_mobile"
-                android:textColor="@color/shell_text"
+                android:textColor="?attr/skin_text_1"
                 android:textSize="13sp" />
 
             <TextView
@@ -100,7 +100,7 @@
                 android:background="@drawable/selector_mode_segment"
                 android:gravity="center"
                 android:text="@string/m_ui_tv"
-                android:textColor="@color/shell_text"
+                android:textColor="?attr/skin_text_1"
                 android:textSize="13sp" />
 
         </LinearLayout>

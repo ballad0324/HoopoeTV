@@ -117,8 +117,8 @@ private fun RecordScreen(initialFav: Boolean, host: RecordHost) {
     // 切换分段时把删除钮收起来
     LaunchedEffect(fav) { deleteKey = null }
 
-    val textColor = colorResource(R.color.shell_text)
-    val dimColor = colorResource(R.color.shell_text_dim)
+    val textColor = skinText1()
+    val dimColor = skinText2()
 
     Column(Modifier.fillMaxSize()) {
         // 顶部：返回 + 居中分段胶囊
@@ -194,11 +194,11 @@ private fun RecordScreen(initialFav: Boolean, host: RecordHost) {
 
 @Composable
 private fun Capsule(fav: Boolean, onSwitch: (Boolean) -> Unit, modifier: Modifier = Modifier) {
-    val trackFill = colorResource(R.color.shell_card_fill)
-    val trackStroke = colorResource(R.color.shell_card_stroke)
-    val onFill = skinAccent()
-    val textColor = colorResource(R.color.shell_text)
-    val dimColor = colorResource(R.color.shell_text_dim)
+    val trackFill = skinBgCard()
+    val trackStroke = skinLine()
+    val onFill = skinBtnBg()
+    val textColor = skinText1()
+    val dimColor = skinText2()
 
     Box(
         modifier.width(200.dp).height(42.dp)
@@ -243,8 +243,8 @@ private fun RecordCard(
     onDelete: () -> Unit,
     onDismissDelete: () -> Unit
 ) {
-    val coverBg = colorResource(R.color.shell_surface_high)
-    val textColor = colorResource(R.color.shell_text)
+    val coverBg = skinBgFloat()
+    val textColor = skinText1()
 
     Column(
         Modifier.fillMaxWidth().combinedClickable(
@@ -314,14 +314,14 @@ private fun ProgressBar(percent: Int, modifier: Modifier = Modifier) {
     Box(
         modifier.fillMaxWidth().height(4.dp)
             .clip(RoundedCornerShape(3.dp))
-            .background(Color(0x1A000000))
+            .background(skinLine())
     ) {
         BoxWithConstraints(Modifier.fillMaxSize()) {
             val barWidth = maxWidth * (pct / 100f)
             val fixedWidth = if (barWidth < 10.dp) 10.dp else barWidth
             Box(
                 Modifier.width(fixedWidth).fillMaxHeight()
-                    .background(Color(0xFF1A6DFF))
+                    .background(skinRating())
             )
         }
     }
@@ -346,8 +346,8 @@ private fun DeleteButton(onDelete: () -> Unit, modifier: Modifier = Modifier) {
 
 @Composable
 private fun SourceBadge(text: String, modifier: Modifier = Modifier) {
-    val stroke = colorResource(R.color.shell_card_stroke)
-    val dimColor = colorResource(R.color.shell_text_dim)
+    val stroke = skinLine()
+    val dimColor = skinText2()
     Box(
         modifier.border(1.dp, stroke, RoundedCornerShape(8.dp))
             .padding(horizontal = 6.dp, vertical = 3.dp)

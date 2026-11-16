@@ -10,6 +10,6 @@
     android:paddingTop="22dp"
     android:paddingEnd="16dp"
     android:paddingBottom="8dp"
-    android:textColor="@color/shell_text"
+    android:textColor="?attr/skin_text_1"
     android:textSize="13sp"
     android:textStyle="bold" />

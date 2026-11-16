@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 界面模式分段按钮：选中=中性按钮底（深底白实心 / 亮底近黑实心），未选=透明 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_selected="true">
         <shape android:shape="rectangle">
             <corners android:radius="8dp" />
-            <solid android:color="?attr/skin_accent" />
+            <solid android:color="?attr/skin_btn_bg" />
         </shape>
     </item>
     <item>

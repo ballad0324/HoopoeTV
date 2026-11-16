@@ -8,7 +8,9 @@ import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -72,7 +74,7 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
 
     private ViewPager pager;
     private ImageView btnUiMode;
-    private ImageView btnUser;
+    private ImageView btnSetting;
     /** 底部导航栏（Compose 绘制：分类 tab + 四图标 dock） */
     private ComposeView cvDock;
 
@@ -134,15 +136,29 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         // 上次跑挂了就弹窗回显堆栈（可一键复制）
         com.github.tvbox.osc.util.CrashLog.showLastIfAny(this);
         initView();
+        showSplashOverlay();
         initEvent();
         initObserver();
         loadConfig();
+        // 「启动直达直播」：开屏动画结束后直接进直播页（对应电视端「直播启动」）
+        if (com.github.tvbox.osc.mobile.setting.MobileSetting.isLiveBoot()) {
+            pager.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        startActivity(new Intent(MobileHomeActivity.this, MobileLiveActivity.class));
+                    } catch (Throwable th) {
+                        th.printStackTrace();
+                    }
+                }
+            }, 1400);
+        }
     }
 
     private void initView() {
         pager = findViewById(R.id.pager);
         btnUiMode = findViewById(R.id.btnUiMode);
-        btnUser = findViewById(R.id.btnUser);
+        btnSetting = findViewById(R.id.btnSetting);
         cvDock = findViewById(R.id.cvDock);
 
         // 收藏/历史/小编推荐标题已移进列表首项（item_home_header），这里只留容器
@@ -178,7 +194,7 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         applyDisplaySettings();
         // Liquid Glass 按压反馈保留（触感），顶栏玻璃周期性扫光已在 v1.7.7 取消
         LiquidMotion.bindPress(btnUiMode, 0.88f);
-        LiquidMotion.bindPress(btnUser, 0.88f);
+        LiquidMotion.bindPress(btnSetting, 0.88f);
     }
 
     /** 应用手机端专有显示开关（设置页改完返回首页即生效） */
@@ -191,10 +207,9 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
 
     /** 顶栏图标状态：深色模式下图标金色高亮、明亮模式下灰色，让当前状态一眼可辨 */
     private void refreshThemeButton() {
-        int color = getResources().getColor(
-                CommonSetting.isNightUi() ? R.color.shell_gold : R.color.shell_text_dim);
+        int color = (CommonSetting.isNightUi() ? com.github.tvbox.osc.util.SkinManager.text1(this) : com.github.tvbox.osc.util.SkinManager.text2(this));
         if (btnUiMode != null) btnUiMode.setColorFilter(color);
-        if (btnUser != null) btnUser.setColorFilter(color);
+        if (btnSetting != null) btnSetting.setColorFilter(color);
     }
 
     /** 右上角一键切到电视端：写 ui_mode 后清栈重启，由 HomeActivity 分流到 TV 首页 */
@@ -207,205 +222,6 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         finish();
     }
 
-    /* ===================== 用户面板（v1.6.36） ===================== */
-
-    /**
-     * 头像点开的用户面板：账号状态 + 设置 / 管理面板 / 下载管理，底部登录或退出登录。
-     * 布局先自己 inflate 再 setView，避免 Dialog.create() 之后 findViewById 拿不到控件的老坑。
-     */
-    private void showUserPanel() {
-        View content = getLayoutInflater().inflate(R.layout.dialog_user_panel, null);
-        final AlertDialog dialog = new AlertDialog.Builder(this).setView(content).create();
-        dialog.show();
-        Window window = dialog.getWindow();
-        if (window != null) {
-            window.setBackgroundDrawableResource(R.drawable.shape_card_base);
-            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        }
-
-        ImageView ivAvatar = content.findViewById(R.id.ivAvatar);
-        TextView tvName = content.findViewById(R.id.tvUserName);
-        TextView tvState = content.findViewById(R.id.tvUserState);
-        final TextView tvAction = content.findViewById(R.id.tvUserAction);
-
-        if (MobileUser.isLoggedIn()) {
-            tvName.setText(MobileUser.name());
-            tvState.setText(com.github.tvbox.osc.setting.CommonSetting.useBuiltinSource()
-                    ? "已登录 · 内置源"
-                    : "已登录 · 解析源");
-            tvAction.setText("退出登录");
-            if (ivAvatar != null) {
-                ivAvatar.setColorFilter(com.github.tvbox.osc.util.SkinManager.accent(this));
-            }
-        } else {
-            tvName.setText("未登录");
-            tvState.setText("当前使用自填源 · 登录后切内置源");
-            tvAction.setText("登录");
-            if (ivAvatar != null) {
-                ivAvatar.setColorFilter(getResources().getColor(R.color.shell_text_dim));
-            }
-        }
-
-        View rowSetting = content.findViewById(R.id.rowSetting);
-        if (rowSetting != null) {
-            rowSetting.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                    jumpActivity(MobileSettingActivity.class);
-                }
-            });
-        }
-        View rowAdmin = content.findViewById(R.id.rowAdmin);
-        if (rowAdmin != null) {
-            rowAdmin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                    jumpActivity(MobileAdminActivity.class);
-                }
-            });
-        }
-        View rowDownload = content.findViewById(R.id.rowDownload);
-        if (rowDownload != null) {
-            rowDownload.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                    jumpActivity(MobileDownloadsActivity.class);
-                }
-            });
-        }
-
-        // v1.6.41：云备份入口已迁到「管理面板」，用户面板不再提供
-
-        tvAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                if (MobileUser.isLoggedIn()) {
-                    confirmLogout();
-                } else {
-                    showLoginDialog();
-                }
-            }
-        });
-    }
-
-    /** 登录弹窗：复用云端备份那套 PHP 账号（地址 / 用户名 / 密码） */
-    private void showLoginDialog() {
-        View content = getLayoutInflater().inflate(R.layout.dialog_user_login, null);
-        final AlertDialog dialog = new AlertDialog.Builder(this).setView(content).create();
-        dialog.show();
-        Window window = dialog.getWindow();
-        if (window != null) {
-            window.setBackgroundDrawableResource(R.drawable.shape_card_base);
-            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        }
-
-        final EditText etServer = content.findViewById(R.id.etServer);
-        final EditText etUser = content.findViewById(R.id.etUser);
-        final EditText etPass = content.findViewById(R.id.etPass);
-        final EditText etInvite = content.findViewById(R.id.etInvite);
-        final TextView tvLoginTip = content.findViewById(R.id.tvLoginTip);
-
-        etServer.setText(CloudBackupHelper.getBaseUrl());
-        etUser.setText(CloudBackupHelper.getUser());
-        etPass.setText(CloudBackupHelper.getPass());
-
-        content.findViewById(R.id.tvCancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        // 注册（v1.7）：用户名 + 密码 + 邀请码，邀请码不对注册不了
-        content.findViewById(R.id.tvRegister).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String server = etServer.getText() == null ? "" : etServer.getText().toString().trim();
-                String user = etUser.getText() == null ? "" : etUser.getText().toString().trim();
-                String pass = etPass.getText() == null ? "" : etPass.getText().toString();
-                String invite = etInvite.getText() == null ? "" : etInvite.getText().toString().trim();
-                if (TextUtils.isEmpty(server) || TextUtils.isEmpty(user)
-                        || TextUtils.isEmpty(pass) || TextUtils.isEmpty(invite)) {
-                    Toast.makeText(MobileHomeActivity.this, "服务器、用户名、密码、邀请码都要填",
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                tvLoginTip.setVisibility(View.VISIBLE);
-                tvLoginTip.setText("正在注册…");
-                MobileUser.register(server, user, pass, invite, new MobileUser.LoginCallback() {
-                    @Override
-                    public void onDone(boolean ok, String msg) {
-                        if (ok) {
-                            Toast.makeText(MobileHomeActivity.this, "注册成功，已自动登录",
-                                    Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                            reloadAfterAccountChange();
-                        } else {
-                            tvLoginTip.setVisibility(View.VISIBLE);
-                            tvLoginTip.setText("注册失败：" + msg);
-                        }
-                    }
-                });
-            }
-        });
-        content.findViewById(R.id.tvLogin).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String server = etServer.getText() == null ? "" : etServer.getText().toString().trim();
-                String user = etUser.getText() == null ? "" : etUser.getText().toString().trim();
-                String pass = etPass.getText() == null ? "" : etPass.getText().toString();
-                if (TextUtils.isEmpty(server) || TextUtils.isEmpty(user) || TextUtils.isEmpty(pass)) {
-                    Toast.makeText(MobileHomeActivity.this, "服务器地址、用户名、密码都要填",
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                tvLoginTip.setVisibility(View.VISIBLE);
-                tvLoginTip.setText("正在登录…");
-                MobileUser.login(server, user, pass, new MobileUser.LoginCallback() {
-                    @Override
-                    public void onDone(boolean ok, String msg) {
-                        if (ok) {
-                            Toast.makeText(MobileHomeActivity.this, "登录成功，已切到内置源",
-                                    Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                            reloadAfterAccountChange();
-                        } else {
-                            tvLoginTip.setVisibility(View.VISIBLE);
-                            tvLoginTip.setText("登录失败：" + msg);
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    private void confirmLogout() {
-        new AlertDialog.Builder(this)
-                .setTitle("退出登录")
-                .setMessage("退出后将改回使用你自己填的接口，确定退出？")
-                .setNegativeButton("取消", null)
-                .setPositiveButton("退出", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        MobileUser.logout();
-                        Toast.makeText(MobileHomeActivity.this, "已退出登录，已切回自填源",
-                                Toast.LENGTH_SHORT).show();
-                        reloadAfterAccountChange();
-                    }
-                })
-                .show();
-    }
-
-    /** 登录态变化会改变生效源（内置 ↔ 自填），必须重建首页分类 */
-    private void reloadAfterAccountChange() {
-        lastHomeKey = null;
-        cfgReloading = true;
-        loadConfig(false);
-    }
 
     @Override
     protected void onResume() {
@@ -447,6 +263,68 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
         loadSort();
     }
 
+    /* ================= 启动动画（手机端开屏 1.2s） =================
+     * 用 addContentView 叠一层全屏遮罩，不动布局文件、不动 Activity 跳转：
+     * 0–0.75s：alpha 0→1（减速曲线）+ scale 1.055→1 + 上浮 16dp 归位
+     * 0.75–1.2s：定格
+     * 结尾 40ms 淡出后移除遮罩
+     * 只在进程内第一次进首页播一次，切夜间模式重建 Activity 不会重播。
+     */
+    private static boolean sSplashShown = false;
+
+    private void showSplashOverlay() {
+        if (sSplashShown) {
+            return;
+        }
+        sSplashShown = true;
+        final FrameLayout mask = new FrameLayout(this);
+        mask.setBackgroundColor(0xFF01040F);
+        // 动画期间吞掉所有点击，避免误触下层首页
+        mask.setClickable(true);
+
+        ImageView iv = new ImageView(this);
+        iv.setImageResource(R.drawable.splash_phone);
+        iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        mask.addView(iv, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        addContentView(mask, new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        final float dy = 16f * getResources().getDisplayMetrics().density;
+        iv.setAlpha(0f);
+        iv.setScaleX(1.055f);
+        iv.setScaleY(1.055f);
+        iv.setTranslationY(dy);
+        iv.animate()
+                .alpha(1f)
+                .scaleX(1f)
+                .scaleY(1f)
+                .translationY(0f)
+                .setDuration(750)
+                .setInterpolator(new DecelerateInterpolator())
+                .start();
+
+        mask.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mask.animate()
+                        .alpha(0f)
+                        .setDuration(40)
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                ViewGroup parent = (ViewGroup) mask.getParent();
+                                if (parent != null) {
+                                    parent.removeView(mask);
+                                }
+                            }
+                        })
+                        .start();
+            }
+        }, 750 + 450);
+    }
+
     private void initEvent() {
         btnUiMode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -454,10 +332,10 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
                 switchToTvUi();
             }
         });
-        btnUser.setOnClickListener(new View.OnClickListener() {
+        btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showUserPanel();
+                jumpActivity(MobileSettingActivity.class);
             }
         });
 
@@ -670,11 +548,19 @@ public class MobileHomeActivity extends BaseActivity implements MobileGridFragme
     private void styleSegment(TextView tv, boolean on) {
         if (tv == null) return;
         tv.setBackgroundResource(on ? R.drawable.shape_home_segment_on : android.R.color.transparent);
-        tv.setTextColor(on ? SkinManager.onAccent(this) : getResources().getColor(R.color.shell_text_dim));
+        tv.setTextColor(on ? SkinManager.onAccent(this) : com.github.tvbox.osc.util.SkinManager.text2(this));
         tv.setTypeface(null, on ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL);
     }
 
     private void syncStripVisibility() {
+        if (!com.github.tvbox.osc.mobile.setting.MobileSetting.isShowHomeStrip()) {
+            // 「首页显示」开关关掉时整条横条（历史/收藏/空态）都不显示
+            if (rvHistory != null) rvHistory.setVisibility(View.GONE);
+            if (rvFav != null) rvFav.setVisibility(View.GONE);
+            if (tvHistoryEmpty != null) tvHistoryEmpty.setVisibility(View.GONE);
+            if (tvFavEmpty != null) tvFavEmpty.setVisibility(View.GONE);
+            return;
+        }
         boolean showHistory = !favStripMode && histHas;
         boolean showFav = favStripMode && favHas;
         if (rvHistory != null) rvHistory.setVisibility(showHistory ? View.VISIBLE : View.GONE);

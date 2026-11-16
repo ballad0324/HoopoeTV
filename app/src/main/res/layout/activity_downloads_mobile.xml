@@ -20,7 +20,7 @@
             android:gravity="center_vertical"
             android:paddingEnd="10dp"
             android:text="@string/m_back"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="14sp" />
 
         <TextView
@@ -31,7 +31,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="@string/m_downloads"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -53,7 +53,7 @@
         android:paddingStart="14dp"
         android:paddingEnd="14dp"
         android:paddingBottom="6dp"
-        android:textColor="@color/shell_text_dim"
+        android:textColor="?attr/skin_text_2"
         android:textSize="10sp" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -75,7 +75,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/m_no_downloads"
-        android:textColor="@color/shell_text_dim"
+        android:textColor="?attr/skin_text_2"
         android:textSize="13sp"
         android:visibility="gone" />
 

@@ -70,6 +70,30 @@
     <!-- 七套色系主题的可变色：由 Theme.Skin0..6 提供，布局里用 ?attr/skin_accent 取用 -->
     <attr name="skin_accent" format="color|reference" />
     <attr name="skin_accent2" format="color|reference" />
+
+    <!-- 「背景即主题」语义 token（v1.7.29 起）：由 Theme.Skin0..6 逐套提供，见 HoopoeTV 七套主题实现规范 -->
+    <!-- bg-page L0 页底 / bg-card L1 卡片 / bg-float L2 浮层 / bg-modal L3 弹窗 -->
+    <attr name="skin_bg_page" format="color|reference" />
+    <attr name="skin_bg_card" format="color|reference" />
+    <attr name="skin_bg_float" format="color|reference" />
+    <attr name="skin_bg_modal" format="color|reference" />
+    <!-- text-1 主文字 / text-2 次文字 / text-3 弱文字 / text-4 禁用占位 -->
+    <attr name="skin_text_1" format="color|reference" />
+    <attr name="skin_text_2" format="color|reference" />
+    <attr name="skin_text_3" format="color|reference" />
+    <attr name="skin_text_4" format="color|reference" />
+    <!-- 中性按钮：底色 / 字色，禁止用主题色染按钮 -->
+    <attr name="skin_btn_bg" format="color|reference" />
+    <attr name="skin_btn_fg" format="color|reference" />
+    <!-- 彩色仅限极小面积：卡片内评分 / 海报上评分 -->
+    <attr name="skin_rating" format="color|reference" />
+    <attr name="skin_rating_poster" format="color|reference" />
+    <!-- 细分割线 / 卡片外框线 -->
+    <attr name="skin_line" format="color|reference" />
+    <attr name="skin_frame" format="color|reference" />
+    <!-- 主题圆角：01=12 02=18 03=10 04=12 05=22 06=4 07=20 -->
+    <attr name="skin_radius" format="dimension|reference" />
+    <attr name="skin_is_light" format="boolean" />
     <!-- Selected Paint Color (color). -->
     <attr name="endColor" format="reference|color" />
 

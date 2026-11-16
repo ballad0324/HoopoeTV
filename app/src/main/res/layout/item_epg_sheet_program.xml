@@ -16,7 +16,7 @@
         android:layout_width="52dp"
         android:layout_height="wrap_content"
         android:text="19:32"
-        android:textColor="@color/shell_text"
+        android:textColor="?attr/skin_text_1"
         android:textSize="13sp" />
 
     <LinearLayout
@@ -32,7 +32,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="节目名"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="14sp" />
 
         <TextView
@@ -43,7 +43,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="19:32 - 20:00"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="10sp" />
     </LinearLayout>
 

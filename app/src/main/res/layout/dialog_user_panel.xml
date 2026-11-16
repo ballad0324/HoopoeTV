@@ -39,7 +39,7 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="未登录"
-                android:textColor="@color/shell_text"
+                android:textColor="?attr/skin_text_1"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="登录后使用内置源"
-                android:textColor="@color/shell_text_dim"
+                android:textColor="?attr/skin_text_2"
                 android:textSize="11sp" />
         </LinearLayout>
     </LinearLayout>
@@ -58,7 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="14dp"
-        android:background="@color/shell_outline" />
+        android:background="?attr/skin_line" />
 
     <LinearLayout
         android:id="@+id/rowSetting"
@@ -74,7 +74,7 @@
             android:layout_height="22dp"
             android:contentDescription="设置"
             android:src="@drawable/hm_settings"
-            android:tint="@color/shell_text_dim" />
+            android:tint="?attr/skin_text_2" />
 
         <TextView
             android:layout_width="0dp"
@@ -82,14 +82,14 @@
             android:layout_marginStart="12dp"
             android:layout_weight="1"
             android:text="设置"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="15sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="›"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="15sp" />
     </LinearLayout>
 
@@ -107,7 +107,7 @@
             android:layout_height="22dp"
             android:contentDescription="管理面板"
             android:src="@drawable/ic_ui_tv"
-            android:tint="@color/shell_text_dim" />
+            android:tint="?attr/skin_text_2" />
 
         <TextView
             android:layout_width="0dp"
@@ -115,14 +115,14 @@
             android:layout_marginStart="12dp"
             android:layout_weight="1"
             android:text="管理面板"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="15sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="›"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="15sp" />
     </LinearLayout>
 
@@ -140,7 +140,7 @@
             android:layout_height="22dp"
             android:contentDescription="下载管理"
             android:src="@drawable/ic_cat_doc"
-            android:tint="@color/shell_text_dim" />
+            android:tint="?attr/skin_text_2" />
 
         <TextView
             android:layout_width="0dp"
@@ -148,14 +148,14 @@
             android:layout_marginStart="12dp"
             android:layout_weight="1"
             android:text="下载管理"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="15sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="›"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="15sp" />
     </LinearLayout>
 

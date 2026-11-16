@@ -132,7 +132,7 @@ public class EpgSheetAdapter extends RecyclerView.Adapter<EpgSheetAdapter.Holder
         final MobileEpgXml.Program p = shown.get(position);
         final int state = stateOf(p);
         int primary = com.github.tvbox.osc.util.SkinManager.accent(context);
-        int textDim = context.getResources().getColor(R.color.shell_text_dim);
+        int textDim = com.github.tvbox.osc.util.SkinManager.text2(context);
 
         holder.tvTime.setText(hm.format(p.start));
         holder.tvName.setText(TextUtils.isEmpty(p.title) ? "（无节目名）" : p.title);
@@ -149,7 +149,7 @@ public class EpgSheetAdapter extends RecyclerView.Adapter<EpgSheetAdapter.Holder
 
         // 文字颜色：正在播用主色强调，不可回看置灰
         int nameColor = state == STATE_LIVE ? primary
-                : (state == STATE_NONE ? textDim : context.getResources().getColor(R.color.shell_text));
+                : (state == STATE_NONE ? textDim : com.github.tvbox.osc.util.SkinManager.text1(context));
         holder.tvName.setTextColor(nameColor);
         holder.tvTime.setTextColor(state == STATE_LIVE ? primary : textDim);
 
@@ -168,7 +168,7 @@ public class EpgSheetAdapter extends RecyclerView.Adapter<EpgSheetAdapter.Holder
                 break;
             case STATE_FUTURE:
                 holder.tvAction.setText("提醒");
-                holder.tvAction.setTextColor(context.getResources().getColor(R.color.shell_text));
+                holder.tvAction.setTextColor(com.github.tvbox.osc.util.SkinManager.text1(context));
                 holder.tvAction.setBackground(roundRect(Color.TRANSPARENT, 0, 9f, tint(textDim, 0x66)));
                 holder.tvAction.setAlpha(1f);
                 break;

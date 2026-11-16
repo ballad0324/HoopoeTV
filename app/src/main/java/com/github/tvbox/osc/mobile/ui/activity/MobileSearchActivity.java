@@ -863,7 +863,7 @@ public class MobileSearchActivity extends BaseActivity {
         chip.setPadding(dp(12), 0, dp(12), 0);
         chip.setBackgroundResource(R.drawable.shape_filter_chip);
         chip.setSelected(selected);
-        chip.setTextColor(selected ? SkinManager.onAccent(this) : getResources().getColor(R.color.shell_text_dim));
+        chip.setTextColor(selected ? SkinManager.onAccent(this) : com.github.tvbox.osc.util.SkinManager.text2(this));
         chip.setOnClickListener(listener);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, h);
@@ -914,7 +914,7 @@ public class MobileSearchActivity extends BaseActivity {
     private void buildCatTabs() {
         if (llCatTabs == null) return;
         llCatTabs.removeAllViews();
-        int colorOff = getResources().getColor(R.color.shell_text_dim);
+        int colorOff = com.github.tvbox.osc.util.SkinManager.text2(this);
         for (int i = 0; i < CAT_NAMES.length; i++) {
             final int idx = i;
             TextView tv = new TextView(this);
@@ -945,7 +945,7 @@ public class MobileSearchActivity extends BaseActivity {
         browseCat = Math.max(0, Math.min(idx, CAT_NAMES.length - 1));
         if (llCatTabs != null) {
             int colorOn = com.github.tvbox.osc.util.SkinManager.accent2(this);
-            int colorOff = getResources().getColor(R.color.shell_text_dim);
+            int colorOff = com.github.tvbox.osc.util.SkinManager.text2(this);
             int lineOn = com.github.tvbox.osc.util.SkinManager.accent2(this);
             for (int i = 0; i < llCatTabs.getChildCount(); i++) {
                 View child = llCatTabs.getChildAt(i);

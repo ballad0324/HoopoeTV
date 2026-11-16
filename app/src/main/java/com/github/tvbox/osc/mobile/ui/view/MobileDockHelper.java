@@ -63,17 +63,19 @@ public class MobileDockHelper {
     /** 选中态：图标染色 + 文案变主题蓝，未选中走暗色 */
     public static void paint(LinearLayout item, boolean on) {
         if (item == null) return;
+        // 选中项：浮层底 L2（中性），不加主题色填充
+        item.setBackgroundResource(on ? R.drawable.shape_capsule_on : 0);
         for (int i = 0; i < item.getChildCount(); i++) {
             View child = item.getChildAt(i);
             if (child instanceof ImageView) {
                 ImageView icon = (ImageView) child;
                 int color = on ? com.github.tvbox.osc.util.SkinManager.accent(item.getContext())
-                        : item.getResources().getColor(R.color.shell_text_dim);
+                        : com.github.tvbox.osc.util.SkinManager.text2(item.getContext());
                 icon.setColorFilter(color, android.graphics.PorterDuff.Mode.SRC_IN);
             } else if (child instanceof TextView) {
                 TextView label = (TextView) child;
                 label.setTextColor(on ? com.github.tvbox.osc.util.SkinManager.accent(item.getContext())
-                        : item.getResources().getColor(R.color.shell_text_dim));
+                        : com.github.tvbox.osc.util.SkinManager.text2(item.getContext()));
                 label.getPaint().setFakeBoldText(on);
                 label.invalidate();
             }

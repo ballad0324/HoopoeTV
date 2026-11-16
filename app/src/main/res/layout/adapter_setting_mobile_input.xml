@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textColor="@color/shell_text"
+        android:textColor="?attr/skin_text_1"
         android:textSize="15sp" />
 
     <TextView
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:maxLines="2"
-        android:textColor="@color/shell_text_dim"
+        android:textColor="?attr/skin_text_2"
         android:textSize="11sp" />
 
     <EditText
@@ -38,14 +38,14 @@
         android:background="@drawable/shape_setting_input"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:hint="@color/shell_text_dim"
+        android:hint="?attr/skin_text_2"
         android:importantForAutofill="no"
         android:inputType="textUri"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
         android:singleLine="true"
-        android:textColor="@color/shell_text"
-        android:textColorHint="@color/shell_text_dim"
+        android:textColor="?attr/skin_text_1"
+        android:textColorHint="?attr/skin_text_2"
         android:textSize="13sp" />
 
     <TextView

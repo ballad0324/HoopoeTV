@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid android:color="?attr/skin_accent" />
-    <corners android:radius="22dp" />
+<!-- 选中胶囊：浮层底 L2 + 外框线，禁止用主题色填充（v1.7.29） -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="?attr/skin_bg_float" />
+    <corners android:radius="?attr/skin_radius" />
+    <stroke android:width="1dp" android:color="?attr/skin_frame" />
 </shape>

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 筛选胶囊：选中=浅色容器底 + 主题色描边，未选=白卡底 + 灰描边（v1.7.7 去高光去透明） -->
+<!-- 筛选胶囊：选中=浮层底 L2 + 外框线（中性，不用主题色染），未选=卡片 L1 + 细线 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_selected="true">
         <shape android:shape="rectangle">
-            <solid android:color="@color/shell_primary_container" />
+            <solid android:color="?attr/skin_bg_float" />
             <corners android:radius="14dp" />
-            <stroke android:width="1dp" android:color="?attr/skin_accent" />
+            <stroke android:width="1dp" android:color="?attr/skin_frame" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/shell_card_fill" />
+            <solid android:color="?attr/skin_bg_card" />
             <corners android:radius="14dp" />
-            <stroke android:width="1dp" android:color="@color/shell_card_stroke" />
+            <stroke android:width="1dp" android:color="?attr/skin_line" />
         </shape>
     </item>
 </selector>

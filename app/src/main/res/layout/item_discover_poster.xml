@@ -47,7 +47,7 @@
             android:shadowDx="1"
             android:shadowDy="1"
             android:shadowRadius="3"
-            android:textColor="#FFFFD166"
+            android:textColor="?attr/skin_rating_poster"
             android:textSize="11sp"
             android:textStyle="bold"
             android:visibility="gone" />

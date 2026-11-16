@@ -1072,8 +1072,7 @@ public class MobileLiveActivity extends BaseActivity {
         chip.setEllipsize(TextUtils.TruncateAt.END);
         chip.setBackgroundResource(R.drawable.shape_filter_chip);
         chip.setSelected(pseudo == pseudoMode);
-        chip.setTextColor(getResources().getColor(
-                pseudo == pseudoMode ? R.color.shell_text : R.color.shell_text_dim));
+        chip.setTextColor((pseudo == pseudoMode ? com.github.tvbox.osc.util.SkinManager.text1(this) : com.github.tvbox.osc.util.SkinManager.text2(this)));
         chip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1103,8 +1102,7 @@ public class MobileLiveActivity extends BaseActivity {
         chip.setBackgroundResource(R.drawable.shape_filter_chip);
         boolean on = pseudo == PSEUDO_NONE && currentGroup == index;
         chip.setSelected(on);
-        chip.setTextColor(getResources().getColor(
-                on ? R.color.shell_text : R.color.shell_text_dim));
+        chip.setTextColor((on ? com.github.tvbox.osc.util.SkinManager.text1(this) : com.github.tvbox.osc.util.SkinManager.text2(this)));
         chip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1320,8 +1318,7 @@ public class MobileLiveActivity extends BaseActivity {
             chip.setBackgroundResource(R.drawable.shape_filter_chip);
             boolean on = offset == catchupDayOffset;
             chip.setSelected(on);
-            chip.setTextColor(getResources().getColor(
-                    on ? R.color.shell_text : R.color.shell_text_dim));
+            chip.setTextColor((on ? com.github.tvbox.osc.util.SkinManager.text1(this) : com.github.tvbox.osc.util.SkinManager.text2(this)));
             chip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1352,8 +1349,7 @@ public class MobileLiveActivity extends BaseActivity {
             cell.setTextSize(11);
             cell.setGravity(Gravity.CENTER);
             cell.setBackgroundResource(R.drawable.shape_filter_chip);
-            cell.setTextColor(getResources().getColor(
-                    future ? R.color.shell_text_dim : R.color.shell_text));
+            cell.setTextColor((future ? com.github.tvbox.osc.util.SkinManager.text2(this) : com.github.tvbox.osc.util.SkinManager.text1(this)));
             if (!future) {
                 cell.setOnClickListener(new View.OnClickListener() {
                     @Override

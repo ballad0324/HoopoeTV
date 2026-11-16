@@ -115,7 +115,7 @@ public class EpgChannelAdapter extends RecyclerView.Adapter<EpgChannelAdapter.Ho
         boolean on = position == selected;
         holder.tvName.setSelected(on);
         if (on) {
-            holder.tvName.setTextColor(holder.tvName.getResources().getColor(R.color.shell_text));
+            holder.tvName.setTextColor(com.github.tvbox.osc.util.SkinManager.text1(holder.tvName.getContext()));
         } else {
             holder.tvName.setTextColor(ok ? COLOR_OK : COLOR_DIM);
         }

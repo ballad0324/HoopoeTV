@@ -24,7 +24,7 @@
         android:layout_weight="1"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textColor="@color/shell_text"
+        android:textColor="?attr/skin_text_1"
         android:textSize="15sp" />
 
     <TextView
@@ -35,7 +35,7 @@
         android:ellipsize="end"
         android:maxWidth="190dp"
         android:singleLine="true"
-        android:textColor="@color/shell_text_dim"
+        android:textColor="?attr/skin_text_2"
         android:textSize="13sp" />
 
     <TextView
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:text="›"
-        android:textColor="@color/shell_text_dim"
+        android:textColor="?attr/skin_text_2"
         android:textSize="16sp" />
 
 </LinearLayout>

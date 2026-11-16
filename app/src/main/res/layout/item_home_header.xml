@@ -25,14 +25,14 @@
             android:paddingStart="6dp"
             android:paddingEnd="6dp"
             android:text="发现"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="15sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="·"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="13sp" />
 
         <TextView
@@ -43,14 +43,14 @@
             android:paddingStart="6dp"
             android:paddingEnd="6dp"
             android:text="收藏"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="15sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="·"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="13sp" />
 
         <TextView
@@ -61,7 +61,7 @@
             android:paddingStart="6dp"
             android:paddingEnd="6dp"
             android:text="继续观看"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="15sp" />
     </LinearLayout>
 
@@ -83,7 +83,7 @@
             android:background="@drawable/shape_home_segment_on"
             android:gravity="center"
             android:text="播放历史"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -94,7 +94,7 @@
             android:background="@android:color/transparent"
             android:gravity="center"
             android:text="收藏夹"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="15sp" />
     </LinearLayout>
 
@@ -120,7 +120,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="继续观看"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -133,7 +133,7 @@
             android:paddingEnd="2dp"
             android:paddingBottom="4dp"
             android:text="清空"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="13sp" />
     </LinearLayout>
 
@@ -164,7 +164,7 @@
             android:layout_height="210dp"
             android:gravity="center"
             android:text="还没有播放记录"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="13sp"
             android:visibility="gone" />
 
@@ -174,7 +174,7 @@
             android:layout_height="210dp"
             android:gravity="center"
             android:text="还没有收藏"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="13sp"
             android:visibility="gone" />
     </FrameLayout>
@@ -204,7 +204,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="小编推荐"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -217,7 +217,7 @@
             android:paddingEnd="2dp"
             android:paddingBottom="2dp"
             android:text="更多 ›"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="12sp" />
     </LinearLayout>
 </LinearLayout>

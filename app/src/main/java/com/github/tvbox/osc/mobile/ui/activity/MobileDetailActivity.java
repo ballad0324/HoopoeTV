@@ -1191,7 +1191,7 @@ public class MobileDetailActivity extends BaseActivity {
             // 液态玻璃 chip：选中态走蓝色玻璃，未选中走透明白玻璃
             UiSkin.chip(chip, chipOn);
             chip.setTextColor(chipOn ? SkinManager.onAccent(this)
-                    : getResources().getColor(R.color.shell_text_dim));
+                    : com.github.tvbox.osc.util.SkinManager.text2(this));
             chip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1338,7 +1338,7 @@ public class MobileDetailActivity extends BaseActivity {
         if (big instanceof android.widget.ImageView) {
             // 星标是实心图形：已收藏给金色 + 全不透明，未收藏压到半透明，避免两者看不出区别
             ((android.widget.ImageView) big).setColorFilter(has
-                    ? 0xFFFFD54F : getResources().getColor(R.color.shell_text));
+                    ? 0xFFFFD54F : com.github.tvbox.osc.util.SkinManager.text1(this));
             big.setAlpha(has ? 1f : 0.55f);
         }
     }

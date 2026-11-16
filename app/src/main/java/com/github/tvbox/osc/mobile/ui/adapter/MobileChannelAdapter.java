@@ -53,8 +53,7 @@ public class MobileChannelAdapter extends RecyclerView.Adapter<MobileChannelAdap
         holder.tvChannel.setText(name == null ? "" : name);
         boolean on = position == selectedIndex;
         holder.tvChannel.setSelected(on);
-        holder.tvChannel.setTextColor(holder.tvChannel.getResources().getColor(
-                on ? R.color.shell_text : R.color.shell_text_dim));
+        holder.tvChannel.setTextColor((on ? com.github.tvbox.osc.util.SkinManager.text1(holder.tvChannel.getContext()) : com.github.tvbox.osc.util.SkinManager.text2(holder.tvChannel.getContext())));
         holder.tvChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

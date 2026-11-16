@@ -78,12 +78,12 @@ fun bindSettings(view: ComposeView, host: SettingsHost) {
 @Composable
 private fun SettingsList(host: SettingsHost) {
     val rows = SettingsState.rows
-    val fill = colorResource(R.color.shell_card_fill)
-    val stroke = colorResource(R.color.shell_card_stroke)
-    val text = colorResource(R.color.shell_text)
-    val dim = colorResource(R.color.shell_text_dim)
-    val primary = skinAccent()
-    val fieldBg = colorResource(R.color.shell_surface_high)
+    val fill = skinBgCard()
+    val stroke = skinLine()
+    val text = skinText1()
+    val dim = skinText2()
+    val primary = skinText1()
+    val fieldBg = skinBgFloat()
 
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),

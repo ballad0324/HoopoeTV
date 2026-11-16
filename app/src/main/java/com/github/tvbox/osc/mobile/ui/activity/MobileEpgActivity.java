@@ -209,8 +209,7 @@ public class MobileEpgActivity extends BaseActivity {
             chip.setBackgroundResource(R.drawable.shape_filter_chip);
             boolean on = i == currentGroup;
             chip.setSelected(on);
-            chip.setTextColor(getResources().getColor(
-                    on ? R.color.shell_text : R.color.shell_text_dim));
+            chip.setTextColor((on ? com.github.tvbox.osc.util.SkinManager.text1(this) : com.github.tvbox.osc.util.SkinManager.text2(this)));
             chip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

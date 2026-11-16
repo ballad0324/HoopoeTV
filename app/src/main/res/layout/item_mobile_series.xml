@@ -10,5 +10,5 @@
     android:paddingStart="6dp"
     android:paddingEnd="6dp"
     android:singleLine="true"
-    android:textColor="@color/shell_text"
+    android:textColor="?attr/skin_text_1"
     android:textSize="15sp" />

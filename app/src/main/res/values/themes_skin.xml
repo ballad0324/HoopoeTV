@@ -1,106 +1,253 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  七套色系：直接沿用 TV 端已有的七套模板色值（Netfx/Dorae/Pepsi/Naruto/Minion/Yagami/Sakura），
-  两端同一套名字、同一条 alpha 阶梯（80/70/60/50/40），换主题只换色，不换结构。
-  0 奈飞红 1 哆啦蓝 2 百事深蓝 3 鸣人橙 4 小黄黄 5 八神粉 6 樱花粉
+  七套「背景即主题」配色（HoopoeTV-七套主题-实现规范 定稿版，色值逐字使用，不得近似取色）。
+
+  规则：页底 L0 就是主题色并铺满整屏；卡片 L1 / 浮层 L2 / 弹窗 L3 同色相逐级提亮；
+  按钮一律中性（暗底白实心深字、亮底近黑实心浅字），禁止用主题色染按钮/图标/选中胶囊；
+  彩色只允许出现在评分数字、进度条、选中描边；圆角随主题走。
+  token：bg-page/bg-card/bg-float/bg-modal/text-1~4/btn-bg/btn-fg/rating/rating-on-poster/line/frame/radius
+
+  0 奈飞红 netflix_red / 1 哆啦蓝 dora_blue / 2 百事深 pepsi_black / 3 鸣人橙 naruto_orange
+  4 小黄黄 candy_yellow / 5 八神粉 iori_pink / 6 樱花粉 sakura_pink
 -->
 <resources>
-    <!-- 0 Netfx红 -->
+
+    <!-- 0 奈飞红 · 暗 · 圆角 12 -->
     <style name="Theme.Skin0" parent="Theme.MobileSplash">
-        <item name="skin_accent">#FFD81F26</item>
-        <item name="skin_accent2">#FFF2A03A</item>
-        <item name="colorAccent">#FFD81F26</item>
-        <item name="color_theme">#FFD81F26</item>
-        <item name="color_theme_80">#CCD81F26</item>
-        <item name="color_theme_70">#B3D81F26</item>
-        <item name="color_theme_60">#99D81F26</item>
-        <item name="color_theme_50">#80D81F26</item>
-        <item name="color_theme_40">#66D81F26</item>
-        <item name="color_theme_dark_70">#FF8C1418</item>
+        <item name="android:windowBackground">#1A0507</item>
+        <item name="android:statusBarColor">#1A0507</item>
+        <item name="android:navigationBarColor">#1A0507</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="skin_bg_page">#1A0507</item>
+        <item name="skin_bg_card">#260B0E</item>
+        <item name="skin_bg_float">#341014</item>
+        <item name="skin_bg_modal">#43151A</item>
+        <item name="skin_text_1">#FFF1F0</item>
+        <item name="skin_text_2">#D8A9A6</item>
+        <item name="skin_text_3">#A87C79</item>
+        <item name="skin_text_4">#7A5754</item>
+        <item name="skin_btn_bg">#FFFFFF</item>
+        <item name="skin_btn_fg">#1A0507</item>
+        <item name="skin_rating">#F0C64B</item>
+        <item name="skin_rating_poster">#F5CF57</item>
+        <item name="skin_line">#1AFFFFFF</item>
+        <item name="skin_frame">#4A2022</item>
+        <item name="skin_radius">12dp</item>
+        <item name="skin_is_light">false</item>
+        <item name="skin_accent">#FFFFFF</item>
+        <item name="skin_accent2">#F0C64B</item>
+        <item name="colorAccent">#FFFFFF</item>
+        <item name="color_theme">#260B0E</item>
+        <item name="color_theme_80">#CC260B0E</item>
+        <item name="color_theme_70">#B3260B0E</item>
+        <item name="color_theme_60">#99260B0E</item>
+        <item name="color_theme_50">#80260B0E</item>
+        <item name="color_theme_40">#66260B0E</item>
+        <item name="color_theme_dark_70">#1A0507</item>
     </style>
 
-    <!-- 1 哆啦蓝 -->
+    <!-- 1 哆啦蓝 · 暗 · 圆角 18 -->
     <style name="Theme.Skin1" parent="Theme.MobileSplash">
-        <item name="skin_accent">#FF18A2E7</item>
-        <item name="skin_accent2">#FFFF6FB5</item>
-        <item name="colorAccent">#FF18A2E7</item>
-        <item name="color_theme">#FF18A2E7</item>
-        <item name="color_theme_80">#CC18A2E7</item>
-        <item name="color_theme_70">#B318A2E7</item>
-        <item name="color_theme_60">#9918A2E7</item>
-        <item name="color_theme_50">#8018A2E7</item>
-        <item name="color_theme_40">#6618A2E7</item>
-        <item name="color_theme_dark_70">#FF106D9C</item>
+        <item name="android:windowBackground">#07203A</item>
+        <item name="android:statusBarColor">#07203A</item>
+        <item name="android:navigationBarColor">#07203A</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="skin_bg_page">#07203A</item>
+        <item name="skin_bg_card">#0D2C4C</item>
+        <item name="skin_bg_float">#143A62</item>
+        <item name="skin_bg_modal">#1B4977</item>
+        <item name="skin_text_1">#E8F3FF</item>
+        <item name="skin_text_2">#A9C4DC</item>
+        <item name="skin_text_3">#7E9BB4</item>
+        <item name="skin_text_4">#5C778F</item>
+        <item name="skin_btn_bg">#EAF4FF</item>
+        <item name="skin_btn_fg">#07203A</item>
+        <item name="skin_rating">#FFD166</item>
+        <item name="skin_rating_poster">#FFD166</item>
+        <item name="skin_line">#1AFFFFFF</item>
+        <item name="skin_frame">#1E4A70</item>
+        <item name="skin_radius">18dp</item>
+        <item name="skin_is_light">false</item>
+        <item name="skin_accent">#EAF4FF</item>
+        <item name="skin_accent2">#FFD166</item>
+        <item name="colorAccent">#EAF4FF</item>
+        <item name="color_theme">#0D2C4C</item>
+        <item name="color_theme_80">#CC0D2C4C</item>
+        <item name="color_theme_70">#B30D2C4C</item>
+        <item name="color_theme_60">#990D2C4C</item>
+        <item name="color_theme_50">#800D2C4C</item>
+        <item name="color_theme_40">#660D2C4C</item>
+        <item name="color_theme_dark_70">#07203A</item>
     </style>
 
-    <!-- 2 百事深蓝 -->
+    <!-- 2 百事深（纯黑） · 暗 · 圆角 10 -->
     <style name="Theme.Skin2" parent="Theme.MobileSplash">
-        <item name="skin_accent">#FF004B93</item>
-        <item name="skin_accent2">#FF3E8BD8</item>
-        <item name="colorAccent">#FF004B93</item>
-        <item name="color_theme">#FF004B93</item>
-        <item name="color_theme_80">#CC004B93</item>
-        <item name="color_theme_70">#B3004B93</item>
-        <item name="color_theme_60">#99004B93</item>
-        <item name="color_theme_50">#80004B93</item>
-        <item name="color_theme_40">#66004B93</item>
-        <item name="color_theme_dark_70">#FF002547</item>
+        <item name="android:windowBackground">#000000</item>
+        <item name="android:statusBarColor">#000000</item>
+        <item name="android:navigationBarColor">#000000</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="skin_bg_page">#000000</item>
+        <item name="skin_bg_card">#0B0B0D</item>
+        <item name="skin_bg_float">#15161A</item>
+        <item name="skin_bg_modal">#202127</item>
+        <item name="skin_text_1">#F5F7FA</item>
+        <item name="skin_text_2">#B7BCC6</item>
+        <item name="skin_text_3">#858B95</item>
+        <item name="skin_text_4">#5F6672</item>
+        <item name="skin_btn_bg">#FFFFFF</item>
+        <item name="skin_btn_fg">#000000</item>
+        <item name="skin_rating">#FFC94D</item>
+        <item name="skin_rating_poster">#FFC94D</item>
+        <item name="skin_line">#1AFFFFFF</item>
+        <item name="skin_frame">#2C3037</item>
+        <item name="skin_radius">10dp</item>
+        <item name="skin_is_light">false</item>
+        <item name="skin_accent">#FFFFFF</item>
+        <item name="skin_accent2">#FFC94D</item>
+        <item name="colorAccent">#FFFFFF</item>
+        <item name="color_theme">#0B0B0D</item>
+        <item name="color_theme_80">#CC0B0B0D</item>
+        <item name="color_theme_70">#B30B0B0D</item>
+        <item name="color_theme_60">#990B0B0D</item>
+        <item name="color_theme_50">#800B0B0D</item>
+        <item name="color_theme_40">#660B0B0D</item>
+        <item name="color_theme_dark_70">#000000</item>
     </style>
 
-    <!-- 3 鸣人橙 -->
+    <!-- 3 鸣人橙 · 暗 · 圆角 12 -->
     <style name="Theme.Skin3" parent="Theme.MobileSplash">
-        <item name="skin_accent">#FFFF7439</item>
-        <item name="skin_accent2">#FFFFC14D</item>
-        <item name="colorAccent">#FFFF7439</item>
-        <item name="color_theme">#FFFF7439</item>
-        <item name="color_theme_80">#CCFF7439</item>
-        <item name="color_theme_70">#B3FF7439</item>
-        <item name="color_theme_60">#99FF7439</item>
-        <item name="color_theme_50">#80FF7439</item>
-        <item name="color_theme_40">#66FF7439</item>
-        <item name="color_theme_dark_70">#FFB35127</item>
+        <item name="android:windowBackground">#2A1206</item>
+        <item name="android:statusBarColor">#2A1206</item>
+        <item name="android:navigationBarColor">#2A1206</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="skin_bg_page">#2A1206</item>
+        <item name="skin_bg_card">#3A1B0B</item>
+        <item name="skin_bg_float">#4A240F</item>
+        <item name="skin_bg_modal">#5A2E13</item>
+        <item name="skin_text_1">#FFEFDD</item>
+        <item name="skin_text_2">#E0B48D</item>
+        <item name="skin_text_3">#B78C68</item>
+        <item name="skin_text_4">#8C6847</item>
+        <item name="skin_btn_bg">#FFEFDD</item>
+        <item name="skin_btn_fg">#2A1206</item>
+        <item name="skin_rating">#FFC069</item>
+        <item name="skin_rating_poster">#FFC069</item>
+        <item name="skin_line">#1AFFFFFF</item>
+        <item name="skin_frame">#5C3317</item>
+        <item name="skin_radius">12dp</item>
+        <item name="skin_is_light">false</item>
+        <item name="skin_accent">#FFEFDD</item>
+        <item name="skin_accent2">#FFC069</item>
+        <item name="colorAccent">#FFEFDD</item>
+        <item name="color_theme">#3A1B0B</item>
+        <item name="color_theme_80">#CC3A1B0B</item>
+        <item name="color_theme_70">#B33A1B0B</item>
+        <item name="color_theme_60">#993A1B0B</item>
+        <item name="color_theme_50">#803A1B0B</item>
+        <item name="color_theme_40">#663A1B0B</item>
+        <item name="color_theme_dark_70">#2A1206</item>
     </style>
 
-    <!-- 4 小黄黄 -->
+    <!-- 4 小黄黄 · 亮 · 圆角 22 -->
     <style name="Theme.Skin4" parent="Theme.MobileSplash">
-        <item name="skin_accent">#FFFFD55E</item>
-        <item name="skin_accent2">#FF7A5A16</item>
-        <item name="colorAccent">#FFFFD55E</item>
-        <item name="color_theme">#FFFFD55E</item>
-        <item name="color_theme_80">#CCFFD55E</item>
-        <item name="color_theme_70">#B3FFD55E</item>
-        <item name="color_theme_60">#99FFD55E</item>
-        <item name="color_theme_50">#80FFD55E</item>
-        <item name="color_theme_40">#66FFD55E</item>
-        <item name="color_theme_dark_70">#FFB39542</item>
+        <item name="android:windowBackground">#FFE155</item>
+        <item name="android:statusBarColor">#FFE155</item>
+        <item name="android:navigationBarColor">#FFE155</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="skin_bg_page">#FFE155</item>
+        <item name="skin_bg_card">#FFFCEA</item>
+        <item name="skin_bg_float">#FFF3B8</item>
+        <item name="skin_bg_modal">#FFFDF6</item>
+        <item name="skin_text_1">#241C00</item>
+        <item name="skin_text_2">#4A3D00</item>
+        <item name="skin_text_3">#6B5900</item>
+        <item name="skin_text_4">#8A7500</item>
+        <item name="skin_btn_bg">#241C00</item>
+        <item name="skin_btn_fg">#FFE155</item>
+        <item name="skin_rating">#8A6000</item>
+        <item name="skin_rating_poster">#FFE39A</item>
+        <item name="skin_line">#12000000</item>
+        <item name="skin_frame">#E8CC55</item>
+        <item name="skin_radius">22dp</item>
+        <item name="skin_is_light">true</item>
+        <item name="skin_accent">#241C00</item>
+        <item name="skin_accent2">#8A6000</item>
+        <item name="colorAccent">#241C00</item>
+        <item name="color_theme">#FFFCEA</item>
+        <item name="color_theme_80">#CCFFFCEA</item>
+        <item name="color_theme_70">#B3FFFCEA</item>
+        <item name="color_theme_60">#99FFFCEA</item>
+        <item name="color_theme_50">#80FFFCEA</item>
+        <item name="color_theme_40">#66FFFCEA</item>
+        <item name="color_theme_dark_70">#FFE155</item>
     </style>
 
-    <!-- 5 八神粉 -->
+    <!-- 5 八神粉 · 暗 · 圆角 4 -->
     <style name="Theme.Skin5" parent="Theme.MobileSplash">
-        <item name="skin_accent">#FFFF2F70</item>
-        <item name="skin_accent2">#FFB3204E</item>
-        <item name="colorAccent">#FFFF2F70</item>
-        <item name="color_theme">#FFFF2F70</item>
-        <item name="color_theme_80">#CCFF2F70</item>
-        <item name="color_theme_70">#B3FF2F70</item>
-        <item name="color_theme_60">#99FF2F70</item>
-        <item name="color_theme_50">#80FF2F70</item>
-        <item name="color_theme_40">#66FF2F70</item>
-        <item name="color_theme_dark_70">#FFB3204E</item>
+        <item name="android:windowBackground">#3A0620</item>
+        <item name="android:statusBarColor">#3A0620</item>
+        <item name="android:navigationBarColor">#3A0620</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="skin_bg_page">#3A0620</item>
+        <item name="skin_bg_card">#4C0A2B</item>
+        <item name="skin_bg_float">#5E1036</item>
+        <item name="skin_bg_modal">#721642</item>
+        <item name="skin_text_1">#FFE9F3</item>
+        <item name="skin_text_2">#E0A8C2</item>
+        <item name="skin_text_3">#B77F9C</item>
+        <item name="skin_text_4">#8E5F77</item>
+        <item name="skin_btn_bg">#FFE9F3</item>
+        <item name="skin_btn_fg">#3A0620</item>
+        <item name="skin_rating">#FFC24D</item>
+        <item name="skin_rating_poster">#FFC24D</item>
+        <item name="skin_line">#1AFFFFFF</item>
+        <item name="skin_frame">#6A1740</item>
+        <item name="skin_radius">4dp</item>
+        <item name="skin_is_light">false</item>
+        <item name="skin_accent">#FFE9F3</item>
+        <item name="skin_accent2">#FFC24D</item>
+        <item name="colorAccent">#FFE9F3</item>
+        <item name="color_theme">#4C0A2B</item>
+        <item name="color_theme_80">#CC4C0A2B</item>
+        <item name="color_theme_70">#B34C0A2B</item>
+        <item name="color_theme_60">#994C0A2B</item>
+        <item name="color_theme_50">#804C0A2B</item>
+        <item name="color_theme_40">#664C0A2B</item>
+        <item name="color_theme_dark_70">#3A0620</item>
     </style>
 
-    <!-- 6 樱花粉 -->
+    <!-- 6 樱花粉 · 亮 · 圆角 20 -->
     <style name="Theme.Skin6" parent="Theme.MobileSplash">
-        <item name="skin_accent">#FFFD9BDB</item>
-        <item name="skin_accent2">#FF9B6BD4</item>
-        <item name="colorAccent">#FFFD9BDB</item>
-        <item name="color_theme">#FFFD9BDB</item>
-        <item name="color_theme_80">#CCFD9BDB</item>
-        <item name="color_theme_70">#B3FD9BDB</item>
-        <item name="color_theme_60">#99FD9BDB</item>
-        <item name="color_theme_50">#80FD9BDB</item>
-        <item name="color_theme_40">#66FD9BDB</item>
-        <item name="color_theme_dark_70">#FFB06B98</item>
+        <item name="android:windowBackground">#FFE3EA</item>
+        <item name="android:statusBarColor">#FFE3EA</item>
+        <item name="android:navigationBarColor">#FFE3EA</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="skin_bg_page">#FFE3EA</item>
+        <item name="skin_bg_card">#FFFFFF</item>
+        <item name="skin_bg_float">#FFD3DD</item>
+        <item name="skin_bg_modal">#FFFFFF</item>
+        <item name="skin_text_1">#2A1218</item>
+        <item name="skin_text_2">#5E3C46</item>
+        <item name="skin_text_3">#8A5F6A</item>
+        <item name="skin_text_4">#A9838D</item>
+        <item name="skin_btn_bg">#3A2228</item>
+        <item name="skin_btn_fg">#FFE3EA</item>
+        <item name="skin_rating">#B4562A</item>
+        <item name="skin_rating_poster">#FFCFAE</item>
+        <item name="skin_line">#12000000</item>
+        <item name="skin_frame">#EBC3CE</item>
+        <item name="skin_radius">20dp</item>
+        <item name="skin_is_light">true</item>
+        <item name="skin_accent">#3A2228</item>
+        <item name="skin_accent2">#B4562A</item>
+        <item name="colorAccent">#3A2228</item>
+        <item name="color_theme">#FFFFFF</item>
+        <item name="color_theme_80">#CCFFFFFF</item>
+        <item name="color_theme_70">#B3FFFFFF</item>
+        <item name="color_theme_60">#99FFFFFF</item>
+        <item name="color_theme_50">#80FFFFFF</item>
+        <item name="color_theme_40">#66FFFFFF</item>
+        <item name="color_theme_dark_70">#FFE3EA</item>
     </style>
 
 </resources>

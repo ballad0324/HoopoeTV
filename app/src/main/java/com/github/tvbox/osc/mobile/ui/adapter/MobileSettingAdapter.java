@@ -231,7 +231,7 @@ public class MobileSettingAdapter extends RecyclerView.Adapter<RecyclerView.View
                 chip.setTextColor(0xFFFFFFFF);
             } else {
                 chip.setBackgroundResource(0);
-                chip.setTextColor(ctx.getResources().getColor(R.color.shell_text_dim));
+                chip.setTextColor(com.github.tvbox.osc.util.SkinManager.text2(ctx));
             }
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     0, LinearLayout.LayoutParams.MATCH_PARENT, 1f);

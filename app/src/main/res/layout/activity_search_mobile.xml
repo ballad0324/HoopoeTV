@@ -25,7 +25,7 @@
             android:focusable="true"
             android:gravity="center"
             android:text="‹"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="28sp" />
 
         <LinearLayout
@@ -43,7 +43,7 @@
                 android:layout_height="17dp"
                 android:contentDescription="@null"
                 android:src="@drawable/hm_search"
-                android:tint="@color/shell_text_dim" />
+                android:tint="?attr/skin_text_2" />
 
             <EditText
                 android:id="@+id/etSearch"
@@ -59,8 +59,8 @@
                 android:paddingStart="0dp"
                 android:paddingEnd="0dp"
                 android:singleLine="true"
-                android:textColor="@color/shell_text"
-                android:textColorHint="@color/shell_text_dim"
+                android:textColor="?attr/skin_text_1"
+                android:textColorHint="?attr/skin_text_2"
                 android:textSize="14sp"
                 tools:ignore="Autofill,LabelFor" />
 
@@ -75,7 +75,7 @@
             android:focusable="true"
             android:padding="8dp"
             android:text="搜索"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="15sp" />
 
     </LinearLayout>
@@ -105,7 +105,7 @@
         android:gravity="center"
         android:paddingTop="10dp"
         android:paddingBottom="12dp"
-        android:textColor="@color/shell_text_dim"
+        android:textColor="?attr/skin_text_2"
         android:textSize="12sp"
         android:visibility="gone"
         tools:text="上拉继续加载 · 已 80 部" />
@@ -230,7 +230,7 @@
                     android:gravity="center"
                     android:paddingStart="24dp"
                     android:paddingEnd="24dp"
-                    android:textColor="@color/shell_text_dim"
+                    android:textColor="?attr/skin_text_2"
                     android:textSize="14sp"
                     android:visibility="gone" />
             </LinearLayout>

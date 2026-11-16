@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
+    android:background="@drawable/bg_page_fill"
     android:orientation="vertical">
 
     <!-- 顶部信息行：左边当前分类名，右边「筛选」胶囊开关（默认关闭） -->
@@ -22,7 +22,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="首页"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -34,7 +34,7 @@
             android:ellipsize="end"
             android:maxWidth="120dp"
             android:singleLine="true"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="11sp" />
 
         <LinearLayout
@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="6dp"
                 android:text="筛选"
-                android:textColor="@color/shell_text_dim"
+                android:textColor="?attr/skin_text_2"
                 android:textSize="11sp" />
 
             <FrameLayout
@@ -82,7 +82,7 @@
         android:id="@+id/llFilterBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/shell_surface"
+        android:background="?attr/skin_bg_card"
         android:orientation="vertical"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
@@ -116,7 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="暂无内容"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="14sp"
             android:visibility="gone" />
 

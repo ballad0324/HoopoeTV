@@ -39,7 +39,7 @@
             android:ellipsize="marquee"
             android:singleLine="true"
             android:text="@string/app_name"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -55,24 +55,24 @@
             android:padding="11dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_ui_tv"
-            android:tint="@color/shell_text_dim" />
+            android:tint="?attr/skin_text_2" />
 
         <!-- 明暗模式切换已移除（v1.7.7）：明暗改在设置页「通用 · 外观」里切换 -->
 
-        <!-- 用户入口（v1.6.36）：原这里是齿轮设置，改为用户头像，
-             点开弹用户面板：设置 / 管理面板 / 下载管理 -->
+        <!-- 设置入口（v1.7.17）：用户头像改回齿轮，点击直接进设置页；
+             原「用户面板」里的登录/管理面板/下载管理已并入设置页 -->
         <ImageView
-            android:id="@+id/btnUser"
+            android:id="@+id/btnSetting"
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="用户"
+            android:contentDescription="设置"
             android:focusable="true"
             android:padding="11dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_user_avatar"
-            android:tint="@color/shell_text_dim" />
+            android:src="@drawable/ic_gear"
+            android:tint="?attr/skin_text_2" />
 
     </LinearLayout>
 
@@ -118,7 +118,7 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/shell_outline" />
+        android:background="?attr/skin_line" />
 
     <!-- 底部导航栏（Compose 重写）：上行分类 tab（原顶部那排挪下来）+ 下行四图标 dock。
          整块由 mobile/ui/compose/HomeDockBar.kt 绘制，高度 wrap_content。 -->

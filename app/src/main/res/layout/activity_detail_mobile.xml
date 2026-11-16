@@ -319,7 +319,7 @@
                         android:id="@+id/ivThumb"
                         android:layout_width="92dp"
                         android:layout_height="130dp"
-                        android:background="@color/shell_surface_high"
+                        android:background="?attr/skin_bg_float"
                         android:scaleType="centerCrop" />
 
                     <LinearLayout
@@ -335,7 +335,7 @@
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:maxLines="2"
-                            android:textColor="@color/shell_text"
+                            android:textColor="?attr/skin_text_1"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -346,7 +346,7 @@
                             android:layout_marginTop="2dp"
                             android:ellipsize="end"
                             android:singleLine="true"
-                            android:textColor="@color/shell_text_dim"
+                            android:textColor="?attr/skin_text_2"
                             android:textSize="11sp"
                             android:visibility="gone" />
 
@@ -355,7 +355,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:textColor="@color/shell_text_dim"
+                            android:textColor="?attr/skin_text_2"
                             android:textSize="12sp" />
 
                         <TextView
@@ -365,7 +365,7 @@
                             android:layout_marginTop="4dp"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:textColor="@color/shell_text_dim"
+                            android:textColor="?attr/skin_text_2"
                             android:textSize="11sp" />
 
                     </LinearLayout>
@@ -389,7 +389,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/m_year"
-                            android:textColor="@color/shell_text_dim"
+                            android:textColor="?attr/skin_text_2"
                             android:textSize="10sp" />
 
                         <TextView
@@ -398,7 +398,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:text="—"
-                            android:textColor="@color/shell_text"
+                            android:textColor="?attr/skin_text_1"
                             android:textSize="13sp" />
                     </LinearLayout>
 
@@ -413,7 +413,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/m_type"
-                            android:textColor="@color/shell_text_dim"
+                            android:textColor="?attr/skin_text_2"
                             android:textSize="10sp" />
 
                         <TextView
@@ -424,7 +424,7 @@
                             android:ellipsize="end"
                             android:singleLine="true"
                             android:text="—"
-                            android:textColor="@color/shell_text"
+                            android:textColor="?attr/skin_text_1"
                             android:textSize="13sp" />
                     </LinearLayout>
 
@@ -439,7 +439,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/m_area"
-                            android:textColor="@color/shell_text_dim"
+                            android:textColor="?attr/skin_text_2"
                             android:textSize="10sp" />
 
                         <TextView
@@ -450,7 +450,7 @@
                             android:ellipsize="end"
                             android:singleLine="true"
                             android:text="—"
-                            android:textColor="@color/shell_text"
+                            android:textColor="?attr/skin_text_1"
                             android:textSize="13sp" />
                     </LinearLayout>
 
@@ -465,7 +465,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/m_status"
-                            android:textColor="@color/shell_text_dim"
+                            android:textColor="?attr/skin_text_2"
                             android:textSize="10sp" />
 
                         <TextView
@@ -476,7 +476,7 @@
                             android:ellipsize="end"
                             android:singleLine="true"
                             android:text="—"
-                            android:textColor="@color/shell_text"
+                            android:textColor="?attr/skin_text_1"
                             android:textSize="13sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -497,7 +497,7 @@
                         android:background="@drawable/bg_play_cta"
                         android:gravity="center"
                         android:text="@string/m_play_now"
-                        android:textColor="@color/shell_text"
+                        android:textColor="?attr/skin_btn_fg"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -506,12 +506,12 @@
                         android:id="@+id/tvDownloadBig"
                         android:layout_width="46dp"
                         android:layout_height="46dp"
-                        android:background="@drawable/bg_vod_play"
+                        android:background="@drawable/shape_btn_circle"
                         android:contentDescription="下载到本地"
                         android:padding="11dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_download"
-                        android:tint="@color/shell_text" />
+                        android:tint="?attr/skin_text_1" />
 
                     <!-- 打开下载文件夹（已下载 / 已转码的视频） -->
                     <ImageView
@@ -519,12 +519,12 @@
                         android:layout_width="46dp"
                         android:layout_height="46dp"
                         android:layout_marginStart="8dp"
-                        android:background="@drawable/bg_vod_play"
+                        android:background="@drawable/shape_btn_circle"
                         android:contentDescription="打开下载文件夹"
                         android:padding="11dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/hm_folder"
-                        android:tint="@color/shell_text" />
+                        android:tint="?attr/skin_text_1" />
 
                     <!-- 收藏（星标，写入首页「我的收藏」） -->
                     <ImageView
@@ -532,12 +532,12 @@
                         android:layout_width="46dp"
                         android:layout_height="46dp"
                         android:layout_marginStart="8dp"
-                        android:background="@drawable/bg_vod_play"
+                        android:background="@drawable/shape_btn_circle"
                         android:contentDescription="收藏"
                         android:padding="11dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/hm_fav"
-                        android:tint="@color/shell_text" />
+                        android:tint="?attr/skin_text_1" />
 
                     <!-- 画中画：缩小成悬浮小窗继续播（原「分享外链」位置，分享已取消） -->
                     <ImageView
@@ -545,12 +545,12 @@
                         android:layout_width="46dp"
                         android:layout_height="46dp"
                         android:layout_marginStart="8dp"
-                        android:background="@drawable/bg_vod_play"
+                        android:background="@drawable/shape_btn_circle"
                         android:contentDescription="画中画"
                         android:padding="11dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_pip"
-                        android:tint="@color/shell_text" />
+                        android:tint="?attr/skin_text_1" />
                 </LinearLayout>
 
                 <!-- 简介 -->
@@ -562,7 +562,7 @@
                     android:ellipsize="end"
                     android:lineSpacingExtra="3dp"
                     android:maxLines="3"
-                    android:textColor="@color/shell_text_dim"
+                    android:textColor="?attr/skin_text_2"
                     android:textSize="12sp" />
 
                 <TextView
@@ -571,7 +571,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="@string/m_desc_more"
-                    android:textColor="?attr/skin_accent"
+                    android:textColor="?attr/skin_text_2"
                     android:textSize="12sp" />
 
             <!-- 线路 -->
@@ -606,7 +606,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/m_series"
-                    android:textColor="@color/shell_text"
+                    android:textColor="?attr/skin_text_1"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -614,7 +614,7 @@
                     android:id="@+id/tvSeriesCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/shell_text_dim"
+                    android:textColor="?attr/skin_text_2"
                     android:textSize="11sp" />
             </LinearLayout>
 
@@ -632,7 +632,7 @@
                 android:layout_marginTop="16dp"
                 android:gravity="center"
                 android:text="@string/m_empty_series"
-                android:textColor="@color/shell_text_dim"
+                android:textColor="?attr/skin_text_2"
                 android:textSize="13sp"
                 android:visibility="gone" />
 

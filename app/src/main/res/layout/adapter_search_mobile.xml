@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/shell_text"
+            android:textColor="?attr/skin_text_1"
             android:textSize="15sp"
             android:textStyle="bold"
             tools:text="凡人修仙传" />
@@ -78,7 +78,7 @@
             android:layout_marginTop="3dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="11sp"
             tools:text="2020 · 中国大陆 · 动漫" />
 
@@ -90,7 +90,7 @@
             android:ellipsize="end"
             android:lineSpacingExtra="2dp"
             android:maxLines="2"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="11sp"
             tools:text="平凡少年韩立出生贫困，为了让家人过上更好的生活，自愿前去七玄门参加…" />
 
@@ -101,7 +101,7 @@
             android:layout_marginTop="3dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/shell_text_dim"
+            android:textColor="?attr/skin_text_2"
             android:textSize="10sp"
             tools:text="来源：默认源" />
 

@@ -221,10 +221,10 @@ private fun NavBar(onCategorySelect: (Int) -> Unit, onDockClick: (Int) -> Unit, 
     val categories = if (categoriesVisible) HomeDockState.categories.drop(1) else emptyList()
 
     // v1.7.7：取消 30% 半透明，dock 回到实色卡片
-    val fill = colorResource(R.color.shell_card_fill)
-    val stroke = colorResource(R.color.shell_card_stroke)
-    val primary = skinAccent()
-    val dim = colorResource(R.color.shell_text_dim)
+    val fill = skinBgCard()
+    val stroke = skinLine()
+    val primary = skinText1()
+    val dim = skinText3()
     val shape = RoundedCornerShape(25.dp)
 
     val entries = if (showSearch) {

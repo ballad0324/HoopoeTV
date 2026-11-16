@@ -17,6 +17,30 @@
         <!--        <item name="android:keepScreenOn">true</item>-->
         <!--        <item name="android:windowBackground">@drawable/app_bg</item>-->
         <item name="android:windowBackground">@android:color/transparent</item>
+
+        <!--
+          「背景即主题」token 的默认值（v1.7.29）：所有 TV 主题都继承本样式，
+          取值保持电视端现有深蓝玻璃观感，共享 drawable 里的 ?attr/skin_* 全部能解析。
+          手机端 Theme.Skin0..6（themes_skin.xml）会逐套覆盖这 18 个 token。
+        -->
+        <item name="skin_bg_page">#FF0C1520</item>
+        <item name="skin_bg_card">#FF1B2434</item>
+        <item name="skin_bg_float">#FF273143</item>
+        <item name="skin_bg_modal">#FF2D3849</item>
+        <item name="skin_text_1">#E6EAF1FA</item>
+        <item name="skin_text_2">#9993A4B8</item>
+        <item name="skin_text_3">#8093A4B8</item>
+        <item name="skin_text_4">#6693A4B8</item>
+        <item name="skin_btn_bg">#FFFFFFFF</item>
+        <item name="skin_btn_fg">#FF0C1520</item>
+        <item name="skin_rating">#FFFF8A5C</item>
+        <item name="skin_rating_poster">#FFFFC94D</item>
+        <item name="skin_line">#2EFFFFFF</item>
+        <item name="skin_frame">#40FFFFFF</item>
+        <item name="skin_radius">18dp</item>
+        <item name="skin_is_light">false</item>
+        <item name="skin_accent">#FF4C9AFF</item>
+        <item name="skin_accent2">#FFFF8A5C</item>
     </style>
 
     <!-- Alternative Themes -->
