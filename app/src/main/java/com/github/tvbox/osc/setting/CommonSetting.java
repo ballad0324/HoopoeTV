@@ -116,24 +116,6 @@ public class CommonSetting {
         Hawk.put(HawkConfig.SUBTITLE_TIME_DELAY, delayMs);
     }
 
-    /* ===================== 直播（两端共用） ===================== */
-
-    public static boolean isLiveChannelReverse() {
-        return Hawk.get(HawkConfig.LIVE_CHANNEL_REVERSE, false);
-    }
-
-    public static boolean isLiveCrossGroup() {
-        return Hawk.get(HawkConfig.LIVE_CROSS_GROUP, false);
-    }
-
-    public static boolean isLiveShowNetSpeed() {
-        return Hawk.get(HawkConfig.LIVE_SHOW_NET_SPEED, false);
-    }
-
-    public static boolean isLiveShowTime() {
-        return Hawk.get(HawkConfig.LIVE_SHOW_TIME, false);
-    }
-
     /* ===================== 数据源（两端共用） ===================== */
 
     /** 聚合搜索：默认开，开启后搜索会在所有可搜索站点并发检索 */
