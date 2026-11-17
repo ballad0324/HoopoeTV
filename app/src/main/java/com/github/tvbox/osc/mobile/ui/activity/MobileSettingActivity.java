@@ -27,7 +27,6 @@ import com.github.tvbox.osc.mobile.ui.adapter.MobileSettingAdapter;
 import com.github.tvbox.osc.setting.CommonSetting;
 import com.github.tvbox.osc.setting.TvSetting;
 import com.github.tvbox.osc.ui.activity.HomeActivity;
-import com.github.tvbox.osc.ui.dialog.MediaSettingDialog;
 import com.github.tvbox.osc.ui.dialog.ResetDialog;
 import com.github.tvbox.osc.util.BackupHelper;
 import com.github.tvbox.osc.util.FavSyncHelper;
@@ -360,50 +359,12 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                     }
                 }));
 
-        // v1.7.23：补齐电视端设置里有、手机端缺的通用项（同一份 Hawk 键，双端共用）
-        rows.add(MobileSettingAdapter.Row.capsule(tr("后台播放器","Background player"),
-                tr("切后台后是否继续播放", "Keep playing when app goes background"),
-                new String[]{"关闭", "开启", "画中画"},
-                clampInt(Hawk.get(HawkConfig.BACKGROUND_PLAY_TYPE, 0), 0, 2),
-                new MobileSettingAdapter.OnOption() {
-                    @Override
-                    public void onOption(MobileSettingAdapter.Row row, int index) {
-                        Hawk.put(HawkConfig.BACKGROUND_PLAY_TYPE, index);
-                        toast(tr("已设置：", "Set: ") + new String[]{"关闭", "开启", "画中画"}[index]);
-                        refreshRows();
-                    }
-                }));
-        // v1.7.30：媒资设置不再弹「两列大列表」，拆成四行胶囊就地切换
-        final String[] exoRenderer = getResources().getStringArray(R.array.media_content_ExoPlayer_renderer);
-        int exoRendererIdx = clampInt(Hawk.get(HawkConfig.EXO_RENDERER, 0), 0, exoRenderer.length - 1);
-        rows.add(MobileSettingAdapter.Row.capsule(tr("播放器渲染器","Player renderer"),
-                tr("默认够用，花屏/黑屏才需要换","Default is fine; switch if glitches"),
-                exoRenderer, exoRendererIdx,
-                new MobileSettingAdapter.OnOption() {
-                    @Override
-                    public void onOption(MobileSettingAdapter.Row row, int index) {
-                        Hawk.put(HawkConfig.EXO_RENDERER, index);
-                        toast(tr("渲染器：", "Renderer: ") + exoRenderer[index]);
-                        refreshRows();
-                    }
-                }));
-        final String[] exoMode = getResources().getStringArray(R.array.media_content_ExoPlayer_renderer_mode);
-        int exoModeIdx = clampInt(Hawk.get(HawkConfig.EXO_RENDERER_MODE, 1), 0, exoMode.length - 1);
-        rows.add(MobileSettingAdapter.Row.capsule(tr("渲染模式","Render mode ext"),
-                tr("核心 / 扩展渲染器的取舍","Core vs extension renderer"),
-                exoMode, exoModeIdx,
-                new MobileSettingAdapter.OnOption() {
-                    @Override
-                    public void onOption(MobileSettingAdapter.Row row, int index) {
-                        Hawk.put(HawkConfig.EXO_RENDERER_MODE, index);
-                        toast(tr("渲染模式：", "Mode: ") + exoMode[index]);
-                        refreshRows();
-                    }
-                }));
+        // v1.7.31：删掉手机端点了没行为的设置（后台播放器 / 播放器渲染器 / 渲染模式 /
+        // 首选配置来源 / 视频净化 / 解析 WebView）——这些键只有电视端有消费者，手机端保留就是摆设
         final String[] cacheOnOff = new String[]{tr("关闭","Off"), tr("开启","On")};
         int cacheIdx = Hawk.get(HawkConfig.IJK_CACHE_PLAY, false) ? 1 : 0;
         rows.add(MobileSettingAdapter.Row.capsule(tr("播放缓存","Playback buffer"),
-                tr("弱网卡顿时开启","Turn on for unstable network"),
+                tr("弱网卡顿时开启，只在 IJK 内核生效", "Turn on for unstable network (IJK engine only)"),
                 cacheOnOff, cacheIdx,
                 new MobileSettingAdapter.OnOption() {
                     @Override
@@ -411,29 +372,6 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                         Hawk.put(HawkConfig.IJK_CACHE_PLAY, index == 1);
                         toast(tr("播放缓存：", "Buffer: ") + cacheOnOff[index]);
                         refreshRows();
-                    }
-                }));
-        final String[] vodPlayer = getResources().getStringArray(R.array.media_content_General_VodPlayerPreferred);
-        int vodPlayerIdx = clampInt(Hawk.get(HawkConfig.VOD_PLAYER_PREFERRED, 0), 0, vodPlayer.length - 1);
-        rows.add(MobileSettingAdapter.Row.capsule(tr("首选配置来源","Preferred config source"),
-                tr("点播优先用接口配置还是本机设置","Use API config or local settings"),
-                vodPlayer, vodPlayerIdx,
-                new MobileSettingAdapter.OnOption() {
-                    @Override
-                    public void onOption(MobileSettingAdapter.Row row, int index) {
-                        Hawk.put(HawkConfig.VOD_PLAYER_PREFERRED, index);
-                        toast(tr("首选配置：", "Config: ") + vodPlayer[index]);
-                        refreshRows();
-                    }
-                }));
-        rows.add(MobileSettingAdapter.Row.switchRow(tr("视频净化","Video purify"),
-                tr("屏蔽播放页的插片广告类链接", "Filter ad-like links on the play page"),
-                Hawk.get(HawkConfig.VIDEO_PURIFY, true),
-                new MobileSettingAdapter.OnSwitch() {
-                    @Override
-                    public void onSwitch(MobileSettingAdapter.Row row, boolean checked) {
-                        Hawk.put(HawkConfig.VIDEO_PURIFY, checked);
-                        toast(checked ? tr("已开启净化", "Purify on") : tr("已关闭净化", "Purify off"));
                     }
                 }));
         rows.add(MobileSettingAdapter.Row.capsule(tr("搜索展示","Search display"),
@@ -456,23 +394,6 @@ public class MobileSettingActivity extends BaseActivity implements SettingsHost 
                     public void onSwitch(MobileSettingAdapter.Row row, boolean checked) {
                         Hawk.put(HawkConfig.FAST_SEARCH_MODE, checked);
                         toast(checked ? tr("已开启快速搜索", "Fast search on") : tr("已关闭快速搜索", "Fast search off"));
-                    }
-                }));
-        rows.add(MobileSettingAdapter.Row.capsule(tr("解析 WebView","Parse WebView"),
-                tr("XWalkView 仅适合低版本系统，5.0 以上建议系统自带", "System WebView is recommended"),
-                new String[]{"系统自带", "XWalkView"},
-                Hawk.get(HawkConfig.PARSE_WEBVIEW, true) ? 0 : 1,
-                new MobileSettingAdapter.OnOption() {
-                    @Override
-                    public void onOption(MobileSettingAdapter.Row row, int index) {
-                        Hawk.put(HawkConfig.PARSE_WEBVIEW, index == 0);
-                        if (index == 1) {
-                            toast(tr("已切到 XWalkView，需重启 App 生效；低版本系统才建议用",
-                                    "XWalkView needs a restart and only suits old Android"));
-                        } else {
-                            toast(tr("已切到系统 WebView，重启后生效", "System WebView, restart to apply"));
-                        }
-                        refreshRows();
                     }
                 }));
         rows.add(MobileSettingAdapter.Row.capsule(tr("历史条数","History limit"),

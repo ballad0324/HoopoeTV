@@ -33,6 +33,15 @@ public class MobileSearchAdapter extends RecyclerView.Adapter<MobileSearchAdapte
 
     private final List<Movie.Video> data = new ArrayList<>();
 
+    /** 「搜索展示」设为缩略图时用网格卡（只有海报+角标+标题），否则用默认的信息行卡 */
+    private boolean gridMode = false;
+
+    public void setGridMode(boolean grid) {
+        if (this.gridMode == grid) return;
+        this.gridMode = grid;
+        notifyDataSetChanged();
+    }
+
     public interface OnItemClick {
         void onItemClick(Movie.Video video);
     }
@@ -69,7 +78,8 @@ public class MobileSearchAdapter extends RecyclerView.Adapter<MobileSearchAdapte
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.adapter_search_mobile, parent, false);
+                .inflate(gridMode ? R.layout.item_search_grid_mobile : R.layout.adapter_search_mobile,
+                        parent, false);
         return new Holder(v);
     }
 
@@ -82,54 +92,65 @@ public class MobileSearchAdapter extends RecyclerView.Adapter<MobileSearchAdapte
         String badge = clean(video.note);
         if (TextUtils.isEmpty(badge)) badge = clean(video.tag);
         if ("folder".equals(badge) || "cover".equals(badge)) badge = "";
-        if (TextUtils.isEmpty(badge)) {
-            holder.badge.setVisibility(View.GONE);
-        } else {
-            holder.badge.setVisibility(View.VISIBLE);
-            holder.badge.setText(badge);
+        if (holder.badge != null) {
+            if (TextUtils.isEmpty(badge)) {
+                holder.badge.setVisibility(View.GONE);
+            } else {
+                holder.badge.setVisibility(View.VISIBLE);
+                holder.badge.setText(badge);
+            }
         }
 
-        // 年份 · 地区 · 类型
-        StringBuilder meta = new StringBuilder();
-        if (video.year > 0) meta.append(video.year);
-        String area = clean(video.area);
-        if (!TextUtils.isEmpty(area)) {
-            if (meta.length() > 0) meta.append(" · ");
-            meta.append(area);
-        }
-        String type = clean(video.type);
-        if (!TextUtils.isEmpty(type)) {
-            if (meta.length() > 0) meta.append(" · ");
-            meta.append(type);
-        }
-        if (meta.length() > 0) {
-            holder.note.setVisibility(View.VISIBLE);
-            holder.note.setText(meta.toString());
-        } else {
-            holder.note.setVisibility(View.GONE);
-        }
-
-        // 两行简介
-        String blurb = clean(video.des);
-        if (TextUtils.isEmpty(blurb)) {
-            holder.blurb.setVisibility(View.GONE);
-        } else {
-            holder.blurb.setVisibility(View.VISIBLE);
-            holder.blurb.setText(blurb);
+        // 网格卡没有下面这些控件，全部做空判断
+        if (holder.note != null) {
+            // 年份 · 地区 · 类型
+            StringBuilder meta = new StringBuilder();
+            if (video.year > 0) meta.append(video.year);
+            String area = clean(video.area);
+            if (!TextUtils.isEmpty(area)) {
+                if (meta.length() > 0) meta.append(" · ");
+                meta.append(area);
+            }
+            String type = clean(video.type);
+            if (!TextUtils.isEmpty(type)) {
+                if (meta.length() > 0) meta.append(" · ");
+                meta.append(type);
+            }
+            if (meta.length() > 0) {
+                holder.note.setVisibility(View.VISIBLE);
+                holder.note.setText(meta.toString());
+            } else {
+                holder.note.setVisibility(View.GONE);
+            }
         }
 
-        String site = siteName(video.sourceKey);
-        if (TextUtils.isEmpty(site)) {
-            holder.site.setVisibility(View.GONE);
-        } else {
-            holder.site.setVisibility(View.VISIBLE);
-            holder.site.setText("来源：" + site);
+        if (holder.blurb != null) {
+            // 两行简介
+            String blurb = clean(video.des);
+            if (TextUtils.isEmpty(blurb)) {
+                holder.blurb.setVisibility(View.GONE);
+            } else {
+                holder.blurb.setVisibility(View.VISIBLE);
+                holder.blurb.setText(blurb);
+            }
         }
 
-        if (!TextUtils.isEmpty(video.pic)) {
-            ImgUtil.load(video.pic.trim(), holder.pic, 8);
-        } else {
-            holder.pic.setImageResource(R.drawable.img_loading_placeholder);
+        if (holder.site != null) {
+            String site = siteName(video.sourceKey);
+            if (TextUtils.isEmpty(site)) {
+                holder.site.setVisibility(View.GONE);
+            } else {
+                holder.site.setVisibility(View.VISIBLE);
+                holder.site.setText("来源：" + site);
+            }
+        }
+
+        if (holder.pic != null) {
+            if (!TextUtils.isEmpty(video.pic)) {
+                ImgUtil.load(video.pic.trim(), holder.pic, 8);
+            } else {
+                holder.pic.setImageResource(R.drawable.img_loading_placeholder);
+            }
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

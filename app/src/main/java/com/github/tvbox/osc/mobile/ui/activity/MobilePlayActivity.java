@@ -36,8 +36,10 @@ import com.github.tvbox.osc.mobile.ui.MobileFavorites;
 import com.github.tvbox.osc.mobile.ui.adapter.MobileSeriesAdapter;
 import com.github.tvbox.osc.player.MyVideoView;
 import com.github.tvbox.osc.ui.activity.PlayActivity;
+import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.MD5;
 import com.github.tvbox.osc.util.PlayerHelper;
+import com.orhanobut.hawk.Hawk;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
 
 import org.json.JSONObject;
@@ -220,6 +222,8 @@ public class MobilePlayActivity extends BaseActivity {
         skipIntroSeconds = parseSkipIntroSeconds(vodInfo.playerCfg);
 
         PlayerHelper.updateCfg(videoView);
+        // 画面比例：起播时按设置项 PLAY_SCALE 恢复（原来只在点按时循环，设置里的值不起作用）
+        applySavedScale();
         // C1 断点续播：与 TV PlayActivity 同一套进度存储（CacheManager + URL 的 MD5）
         videoView.setProgressManager(new ProgressManager() {
             @Override
@@ -298,13 +302,9 @@ public class MobilePlayActivity extends BaseActivity {
         tvScale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                scaleIndex = (scaleIndex + 1) % 4;
-                int scaleType = scaleIndex == 0 ? VideoView.SCREEN_SCALE_DEFAULT
-                        : scaleIndex == 1 ? VideoView.SCREEN_SCALE_16_9
-                        : scaleIndex == 2 ? VideoView.SCREEN_SCALE_4_3
-                        : VideoView.SCREEN_SCALE_MATCH_PARENT;
-                videoView.setScreenScaleType(scaleType);
-                tvScale.setText(PlayerHelper.getScaleName(scaleType));
+                // 点按循环切换 + 回写设置项，下次起播按这里的选择恢复
+                applyScale(scaleIndex + 1);
+                Hawk.put(HawkConfig.PLAY_SCALE, scaleIndex);
             }
         });
         // v1.7.1：顶栏收藏 / 底部下载 / 底部投屏
@@ -853,5 +853,38 @@ public class MobilePlayActivity extends BaseActivity {
         }
         videoView.release();
         super.onDestroy();
+    }
+
+    /* ===================== 画面比例：设置项 → 起播 ===================== */
+
+    /** 起播时按设置项恢复比例（0 默认 / 1 16:9 / 2 4:3 / 3 铺满） */
+    private void applySavedScale() {
+        int idx = 0;
+        try {
+            idx = Hawk.get(HawkConfig.PLAY_SCALE, 0);
+        } catch (Throwable ignored) {
+        }
+        applyScale(idx);
+    }
+
+    /** 应用一个比例档位，同步更新右下角的比例文字 */
+    private void applyScale(int index) {
+        scaleIndex = ((index % 4) + 4) % 4;
+        int scaleType = scaleTypeOf(scaleIndex);
+        if (videoView != null) videoView.setScreenScaleType(scaleType);
+        if (tvScale != null) tvScale.setText(PlayerHelper.getScaleName(scaleType));
+    }
+
+    private static int scaleTypeOf(int index) {
+        switch (index) {
+            case 1:
+                return VideoView.SCREEN_SCALE_16_9;
+            case 2:
+                return VideoView.SCREEN_SCALE_4_3;
+            case 3:
+                return VideoView.SCREEN_SCALE_MATCH_PARENT;
+            default:
+                return VideoView.SCREEN_SCALE_DEFAULT;
+        }
     }
 }

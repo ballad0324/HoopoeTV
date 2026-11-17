@@ -1,5 +1,6 @@
 package com.github.tvbox.osc.mobile.ui;
 
+import com.github.tvbox.osc.util.HawkConfig;
 import com.orhanobut.hawk.Hawk;
 
 import org.json.JSONArray;
@@ -9,13 +10,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 首页「继续观看」的历史记录：只存在本机 Hawk 里，同片源同 id 去重，最多 20 条，按时间倒序。
+ * 首页「继续观看」的历史记录：只存在本机 Hawk 里，同片源同 id 去重，按时间倒序。
+ * 保留条数由设置项「历史条数」（HawkConfig.HOME_NUM：20/40/60/80/100）决定。
  * 只记录够回跳的最小信息（id / 源 / 封面 / 线路 / 集数 / 进度），不带完整剧集列表。
  */
 public class MobilePlayHistory {
 
     private static final String KEY = "mobile_play_history";
-    private static final int MAX = 20;
+
+    /** 「历史条数」设置项 5 档对应的实际条数，与 MobileSettingActivity 的胶囊文案一一对应 */
+    private static final int[] LIMITS = {20, 40, 60, 80, 100};
+
+    /** 当前生效的保留条数，读设置项 HOME_NUM（与电视端同一个 Hawk 键） */
+    public static int limit() {
+        int idx = 0;
+        try {
+            idx = Hawk.get(HawkConfig.HOME_NUM, 0);
+        } catch (Throwable ignored) {
+        }
+        if (idx < 0) idx = 0;
+        if (idx > LIMITS.length - 1) idx = LIMITS.length - 1;
+        return LIMITS[idx];
+    }
 
     public static class Item {
         public String vodId = "";
@@ -91,7 +107,7 @@ public class MobilePlayHistory {
         }
         item.time = System.currentTimeMillis();
         list.add(0, item);
-        while (list.size() > MAX) {
+        while (list.size() > limit()) {
             list.remove(list.size() - 1);
         }
         save(list);

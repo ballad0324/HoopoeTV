@@ -66,6 +66,16 @@ public class CommonSetting {
         Hawk.put(HawkConfig.PLAY_SCALE, scale);
     }
 
+    /** 搜索展示：0 文字列表 / 1 缩略图（与电视端同键，手机端搜索页按此切换） */
+    public static int getSearchView() {
+        return Hawk.get(HawkConfig.SEARCH_VIEW, 0);
+    }
+
+    /** 快速搜索：开启后手机端搜索页边输边搜 */
+    public static boolean isFastSearch() {
+        return Hawk.get(HawkConfig.FAST_SEARCH_MODE, false);
+    }
+
     /** 0 系统 1 ijk 2 exo，键沿用 HawkConfig.LIVE_PLAYER_TYPE */
     public static int getLivePlayerType() {
         return Hawk.get(HawkConfig.LIVE_PLAYER_TYPE, 0);

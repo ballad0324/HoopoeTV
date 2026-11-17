@@ -143,6 +143,8 @@ public class MobileSearchActivity extends BaseActivity {
 
     private String keyword = "";
     private String lastSuggest = "";
+    /** 快速搜索待搜关键词（输入后 400ms 防抖再起搜） */
+    private String pendingFastQuery = "";
 
     private final Runnable timeoutRunnable = new Runnable() {
         @Override
@@ -159,6 +161,17 @@ public class MobileSearchActivity extends BaseActivity {
         @Override
         public void run() {
             loadSuggest(lastSuggest);
+        }
+    };
+
+    /** 「快速搜索」开启后的边输边搜：400ms 防抖，同一关键词不重复起搜 */
+    private final Runnable fastSearchRunnable = new Runnable() {
+        @Override
+        public void run() {
+            String q = pendingFastQuery == null ? "" : pendingFastQuery.trim();
+            if (TextUtils.isEmpty(q)) return;
+            if (q.equals(keyword) && !finished) return;
+            startSearch(q, true);
         }
     };
 
@@ -276,7 +289,12 @@ public class MobileSearchActivity extends BaseActivity {
                 openVideo(video);
             }
         });
-        rvResult.setLayoutManager(new LinearLayoutManager(this));
+        // 搜索展示（设置项 SEARCH_VIEW）：0 文字列表 / 1 缩略图网格
+        boolean gridResult = CommonSetting.getSearchView() == 1;
+        resultAdapter.setGridMode(gridResult);
+        rvResult.setLayoutManager(gridResult
+                ? new GridLayoutManager(this, 3)
+                : new LinearLayoutManager(this));
         rvResult.setAdapter(resultAdapter);
 
         rankAdapter = new MobileRankAdapter();
@@ -364,6 +382,8 @@ public class MobileSearchActivity extends BaseActivity {
                 if (TextUtils.isEmpty(text)) {
                     // 输入清空：回到历史 + 热词
                     mainHandler.removeCallbacks(suggestRunnable);
+                    mainHandler.removeCallbacks(fastSearchRunnable);
+                    pendingFastQuery = "";
                     showTipsArea();
                     tvWordTitle.setText("热门搜索");
                     loadHotWords();
@@ -372,6 +392,12 @@ public class MobileSearchActivity extends BaseActivity {
                 lastSuggest = text;
                 mainHandler.removeCallbacks(suggestRunnable);
                 mainHandler.postDelayed(suggestRunnable, 500);
+                // 「快速搜索」开启时：输入即搜（400ms 防抖），不用再按键盘上的搜索键
+                if (CommonSetting.isFastSearch()) {
+                    pendingFastQuery = text;
+                    mainHandler.removeCallbacks(fastSearchRunnable);
+                    mainHandler.postDelayed(fastSearchRunnable, 400);
+                }
             }
         });
     }
@@ -508,6 +534,14 @@ public class MobileSearchActivity extends BaseActivity {
     /* ===================== 搜索 ===================== */
 
     private void startSearch(String key) {
+        startSearch(key, false);
+    }
+
+    /**
+     * @param asYouType 快速搜索的边输边搜：保留输入法与焦点、不逐字写历史，
+     *                  避免每敲一个字就收键盘、历史里塞一堆半截关键词
+     */
+    private void startSearch(String key, boolean asYouType) {
         if (key == null) key = "";
         key = key.trim();
         if (TextUtils.isEmpty(key)) {
@@ -515,9 +549,11 @@ public class MobileSearchActivity extends BaseActivity {
             return;
         }
         keyword = key;
-        saveHistory(key);
-        hideKeyboard();
-        etSearch.clearFocus();
+        if (!asYouType) {
+            saveHistory(key);
+            hideKeyboard();
+            etSearch.clearFocus();
+        }
 
         mainHandler.removeCallbacks(timeoutRunnable);
         try {
